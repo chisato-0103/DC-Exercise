@@ -12,7 +12,7 @@ $destination = $_GET['destination'] ?? getSetting('default_destination', DEFAULT
 
 // 現在時刻
 $currentTime = getCurrentTime();
-$currentDateTime = date('Y年n月j日 H:i');
+$currentDateTime = date('Y年n月j日 H:i:s');
 
 // お知らせを取得
 $notices = getActiveNotices('all');
