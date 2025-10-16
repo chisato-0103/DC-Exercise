@@ -7,6 +7,7 @@
 
 // データベース接続情報
 define('DB_HOST', 'localhost');
+define('DB_PORT', '8889'); // MAMPのデフォルトポート
 define('DB_NAME', 'ait_transport');
 define('DB_USER', 'root');
 define('DB_PASS', 'root'); // MAMPのデフォルト。環境に応じて変更してください
@@ -27,8 +28,9 @@ function getDbConnection() {
     if ($pdo === null) {
         try {
             $dsn = sprintf(
-                'mysql:host=%s;dbname=%s;charset=%s',
+                'mysql:host=%s;port=%s;dbname=%s;charset=%s',
                 DB_HOST,
+                DB_PORT,
                 DB_NAME,
                 DB_CHARSET
             );

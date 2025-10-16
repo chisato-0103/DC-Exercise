@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS system_settings;
 -- ===================================
 CREATE TABLE stations (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    station_code VARCHAR(10) UNIQUE NOT NULL,
+    station_code VARCHAR(50) UNIQUE NOT NULL,
     station_name VARCHAR(50) NOT NULL,
     station_name_en VARCHAR(100),
     order_index INT NOT NULL,
@@ -108,7 +108,7 @@ INSERT INTO shuttle_bus_timetable (dia_type, direction, departure_time, arrival_
 -- ===================================
 CREATE TABLE linimo_timetable (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    station_code VARCHAR(10) NOT NULL,
+    station_code VARCHAR(50) NOT NULL,
     station_name VARCHAR(50) NOT NULL,
     direction ENUM('to_fujigaoka', 'to_yagusa') NOT NULL COMMENT '方向: to_fujigaoka=藤が丘方面, to_yagusa=八草方面',
     departure_time TIME NOT NULL COMMENT '発車時刻',
