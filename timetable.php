@@ -11,6 +11,8 @@ require_once __DIR__ . '/includes/db_functions.php';
 $type = $_GET['type'] ?? 'shuttle'; // shuttle or linimo
 $diaType = $_GET['dia'] ?? getCurrentDiaType();
 $direction = $_GET['direction'] ?? 'to_university';
+$dayType = $_GET['day_type'] ?? getCurrentDayType();
+$stationCode = $_GET['station'] ?? 'yagusa';
 
 // シャトルバスの時刻表を取得
 function getShuttleTimetable($direction, $diaType) {
@@ -34,6 +36,30 @@ function getShuttleTimetable($direction, $diaType) {
     }
 }
 
+// リニモの時刻表を取得
+function getLinimoTimetable($stationCode, $direction, $dayType) {
+    try {
+        $pdo = getDbConnection();
+        $sql = "SELECT * FROM linimo_timetable
+                WHERE station_code = :station_code
+                AND direction = :direction
+                AND day_type = :day_type
+                AND is_active = 1
+                ORDER BY departure_time ASC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':station_code', $stationCode, PDO::PARAM_STR);
+        $stmt->bindValue(':direction', $direction, PDO::PARAM_STR);
+        $stmt->bindValue(':day_type', $dayType, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        logError('Failed to get linimo timetable', $e);
+        return [];
+    }
+}
+
 // 時刻を時間ごとにグループ化
 function groupByHour($timetable) {
     $grouped = [];
@@ -51,13 +77,16 @@ function groupByHour($timetable) {
 $timetableData = [];
 if ($type === 'shuttle') {
     $timetableData = getShuttleTimetable($direction, $diaType);
+} elseif ($type === 'linimo') {
+    $timetableData = getLinimoTimetable($stationCode, $direction, $dayType);
 }
 
 $groupedTimetable = groupByHour($timetableData);
 
 // ダイヤ種別の説明
-global $DIA_TYPE_DESCRIPTIONS;
+global $DIA_TYPE_DESCRIPTIONS, $DAY_TYPE_DESCRIPTIONS;
 $diaDescription = $DIA_TYPE_DESCRIPTIONS[$diaType] ?? '';
+$dayDescription = $DAY_TYPE_DESCRIPTIONS[$dayType] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -140,7 +169,7 @@ $diaDescription = $DIA_TYPE_DESCRIPTIONS[$diaType] ?? '';
                     <label for="type">種別</label>
                     <select name="type" id="type">
                         <option value="shuttle" <?php echo $type === 'shuttle' ? 'selected' : ''; ?>>シャトルバス</option>
-                        <option value="linimo" disabled>リニモ（準備中）</option>
+                        <option value="linimo" <?php echo $type === 'linimo' ? 'selected' : ''; ?>>リニモ</option>
                     </select>
                 </div>
 
@@ -161,6 +190,29 @@ $diaDescription = $DIA_TYPE_DESCRIPTIONS[$diaType] ?? '';
                         <option value="to_yagusa" <?php echo $direction === 'to_yagusa' ? 'selected' : ''; ?>>大学 → 八草駅</option>
                     </select>
                 </div>
+                <?php elseif ($type === 'linimo'): ?>
+                <div class="form-group">
+                    <label for="station">駅</label>
+                    <select name="station" id="station">
+                        <option value="yagusa" <?php echo $stationCode === 'yagusa' ? 'selected' : ''; ?>>八草</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="direction">方向</label>
+                    <select name="direction" id="direction">
+                        <option value="to_fujigaoka" <?php echo $direction === 'to_fujigaoka' ? 'selected' : ''; ?>>藤が丘方面</option>
+                        <option value="to_yagusa" <?php echo $direction === 'to_yagusa' ? 'selected' : ''; ?>>八草方面</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="day_type">曜日種別</label>
+                    <select name="day_type" id="day_type">
+                        <option value="weekday_green" <?php echo $dayType === 'weekday_green' ? 'selected' : ''; ?>>平日（緑時刻）</option>
+                        <option value="holiday_red" <?php echo $dayType === 'holiday_red' ? 'selected' : ''; ?>>休日（赤時刻）</option>
+                    </select>
+                </div>
                 <?php endif; ?>
 
                 <button type="submit" class="btn btn-primary">表示</button>
@@ -174,6 +226,37 @@ $diaDescription = $DIA_TYPE_DESCRIPTIONS[$diaType] ?? '';
                     <strong><?php echo h($diaType); ?>ダイヤ</strong>: <?php echo h($diaDescription); ?><br>
                     <strong>方向</strong>: <?php echo $direction === 'to_university' ? '八草駅 → 愛知工業大学' : '愛知工業大学 → 八草駅'; ?><br>
                     <strong>所要時間</strong>: 約5分
+                </div>
+
+                <?php if (empty($groupedTimetable)): ?>
+                    <div class="error-message">
+                        時刻表データがありません。
+                    </div>
+                <?php else: ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>時</th>
+                                <th>分</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($groupedTimetable as $hour => $minutes): ?>
+                            <tr>
+                                <td class="hour-cell"><?php echo h($hour); ?></td>
+                                <td class="minutes-cell">
+                                    <?php echo h(implode(', ', $minutes)); ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            <?php elseif ($type === 'linimo'): ?>
+                <div class="dia-info">
+                    <strong>駅</strong>: <?php echo h(getStationName($stationCode)); ?><br>
+                    <strong>方向</strong>: <?php echo $direction === 'to_fujigaoka' ? '藤が丘方面' : '八草方面'; ?><br>
+                    <strong>曜日種別</strong>: <?php echo h($dayDescription); ?>
                 </div>
 
                 <?php if (empty($groupedTimetable)): ?>

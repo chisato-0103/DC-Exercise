@@ -235,6 +235,90 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
 }
 
 /**
+ * 最適な乗り継ぎルートを計算（リニモ各駅→大学）
+ *
+ * @param string $originCode 出発駅コード
+ * @param string $currentTime 現在時刻（HH:MM:SS）
+ * @param int $limit 取得件数
+ * @return array 乗り継ぎルートの配列
+ */
+function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
+    try {
+        // 現在のダイヤ種別と曜日種別を取得
+        $diaType = getCurrentDiaType();
+        $dayType = getCurrentDayType();
+
+        // 乗り換え時間を取得
+        $transferTime = (int)getSetting('transfer_time_minutes', TRANSFER_TIME_MINUTES);
+
+        // 出発駅の情報を取得
+        $originInfo = getStationInfo($originCode);
+        if (!$originInfo) {
+            return [];
+        }
+
+        $linimoTravelTime = (int)$originInfo['travel_time_from_yagusa'];
+
+        // 次のリニモ（出発駅→八草駅）を取得
+        // 出発駅から八草方面への時刻表を取得する必要があるが、
+        // 現在のDBには八草発のみなので、八草着時刻を計算
+        $linimoTrains = getNextLinimoTrains('yagusa', 'to_fujigaoka', $currentTime, $dayType, 30);
+
+        $routes = [];
+
+        foreach ($linimoTrains as $linimo) {
+            // リニモ発車時刻から出発駅の発車時刻を逆算
+            $yagusaDepartureTime = $linimo['departure_time'];
+            $originDepartureTime = addMinutes($yagusaDepartureTime, -$linimoTravelTime);
+
+            // 現在時刻より前なら除外
+            if (compareTime($originDepartureTime, $currentTime) < 0) {
+                continue;
+            }
+
+            // 八草駅到着時刻 + 乗り換え時間
+            $yagusaArrivalTime = addMinutes($yagusaDepartureTime, 2); // 八草駅での停車時間
+            $minShuttleTime = addMinutes($yagusaArrivalTime, $transferTime);
+
+            // 接続可能なシャトルバスを取得
+            $shuttleBuses = getNextShuttleBuses('to_university', $minShuttleTime, $diaType, 1);
+
+            if (empty($shuttleBuses)) {
+                continue;
+            }
+
+            $shuttle = $shuttleBuses[0];
+
+            // 総所要時間と待ち時間を計算
+            $totalTime = calculateDuration($originDepartureTime, $shuttle['arrival_time']);
+            $waitingTime = calculateDuration($currentTime, $originDepartureTime);
+            $actualTransferTime = calculateDuration($yagusaArrivalTime, $shuttle['departure_time']);
+
+            $routes[] = [
+                'origin_departure' => formatTime($originDepartureTime),
+                'yagusa_arrival' => formatTime($yagusaArrivalTime),
+                'shuttle_departure' => formatTime($shuttle['departure_time']),
+                'university_arrival' => formatTime($shuttle['arrival_time']),
+                'transfer_time' => $actualTransferTime,
+                'total_time' => $totalTime,
+                'waiting_time' => $waitingTime,
+                'origin_name' => $originInfo['station_name']
+            ];
+
+            if (count($routes) >= $limit) {
+                break;
+            }
+        }
+
+        return $routes;
+
+    } catch (Exception $e) {
+        logError('Failed to calculate station to university route', $e);
+        return [];
+    }
+}
+
+/**
  * システム設定を取得
  *
  * @param string $key 設定キー
