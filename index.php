@@ -52,7 +52,7 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
 
         <!-- 次の便 - 大型表示 -->
         <?php if ($nextRoute): ?>
-        <div class="next-departure">
+        <div class="next-departure" onclick="this.classList.toggle('expanded')">
             <div class="next-departure-title">次に乗るシャトルバス</div>
             <div class="next-departure-time"><?php echo h($nextRoute['shuttle_departure']); ?> 発</div>
             <div class="next-departure-info">
@@ -62,6 +62,84 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
                 <span class="countdown" id="countdown" data-departure="<?php echo h($nextRoute['shuttle_departure']); ?>">
                     あと <?php echo h($nextRoute['waiting_time']); ?> 分
                 </span>
+            </div>
+            <div style="text-align: center; margin-top: 0.5rem; opacity: 0.9; font-size: 0.9rem;">
+                タップで詳細を表示 ▼
+            </div>
+
+            <!-- 詳細ルート（折りたたみ） -->
+            <div class="next-departure-details">
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                    <div class="route-steps" style="color: white;">
+                        <!-- 大学発 -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏫</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">愛知工業大学 発 <?php echo h($nextRoute['shuttle_departure']); ?></div>
+                                <div class="route-step-detail">シャトルバスで出発</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 八草駅着 -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚌</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">八草駅 着 <?php echo h($nextRoute['shuttle_arrival']); ?></div>
+                                <div class="route-step-detail">シャトルバス約5分</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 乗り換え -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">⏱️</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">乗り換え時間: <?php echo h($nextRoute['transfer_time']); ?>分</div>
+                                <div class="route-step-detail">リニモへ乗り換え</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 八草駅発（リニモ） -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚃</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">八草駅 発 <?php echo h($nextRoute['linimo_departure']); ?></div>
+                                <div class="route-step-detail">リニモで出発</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 目的地着 -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏁</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time"><?php echo h($nextRoute['destination_name']); ?> 着 <?php echo h($nextRoute['destination_arrival']); ?></div>
+                                <div class="route-step-detail">到着</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="route-summary" style="background-color: rgba(255,255,255,0.1); border-top-color: rgba(255,255,255,0.3);">
+                        <div class="summary-item">
+                            <span class="summary-label">待ち時間</span>
+                            <span class="summary-value" style="color: white;"><?php echo h($nextRoute['waiting_time']); ?>分</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">乗り換え</span>
+                            <span class="summary-value" style="color: white;"><?php echo h($nextRoute['transfer_time']); ?>分</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">総所要時間</span>
+                            <span class="summary-value" style="color: white;"><?php echo h($nextRoute['total_time']); ?>分</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <?php else: ?>

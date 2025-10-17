@@ -474,6 +474,12 @@ body {
     border-radius: 12px;
     margin-bottom: 1rem;
     box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.next-departure:hover {
+    box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
 }
 
 .next-departure-title {
@@ -514,6 +520,16 @@ body {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
+}
+
+.next-departure-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.next-departure.expanded .next-departure-details {
+    max-height: 1000px;
 }
 
 /* ===================================
