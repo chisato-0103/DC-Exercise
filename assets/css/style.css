@@ -422,3 +422,148 @@ body {
 .hidden {
     display: none;
 }
+
+/* ===================================
+   折りたたみ可能セクション
+   =================================== */
+.collapsible {
+    cursor: pointer;
+    user-select: none;
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.collapsible-header:hover {
+    background-color: #0052a3;
+}
+
+.collapsible-icon {
+    transition: transform 0.3s ease;
+}
+
+.collapsible.active .collapsible-icon {
+    transform: rotate(180deg);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.collapsible.active .collapsible-content {
+    max-height: 1000px;
+}
+
+/* ===================================
+   次の便 - 大型表示
+   =================================== */
+.next-departure {
+    background: linear-gradient(135deg, var(--primary-color), #0052a3);
+    color: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.next-departure-title {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.next-departure-time {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.next-departure-info {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.countdown {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+.countdown.urgent {
+    background-color: var(--danger-color);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===================================
+   ルートカード簡略版
+   =================================== */
+.route-card-compact {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.route-card-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.route-card-compact .route-header {
+    margin-bottom: 0.5rem;
+}
+
+.route-card-compact .route-steps {
+    display: none;
+}
+
+.route-card-compact.expanded .route-steps {
+    display: block;
+}
+
+.route-quick-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+.route-quick-time {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.expand-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.route-card-compact.expanded .expand-icon {
+    transform: rotate(180deg);
+}

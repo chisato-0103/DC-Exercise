@@ -26,6 +26,62 @@
     }
 
     /**
+     * カウントダウン表示を更新
+     */
+    function updateCountdown() {
+        const countdownElement = document.getElementById('countdown');
+        if (!countdownElement) return;
+
+        const departureTime = countdownElement.getAttribute('data-departure');
+        if (!departureTime) return;
+
+        const now = new Date();
+        const [hours, minutes] = departureTime.split(':').map(Number);
+
+        const departure = new Date();
+        departure.setHours(hours, minutes, 0, 0);
+
+        // 翌日の場合の処理
+        if (departure < now) {
+            departure.setDate(departure.getDate() + 1);
+        }
+
+        const diff = Math.floor((departure - now) / 1000); // 秒単位
+        const minutesLeft = Math.floor(diff / 60);
+        const secondsLeft = diff % 60;
+
+        if (minutesLeft < 0) {
+            countdownElement.textContent = '出発しました';
+            return;
+        }
+
+        countdownElement.textContent = `あと ${minutesLeft}分${secondsLeft}秒`;
+
+        // 5分以内なら緊急表示
+        if (minutesLeft < 5) {
+            countdownElement.classList.add('urgent');
+        } else {
+            countdownElement.classList.remove('urgent');
+        }
+    }
+
+    /**
+     * 折りたたみ機能をセットアップ
+     */
+    function setupCollapsibles() {
+        const collapsibles = document.querySelectorAll('.collapsible');
+
+        collapsibles.forEach(function(collapsible) {
+            const header = collapsible.querySelector('.collapsible-header');
+            if (!header) return;
+
+            header.addEventListener('click', function() {
+                collapsible.classList.toggle('active');
+            });
+        });
+    }
+
+    /**
      * ページを自動リロードする関数（1分ごと）
      */
     function setupAutoReload() {
@@ -42,6 +98,13 @@
         // 現在時刻を1秒ごとに更新
         updateCurrentTime();
         setInterval(updateCurrentTime, 1000);
+
+        // カウントダウンを1秒ごとに更新
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // 折りたたみ機能をセットアップ
+        setupCollapsibles();
 
         // 1分ごとに自動リロード
         setupAutoReload();
