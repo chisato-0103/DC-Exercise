@@ -361,3 +361,58 @@ function getSystemSetting($key) {
         return null;
     }
 }
+
+
+/**
+ * シャトルバスの最終便を取得
+ */
+function getLastShuttleBus($direction, $diaType) {
+    try {
+        $pdo = getDbConnection();
+        $sql = "SELECT departure_time, arrival_time
+                FROM shuttle_bus_timetable
+                WHERE direction = :direction
+                AND dia_type = :dia_type
+                AND is_active = 1
+                ORDER BY departure_time DESC
+                LIMIT 1";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":direction", $direction, PDO::PARAM_STR);
+        $stmt->bindValue(":dia_type", $diaType, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetch();
+
+    } catch (PDOException $e) {
+        logError("Failed to get last shuttle bus", $e);
+        return null;
+    }
+}
+
+/**
+ * シャトルバスの初便を取得
+ */
+function getFirstShuttleBus($direction, $diaType) {
+    try {
+        $pdo = getDbConnection();
+        $sql = "SELECT departure_time, arrival_time
+                FROM shuttle_bus_timetable
+                WHERE direction = :direction
+                AND dia_type = :dia_type
+                AND is_active = 1
+                ORDER BY departure_time ASC
+                LIMIT 1";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":direction", $direction, PDO::PARAM_STR);
+        $stmt->bindValue(":dia_type", $diaType, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetch();
+
+    } catch (PDOException $e) {
+        logError("Failed to get first shuttle bus", $e);
+        return null;
+    }
+}

@@ -101,13 +101,41 @@ function getSetting($key, $default = null) {
 }
 
 /**
- * 現在のダイヤ種別を判定
+ * 現在のダイヤ種別を判定（自動判定）
  *
  * @return string ダイヤ種別（A/B/C）
+ *
+ * ダイヤ種別の判定ロジック:
+ * - Aダイヤ: 4-7月, 10-1月の平日（授業期間）
+ * - Bダイヤ: 土曜日（通年）
+ * - Cダイヤ: 8-9月, 2-3月の平日（学校休業期間）
  */
 function getCurrentDiaType() {
-    // 実際の実装では、現在の日付と運行カレンダーから判定
-    // プロトタイプではsystem_settingsから取得
+    $month = (int)date('n');     // 1-12
+    $dayOfWeek = (int)date('w'); // 0=日曜, 1=月曜, ..., 6=土曜
+
+    // 土曜日は常にBダイヤ
+    if ($dayOfWeek === 6) {
+        return 'B';
+    }
+
+    // 日曜日は運行なし（念のためCダイヤ扱い）
+    if ($dayOfWeek === 0) {
+        return 'C';
+    }
+
+    // 平日の判定
+    // 8月、9月、2月、3月 → Cダイヤ（学校休業期間）
+    if (in_array($month, [2, 3, 8, 9])) {
+        return 'C';
+    }
+
+    // 4-7月、10-1月の平日 → Aダイヤ（授業期間）
+    if (in_array($month, [4, 5, 6, 7, 10, 11, 12, 1])) {
+        return 'A';
+    }
+
+    // それ以外（念のため）
     return getSetting('current_dia_type', CURRENT_DIA_TYPE);
 }
 

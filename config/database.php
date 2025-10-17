@@ -6,11 +6,12 @@
  */
 
 // データベース接続情報
-define('DB_HOST', 'localhost');
-define('DB_PORT', '8889'); // MAMPのデフォルトポート
-define('DB_NAME', 'ait_transport');
-define('DB_USER', 'root');
-define('DB_PASS', 'root'); // MAMPのデフォルト。環境に応じて変更してください
+// 環境変数があればそれを使用、なければローカル開発用のデフォルト値
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_PORT', getenv('DB_PORT') ?: '8889'); // MAMPのデフォルトポート
+define('DB_NAME', getenv('DB_NAME') ?: 'ait_transport');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: 'root'); // MAMPのデフォルト
 define('DB_CHARSET', 'utf8mb4');
 
 // エラーハンドリング設定

@@ -41,6 +41,41 @@ $stations = getAllStations();
 
 // 次の便（最初のルート）
 $nextRoute = !empty($routes) ? $routes[0] : null;
+
+// ルートがない場合、最終便・初便情報を取得
+$serviceInfo = null;
+if (empty($routes)) {
+    $diaType = getCurrentDiaType();
+    $currentHour = (int)date('H');
+
+    if ($direction === 'to_station') {
+        // 大学→駅の場合、シャトルバスの情報を取得
+        $lastBus = getLastShuttleBus('to_yagusa', $diaType);
+        $firstBus = getFirstShuttleBus('to_yagusa', $diaType);
+
+        $serviceInfo = [
+            'type' => 'shuttle',
+            'direction_text' => '八草駅行き',
+            'last' => $lastBus ? formatTime($lastBus['departure_time']) : null,
+            'first' => $firstBus ? formatTime($firstBus['departure_time']) : null,
+            'is_before_service' => $currentHour < 8, // 8時前は運行前
+            'is_after_service' => $currentHour >= 22  // 22時以降は運行終了
+        ];
+    } else {
+        // 駅→大学の場合、シャトルバスの情報を取得
+        $lastBus = getLastShuttleBus('to_university', $diaType);
+        $firstBus = getFirstShuttleBus('to_university', $diaType);
+
+        $serviceInfo = [
+            'type' => 'shuttle',
+            'direction_text' => '大学行き',
+            'last' => $lastBus ? formatTime($lastBus['departure_time']) : null,
+            'first' => $firstBus ? formatTime($firstBus['departure_time']) : null,
+            'is_before_service' => $currentHour < 8,
+            'is_after_service' => $currentHour >= 22
+        ];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -61,6 +96,15 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
         <!-- 現在時刻 -->
         <div class="current-time">
             現在時刻: <?php echo h($currentDateTime); ?>
+            <span style="margin-left: 15px; font-size: 0.9em; opacity: 0.9;">
+                📅 <?php
+                    $diaType = getCurrentDiaType();
+                    $dayType = getCurrentDayType();
+                    echo $DIA_TYPE_DESCRIPTIONS[$diaType] ?? "ダイヤ{$diaType}";
+                    echo ' / ';
+                    echo $dayType === 'weekday_green' ? 'リニモ平日' : 'リニモ土休日';
+                ?>
+            </span>
         </div>
 
         <!-- 次の便 - 大型表示 -->
@@ -214,8 +258,38 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
         </div>
         <?php else: ?>
         <div class="error-message">
-            <strong>お知らせ</strong>
-            現在、表示可能な乗り継ぎルートがありません。運行時間をご確認ください。
+            <?php if ($serviceInfo): ?>
+                <?php if ($serviceInfo['is_before_service']): ?>
+                    <strong>⏰ 運行開始前</strong>
+                    <p>本日の運行はまだ開始していません。</p>
+                    <?php if ($serviceInfo['first']): ?>
+                        <p style="font-size: 1.1em; margin-top: 8px;">
+                            初便: <strong><?php echo h($serviceInfo['first']); ?> 発</strong>（<?php echo h($serviceInfo['direction_text']); ?>）
+                        </p>
+                    <?php endif; ?>
+                <?php elseif ($serviceInfo['is_after_service']): ?>
+                    <strong>🌙 本日の運行は終了しました</strong>
+                    <?php if ($serviceInfo['last']): ?>
+                        <p>最終便: <?php echo h($serviceInfo['last']); ?> 発（<?php echo h($serviceInfo['direction_text']); ?>）</p>
+                    <?php endif; ?>
+                    <?php if ($serviceInfo['first']): ?>
+                        <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2);">
+                            明日の初便: <strong><?php echo h($serviceInfo['first']); ?> 発</strong>（<?php echo h($serviceInfo['direction_text']); ?>）
+                        </p>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <strong>お知らせ</strong>
+                    <p>現在、表示可能な乗り継ぎルートがありません。</p>
+                    <?php if ($serviceInfo['last']): ?>
+                        <p style="font-size: 0.9em; margin-top: 8px;">
+                            最終便: <?php echo h($serviceInfo['last']); ?> 発（<?php echo h($serviceInfo['direction_text']); ?>）
+                        </p>
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php else: ?>
+                <strong>お知らせ</strong>
+                <p>現在、表示可能な乗り継ぎルートがありません。運行時間をご確認ください。</p>
+            <?php endif; ?>
         </div>
         <?php endif; ?>
 
@@ -458,7 +532,11 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
     <!-- フッター -->
     <footer class="footer">
         <p>&copy; 2025 愛知工業大学 交通情報システム</p>
-        <p>シャトルバスとリニモの時刻は変更される場合があります</p>
+        <p style="font-size: 0.85em; margin-top: 8px;">
+            <strong>免責事項：</strong>本システムは愛知工業大学の学生向け通学支援を目的とした非営利の情報提供サービスです。<br>
+            時刻表データは公開情報を参考にしていますが、実際の運行状況と異なる場合があります。<br>
+            正確な時刻は<a href="https://www.linimo.jp/" target="_blank" rel="noopener">リニモ公式サイト</a>でご確認ください。
+        </p>
     </footer>
 
     <!-- JavaScript -->

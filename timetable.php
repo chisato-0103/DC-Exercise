@@ -295,7 +295,11 @@ $dayDescription = $DAY_TYPE_DESCRIPTIONS[$dayType] ?? '';
     <!-- フッター -->
     <footer class="footer">
         <p>&copy; 2025 愛知工業大学 交通情報システム</p>
-        <p>時刻は変更される場合があります</p>
+        <p style="font-size: 0.85em; margin-top: 8px;">
+            <strong>免責事項：</strong>本システムは愛知工業大学の学生向け通学支援を目的とした非営利の情報提供サービスです。<br>
+            時刻表データは公開情報を参考にしていますが、実際の運行状況と異なる場合があります。<br>
+            正確な時刻は<a href="https://www.linimo.jp/" target="_blank" rel="noopener">リニモ公式サイト</a>でご確認ください。
+        </p>
     </footer>
 </body>
 </html>
