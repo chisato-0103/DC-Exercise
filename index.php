@@ -7,8 +7,10 @@ require_once __DIR__ . '/config/settings.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/db_functions.php';
 
-// デフォルト目的地
+// 方向とパラメータの取得
+$direction = $_GET['direction'] ?? 'to_station'; // to_station or to_university
 $destination = $_GET['destination'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
+$origin = $_GET['origin'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
 
 // 現在時刻
 $currentTime = getCurrentTime();
@@ -19,8 +21,19 @@ $notices = getActiveNotices('all');
 
 // 乗り継ぎルートを計算
 $routes = [];
-if (isValidStationCode($destination)) {
+if ($direction === 'to_station' && isValidStationCode($destination)) {
+    // 大学 → リニモ各駅
     $routes = calculateUniversityToStation($destination, $currentTime);
+    $fromName = '愛知工業大学';
+    $toName = getStationName($destination);
+} elseif ($direction === 'to_university' && isValidStationCode($origin)) {
+    // リニモ各駅 → 大学
+    $routes = calculateStationToUniversity($origin, $currentTime);
+    $fromName = getStationName($origin);
+    $toName = '愛知工業大学';
+} else {
+    $fromName = '愛知工業大学';
+    $toName = getStationName($destination);
 }
 
 // 全駅リストを取得
@@ -53,13 +66,15 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
         <!-- 次の便 - 大型表示 -->
         <?php if ($nextRoute): ?>
         <div class="next-departure" onclick="this.classList.toggle('expanded')">
-            <div class="next-departure-title">次に乗るシャトルバス</div>
-            <div class="next-departure-time"><?php echo h($nextRoute['shuttle_departure']); ?> 発</div>
+            <div class="next-departure-title"><?php echo $direction === 'to_station' ? '次に乗るシャトルバス' : '次に乗るリニモ'; ?></div>
+            <div class="next-departure-time"><?php echo h($direction === 'to_station' ? $nextRoute['shuttle_departure'] : $nextRoute['linimo_departure']); ?> 発</div>
             <div class="next-departure-info">
-                🏫 愛知工業大学 → 🚌 八草駅 → 🚃 <?php echo h($nextRoute['destination_name']); ?>
+                <?php echo $direction === 'to_station'
+                    ? '🏫 ' . h($fromName) . ' → 🚌 八草駅 → 🚃 ' . h($toName)
+                    : '🚃 ' . h($fromName) . ' → 🚌 八草駅 → 🏫 ' . h($toName); ?>
             </div>
             <div style="text-align: center;">
-                <span class="countdown" id="countdown" data-departure="<?php echo h($nextRoute['shuttle_departure']); ?>">
+                <span class="countdown" id="countdown" data-departure="<?php echo h($direction === 'to_station' ? $nextRoute['shuttle_departure'] : $nextRoute['linimo_departure']); ?>">
                     あと <?php echo h($nextRoute['waiting_time']); ?> 分
                 </span>
             </div>
@@ -71,6 +86,7 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
             <div class="next-departure-details">
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);">
                     <div class="route-steps" style="color: white;">
+                        <?php if ($direction === 'to_station'): ?>
                         <!-- 大学発 -->
                         <div class="route-step">
                             <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏫</div>
@@ -123,6 +139,60 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
                                 <div class="route-step-detail">到着</div>
                             </div>
                         </div>
+                        <?php else: ?>
+                        <!-- 駅発（リニモ） -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚃</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time"><?php echo h($nextRoute['origin_name']); ?> 発 <?php echo h($nextRoute['linimo_departure']); ?></div>
+                                <div class="route-step-detail">リニモで出発</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 八草駅着（リニモ） -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚃</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">八草駅 着 <?php echo h($nextRoute['linimo_arrival']); ?></div>
+                                <div class="route-step-detail">リニモ約<?php echo h($nextRoute['linimo_time']); ?>分</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 乗り換え -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">⏱️</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">乗り換え時間: <?php echo h($nextRoute['transfer_time']); ?>分</div>
+                                <div class="route-step-detail">シャトルバスへ乗り換え</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 八草駅発（シャトルバス） -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚌</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">八草駅 発 <?php echo h($nextRoute['shuttle_departure']); ?></div>
+                                <div class="route-step-detail">シャトルバスで出発</div>
+                            </div>
+                        </div>
+
+                        <div class="route-arrow" style="color: white;">↓</div>
+
+                        <!-- 大学着 -->
+                        <div class="route-step">
+                            <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏁</div>
+                            <div class="route-step-content">
+                                <div class="route-step-time">愛知工業大学 着 <?php echo h($nextRoute['shuttle_arrival']); ?></div>
+                                <div class="route-step-detail">到着</div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="route-summary" style="background-color: rgba(255,255,255,0.1); border-top-color: rgba(255,255,255,0.3);">
@@ -167,15 +237,23 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
         </section>
         <?php endif; ?>
 
-        <!-- 目的地変更（折りたたみ可能） -->
+        <!-- ルート検索（折りたたみ可能） -->
         <section class="search-area collapsible">
             <div class="collapsible-header">
-                <span>📍 目的地を変更</span>
+                <span>📍 ルート検索</span>
                 <span class="collapsible-icon">▼</span>
             </div>
             <div class="collapsible-content">
                 <form class="search-form" method="GET" action="index.php">
                     <div class="form-group">
+                        <label for="direction">方向を選択</label>
+                        <select name="direction" id="direction" onchange="toggleDirectionFields(this.value)">
+                            <option value="to_station" <?php echo $direction === 'to_station' ? 'selected' : ''; ?>>🏫 大学 → 🚃 リニモ各駅</option>
+                            <option value="to_university" <?php echo $direction === 'to_university' ? 'selected' : ''; ?>>🚃 リニモ各駅 → 🏫 大学</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="destination-group" style="<?php echo $direction === 'to_university' ? 'display:none;' : ''; ?>">
                         <label for="destination">目的地を選択</label>
                         <select name="destination" id="destination">
                             <?php foreach ($stations as $station): ?>
@@ -188,10 +266,40 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
                             <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <div class="form-group" id="origin-group" style="<?php echo $direction === 'to_station' ? 'display:none;' : ''; ?>">
+                        <label for="origin">出発地を選択</label>
+                        <select name="origin" id="origin">
+                            <?php foreach ($stations as $station): ?>
+                                <?php if ($station['station_code'] !== 'yagusa'): // 八草駅は除外 ?>
+                                <option value="<?php echo h($station['station_code']); ?>"
+                                        <?php echo $origin === $station['station_code'] ? 'selected' : ''; ?>>
+                                    <?php echo h($station['station_name']); ?>
+                                </option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">検索</button>
                 </form>
             </div>
         </section>
+
+        <script>
+        function toggleDirectionFields(direction) {
+            const destinationGroup = document.getElementById('destination-group');
+            const originGroup = document.getElementById('origin-group');
+
+            if (direction === 'to_station') {
+                destinationGroup.style.display = '';
+                originGroup.style.display = 'none';
+            } else {
+                destinationGroup.style.display = 'none';
+                originGroup.style.display = '';
+            }
+        }
+        </script>
 
         <!-- その他のルート -->
         <?php if (count($routes) > 1): ?>
@@ -206,12 +314,13 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
 
                 <div class="route-quick-info">
                     <span class="route-quick-time">
-                        🏫 <?php echo h($route['shuttle_departure']); ?> 発
+                        <?php echo $direction === 'to_station' ? '🏫 ' . h($route['shuttle_departure']) : '🚃 ' . h($route['linimo_departure']); ?> 発
                     </span>
                     <span class="expand-icon">▼</span>
                 </div>
 
                 <div class="route-steps">
+                    <?php if ($direction === 'to_station'): ?>
                     <!-- 大学発 -->
                     <div class="route-step">
                         <div class="route-step-icon">🏫</div>
@@ -264,6 +373,60 @@ $nextRoute = !empty($routes) ? $routes[0] : null;
                             <div class="route-step-detail">到着</div>
                         </div>
                     </div>
+                    <?php else: ?>
+                    <!-- 駅発（リニモ） -->
+                    <div class="route-step">
+                        <div class="route-step-icon">🚃</div>
+                        <div class="route-step-content">
+                            <div class="route-step-time"><?php echo h($route['origin_name']); ?> 発 <?php echo h($route['linimo_departure']); ?></div>
+                            <div class="route-step-detail">リニモで出発</div>
+                        </div>
+                    </div>
+
+                    <div class="route-arrow">↓</div>
+
+                    <!-- 八草駅着（リニモ） -->
+                    <div class="route-step">
+                        <div class="route-step-icon">🚃</div>
+                        <div class="route-step-content">
+                            <div class="route-step-time">八草駅 着 <?php echo h($route['linimo_arrival']); ?></div>
+                            <div class="route-step-detail">リニモ約<?php echo h($route['linimo_time']); ?>分</div>
+                        </div>
+                    </div>
+
+                    <div class="route-arrow">↓</div>
+
+                    <!-- 乗り換え -->
+                    <div class="route-step">
+                        <div class="route-step-icon">⏱️</div>
+                        <div class="route-step-content">
+                            <div class="route-step-time">乗り換え時間: <?php echo h($route['transfer_time']); ?>分</div>
+                            <div class="route-step-detail">シャトルバスへ乗り換え</div>
+                        </div>
+                    </div>
+
+                    <div class="route-arrow">↓</div>
+
+                    <!-- 八草駅発（シャトルバス） -->
+                    <div class="route-step">
+                        <div class="route-step-icon">🚌</div>
+                        <div class="route-step-content">
+                            <div class="route-step-time">八草駅 発 <?php echo h($route['shuttle_departure']); ?></div>
+                            <div class="route-step-detail">シャトルバスで出発</div>
+                        </div>
+                    </div>
+
+                    <div class="route-arrow">↓</div>
+
+                    <!-- 大学着 -->
+                    <div class="route-step">
+                        <div class="route-step-icon">🏁</div>
+                        <div class="route-step-content">
+                            <div class="route-step-time">愛知工業大学 着 <?php echo h($route['shuttle_arrival']); ?></div>
+                            <div class="route-step-detail">到着</div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
 
                     <div class="route-summary">
                         <div class="summary-item">

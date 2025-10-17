@@ -29,15 +29,16 @@ CREATE TABLE stations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 駅マスタ初期データ
+-- 注意: 八草→陶磁資料館南は3分、その他の駅間は2分
 INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yagusa) VALUES
 ('yagusa', '八草', 'Yagusa', 1, 0),
-('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 2),
-('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 4),
-('koen_nishi', '公園西', 'Koen Nishi', 4, 6),
-('geidai_dori', '芸大通', 'Geidai-dori', 5, 8),
-('nagakute_kosenjo', '長久手古戦場', 'Nagakute Kosenjo', 6, 10),
-('irigaike_koen', '杁ヶ池公園', 'Irigaike Koen', 7, 12),
-('hanamizuki_dori', 'はなみずき通', 'Hanamizuki-dori', 8, 14),
+('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3),
+('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5),
+('koen_nishi', '公園西', 'Koen Nishi', 4, 7),
+('geidai_dori', '芸大通', 'Geidai-dori', 5, 9),
+('nagakute_kosenjo', '長久手古戦場', 'Nagakute Kosenjo', 6, 11),
+('irigaike_koen', '杁ヶ池公園', 'Irigaike Koen', 7, 13),
+('hanamizuki_dori', 'はなみずき通', 'Hanamizuki-dori', 8, 15),
 ('fujigaoka', '藤が丘', 'Fujigaoka', 9, 17);
 
 -- ===================================

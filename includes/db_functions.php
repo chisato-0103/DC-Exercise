@@ -260,24 +260,39 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
         $linimoTravelTime = (int)$originInfo['travel_time_from_yagusa'];
 
         // 次のリニモ（出発駅→八草駅）を取得
-        // 出発駅から八草方面への時刻表を取得する必要があるが、
-        // 現在のDBには八草発のみなので、八草着時刻を計算
-        $linimoTrains = getNextLinimoTrains('yagusa', 'to_fujigaoka', $currentTime, $dayType, 30);
+        // まず、出発駅から八草方面(to_yagusa)の時刻表を取得を試みる
+        $linimoTrains = getNextLinimoTrains($originCode, 'to_yagusa', $currentTime, $dayType, 30);
+
+        // 時刻表データがない場合は、八草発藤が丘方面から逆算
+        $useReverseCalculation = empty($linimoTrains);
+        if ($useReverseCalculation) {
+            $linimoTrains = getNextLinimoTrains('yagusa', 'to_fujigaoka', $currentTime, $dayType, 30);
+        }
 
         $routes = [];
 
         foreach ($linimoTrains as $linimo) {
-            // リニモ発車時刻から出発駅の発車時刻を逆算
-            $yagusaDepartureTime = $linimo['departure_time'];
-            $originDepartureTime = addMinutes($yagusaDepartureTime, -$linimoTravelTime);
+            if ($useReverseCalculation) {
+                // 八草駅発車時刻から出発駅の発車時刻を逆算
+                $yagusaDepartureTime = $linimo['departure_time'];
+                $originDepartureTime = addMinutes($yagusaDepartureTime, -$linimoTravelTime);
 
-            // 現在時刻より前なら除外
-            if (compareTime($originDepartureTime, $currentTime) < 0) {
-                continue;
+                // 現在時刻より前なら除外
+                if (compareTime($originDepartureTime, $currentTime) < 0) {
+                    continue;
+                }
+
+                // 八草駅到着時刻
+                $yagusaArrivalTime = addMinutes($yagusaDepartureTime, 2);
+            } else {
+                // 実際の時刻表データを使用
+                $originDepartureTime = $linimo['departure_time'];
+
+                // 八草駅到着時刻を計算
+                $yagusaArrivalTime = addMinutes($originDepartureTime, $linimoTravelTime);
             }
 
-            // 八草駅到着時刻 + 乗り換え時間
-            $yagusaArrivalTime = addMinutes($yagusaDepartureTime, 2); // 八草駅での停車時間
+            // 乗り換え時間を加算
             $minShuttleTime = addMinutes($yagusaArrivalTime, $transferTime);
 
             // 接続可能なシャトルバスを取得
@@ -295,14 +310,19 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $shuttle['departure_time']);
 
             $routes[] = [
-                'origin_departure' => formatTime($originDepartureTime),
-                'yagusa_arrival' => formatTime($yagusaArrivalTime),
+                'linimo_departure' => formatTime($originDepartureTime),
+                'linimo_arrival' => formatTime($yagusaArrivalTime),
                 'shuttle_departure' => formatTime($shuttle['departure_time']),
-                'university_arrival' => formatTime($shuttle['arrival_time']),
+                'shuttle_arrival' => formatTime($shuttle['arrival_time']),
                 'transfer_time' => $actualTransferTime,
                 'total_time' => $totalTime,
                 'waiting_time' => $waitingTime,
-                'origin_name' => $originInfo['station_name']
+                'linimo_time' => $linimoTravelTime,
+                'origin_name' => $originInfo['station_name'],
+                // 互換性のため旧キー名も保持
+                'origin_departure' => formatTime($originDepartureTime),
+                'yagusa_arrival' => formatTime($yagusaArrivalTime),
+                'university_arrival' => formatTime($shuttle['arrival_time'])
             ];
 
             if (count($routes) >= $limit) {
