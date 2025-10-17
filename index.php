@@ -181,5 +181,8 @@ $stations = getAllStations();
         <p>&copy; 2025 愛知工業大学 交通情報システム</p>
         <p>シャトルバスとリニモの時刻は変更される場合があります</p>
     </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
