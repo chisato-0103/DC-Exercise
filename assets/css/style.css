@@ -532,6 +532,18 @@ body {
     max-height: 1000px;
 }
 
+.next-departure .route-step-time {
+    color: white;
+}
+
+.next-departure .route-step-detail {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.next-departure .summary-label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 /* ===================================
    ルートカード簡略版
    =================================== */
