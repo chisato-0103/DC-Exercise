@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愛工大交通情報システム</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <h1>愛工大交通情報システム</h1>
+        <p>シャトルバス＆リニモ乗り継ぎ案内</p>
+    </header>
+
+    <div class="container">
+        <!-- 現在時刻 -->
+        <div class="current-time">
+            現在時刻: 読み込み中...
+        </div>
+
+        <!-- 次の便 - 大型表示 -->
+        <div class="next-departure">
+            <div style="text-align: center; padding: 2rem;">
+                読み込み中...
+            </div>
+        </div>
+
+        <!-- お知らせエリア（折りたたみ可能） -->
+        <section class="notices collapsible">
+            <div class="collapsible-header">
+                <span>📢 運行情報・お知らせ</span>
+                <span class="collapsible-icon">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <!-- JavaScriptで動的生成 -->
+            </div>
+        </section>
+
+        <!-- ルート検索（折りたたみ可能） -->
+        <section class="search-area collapsible">
+            <div class="collapsible-header">
+                <span>📍 ルート検索</span>
+                <span class="collapsible-icon">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <form class="search-form" method="GET" action="index.html">
+                    <div class="form-group">
+                        <label for="direction">方向を選択</label>
+                        <select name="direction" id="direction" onchange="toggleDirectionFields(this.value)">
+                            <option value="to_station">🏫 大学 → 🚃 リニモ各駅</option>
+                            <option value="to_university">🚃 リニモ各駅 → 🏫 大学</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="destination-group">
+                        <label for="destination">目的地を選択</label>
+                        <select name="destination" id="destination">
+                            <!-- JavaScriptで動的生成 -->
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="origin-group" style="display:none;">
+                        <label for="origin">出発地を選択</label>
+                        <select name="origin" id="origin">
+                            <!-- JavaScriptで動的生成 -->
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">検索</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- その他のルート -->
+        <section class="results" style="display: none;">
+            <!-- JavaScriptで動的生成 -->
+        </section>
+
+        <!-- ナビゲーションボタン -->
+        <!-- <div class="nav-buttons">
+        </div> -->
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2025 愛知工業大学 交通情報システム</p>
+        <p style="font-size: 0.85em; margin-top: 8px;">
+            <strong>免責事項：</strong>本システムは愛知工業大学の学生向け通学支援を目的とした非営利の情報提供サービスです。<br>
+            時刻表データは公開情報を参考にしていますが、実際の運行状況と異なる場合があります。<br>
+            正確な時刻は<a href="https://www.linimo.jp/" target="_blank" rel="noopener">リニモ公式サイト</a>でご確認ください。
+        </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/index.js"></script>
+</body>
+</html>

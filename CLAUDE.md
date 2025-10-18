@@ -14,33 +14,39 @@ This is a web application for Aichi Institute of Technology (AIT) that displays 
 
 ## Technology Stack
 
-- **Frontend**: Vanilla JavaScript (no frameworks), HTML5, CSS3
-- **Backend**: PHP 7.4+
+- **Frontend**: Vanilla JavaScript (no frameworks), HTML5, CSS3 - Static HTML with API calls
+- **Backend**: PHP 7.4+ - REST API architecture
 - **Database**: MySQL 5.7+
 - **Development Environment**: MAMP (Mac, Apache, MySQL, PHP)
+- **Architecture**: Frontend/Backend separation (SPA-like)
 
-## Project Structure (Planned)
+## Project Structure (Current Implementation)
 
 ```
-/project-root/
-├── index.php              # Top page (next available connection)
-├── timetable.php          # Timetable display
-├── search.php             # Transfer search results
-├── api/
-│   ├── get_next_connection.php    # Get next connection API
-│   ├── search_connection.php      # Transfer search API
-│   └── get_timetable.php          # Get timetable API
+/DC-Exercise/
+├── index.html             # Top page (SPA)
+├── api/                   # Backend REST APIs
+│   ├── get_next_connection.php    # Get next connection
+│   ├── search_connection.php      # Transfer search
+│   ├── get_stations.php           # Get station list
+│   └── get_notices.php            # Get notices
 ├── config/
 │   ├── database.php       # DB connection config
-│   └── settings.php       # System settings (transfer time, etc.)
+│   └── settings.php       # System settings (auto dia detection)
 ├── includes/
 │   ├── functions.php      # Common functions
 │   └── db_functions.php   # DB operation functions
 ├── assets/
 │   ├── css/style.css
-│   └── js/app.js
-└── sql/
-    └── setup.sql          # DB initialization script
+│   └── js/
+│       ├── api.js         # API communication module
+│       ├── app.js         # Common utilities (collapsible, countdown)
+│       └── index.js       # Index page logic
+└── sql/                   # DB initialization & data scripts
+    ├── setup.sql
+    ├── complete_shuttle_a.sql
+    ├── complete_shuttle_bc.sql
+    └── complete_linimo_*.sql
 ```
 
 ## Database Schema
@@ -115,11 +121,16 @@ All APIs return JSON responses with structure:
 ## Development Notes
 
 - **Mobile-First**: Responsive design prioritizing smartphone users
-- **No Authentication**: Public access system
+- **No Authentication**: Public access system (Phase 1)
 - **Data Updates**: Timetable changes require manual DB updates via SQL scripts
-- **Security**: Use prepared statements for all queries, escape all output
-- **Performance**: Target page load < 3 seconds
+- **Security**:
+  - Frontend/Backend separation (HTML + API)
+  - Prepared statements for all queries
+  - XSS protection via escapeHtml() in JavaScript
+  - No inline PHP in HTML
+- **Performance**: Target page load < 3 seconds (achieved with static HTML)
 - **Maintainability**: All configurable parameters in settings files, not hardcoded
+- **Auto Dia Detection**: A/B/C diagram types automatically determined by date and day of week
 
 ## Data Sources
 
@@ -130,7 +141,18 @@ The repository includes PDF timetables:
 
 These PDFs are the authoritative source for timetable data and should be parsed to populate the database.
 
-## Future Phases
+## Implementation Status
 
-- **Phase 2**: Aichi Kanjō Line integration, favorites feature, admin panel
-- **Phase 3**: Real-time delay information, push notifications
+### Phase 1 (Completed) ✅
+- ✅ Shuttle bus: Yagusa Station ⇔ AIT Campus (A/B/C diagrams)
+- ✅ Linimo rail: Yagusa Station → Fujigaoka Station (all 9 stations)
+- ✅ Bi-directional transfer search
+- ✅ Next available connection display
+- ✅ Automatic diagram type detection
+- ✅ Notices display feature
+- ✅ Frontend/Backend separation (HTML + REST API)
+- ✅ Mobile-first responsive UI
+
+### Phase 2 (Future)
+- Admin panel (notices & settings management)
+- Aichi Kanjō Line integration
