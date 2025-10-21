@@ -138,7 +138,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('yagusa', '八草', 'to_fujigaoka', '23:01:00', 'weekday_green'),
 ('yagusa', '八草', 'to_fujigaoka', '23:15:00', 'weekday_green'),
 ('yagusa', '八草', 'to_fujigaoka', '23:30:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '23:45:00', 'weekday_green'),
+('yagusa', '八草', 'to_fujigaoka', '23:45:00', 'weekday_green');
 
 -- ========================================
 -- 陶磁資料館南駅 → 藤が丘方面（平日・緑時刻）
@@ -273,7 +273,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:02:00', 'weekday_green'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:16:00', 'weekday_green'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:31:00', 'weekday_green'),
-('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:46:00', 'weekday_green'),
+('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:46:00', 'weekday_green');
 
 -- ========================================
 -- 愛・地球博記念公園駅 → 藤が丘方面（平日・緑時刻）
