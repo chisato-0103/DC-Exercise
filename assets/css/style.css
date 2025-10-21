@@ -595,3 +595,63 @@ body {
 .route-card-compact.expanded .expand-icon {
     transform: rotate(180deg);
 }
+
+
+
+/* ===== 改良版ルート表示 ===== */
+.route-step {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem 0;
+    position: relative;
+}
+
+.route-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 60px;
+    width: 2px;
+    height: calc(100% - 60px);
+    background-color: #ccc;
+    opacity: 0.6;
+}
+
+
+
+.route-step-time {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #003366;
+}
+
+
+.route-step-detail {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.route-summary {
+    background-color: #f8f9fb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.route-step-time {
+    
+    border-bottom: 2px solid white; /* アンダーラインを太くできる */
+    padding-bottom: 2px;            /* 下に少し余白を作る */
+}
+
+
+img{
+    width: 50px;
+    height: 30px;
+}
+
+.countdown {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+

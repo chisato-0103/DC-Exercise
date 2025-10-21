@@ -3,7 +3,7 @@
  * トップページ（index.html）用スクリプト
  */
 
-(function() {
+(function () {
     'use strict';
 
     let stations = [];
@@ -114,17 +114,19 @@
      * 現在時刻とダイヤ情報を更新
      */
     function updateCurrentTimeDisplay(data) {
-        const currentTimeElement = document.querySelector('.current-time');
-        if (!currentTimeElement || !data.data) return;
+    const currentTimeElement = document.querySelector('.current-time');
+    if (!currentTimeElement || !data.data) return;
 
-        const { current_time, dia_description, day_description } = data.data;
-        currentTimeElement.innerHTML = `
-            現在時刻: ${escapeHtml(current_time)}
-            <span style="margin-left: 15px; font-size: 0.9em; opacity: 0.9;">
-                📅 ${escapeHtml(dia_description)} / ${escapeHtml(day_description)}
-            </span>
-        `;
-    }
+    // 現在時刻のみ取得（HH:MM形式）
+    const { current_time } = data.data;
+
+    currentTimeElement.innerHTML = `
+        <span style="font-size: 0.8em; opacity: 1.0;">
+            ${escapeHtml(current_time)}
+        </span>
+    `;
+}
+
 
     /**
      * ルート情報をレンダリング
@@ -158,8 +160,8 @@
             <div class="next-departure-time">${escapeHtml(departureTime)} 発</div>
             <div class="next-departure-info">
                 ${direction === 'to_station'
-                    ? `🏫 愛知工業大学 → 🚌 八草駅 → 🚃 ${escapeHtml(route.destination_name)}`
-                    : `🚃 ${escapeHtml(route.origin_name)} → 🚌 八草駅 → 🏫 愛知工業大学`}
+                ? `<img src="assets/image/school-flag-svgrepo-com 2.svg" /> 愛知工業大学 → <img src="assets/image/bus-svgrepo-com 2.svg" /> 八草駅 → <img src="assets/image/train-svgrepo-com 2.svg" /> ${escapeHtml(route.destination_name)}`
+                : `<img src="assets/image/train-svgrepo-com 2.svg" /> ${escapeHtml(route.origin_name)} → <img src="assets/image/bus-svgrepo-com 2.svg" /> 八草駅 → <img src="assets/image/school-flag-svgrepo-com 2.svg" /> 愛知工業大学`}
             </div>
             <div style="text-align: center;">
                 <span class="countdown" id="countdown" data-departure="${escapeHtml(departureTime)}">
@@ -175,7 +177,7 @@
         `;
 
         container.style.display = 'block';
-        container.onclick = function() {
+        container.onclick = function () {
             this.classList.toggle('expanded');
         };
     }
@@ -189,7 +191,7 @@
         if (direction === 'to_station') {
             html += `
                 <div class="route-step">
-                    <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏫</div>
+                    <img src="assets/image/school-flag-svgrepo-com 2.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">愛知工業大学 発 ${escapeHtml(route.shuttle_departure)}</div>
                         <div class="route-step-detail">シャトルバスで出発</div>
@@ -197,7 +199,7 @@
                 </div>
                 <div class="route-arrow" style="color: white;">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚌</div>
+                    <img src="assets/image/bus-svgrepo-com 2.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 着 ${escapeHtml(route.shuttle_arrival)}</div>
                         <div class="route-step-detail">シャトルバス約5分</div>
@@ -205,7 +207,7 @@
                 </div>
                 <div class="route-arrow" style="color: white;">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">⏱️</div>
+                    <img src="assets/image/time-svgrepo-com 2.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
                         <div class="route-step-detail">リニモへ乗り換え</div>
@@ -213,7 +215,7 @@
                 </div>
                 <div class="route-arrow" style="color: white;">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🚃</div>
+                    <img src="assets/image/train-svgrepo-com 2.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 発 ${escapeHtml(route.linimo_departure)}</div>
                         <div class="route-step-detail">リニモで出発</div>
@@ -221,7 +223,7 @@
                 </div>
                 <div class="route-arrow" style="color: white;">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon" style="background-color: rgba(255,255,255,0.2);">🏁</div>
+                    <img src="assets/image/flag-2-svgrepo-com 2.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">${escapeHtml(route.destination_name)} 着 ${escapeHtml(route.destination_arrival)}</div>
                         <div class="route-step-detail">到着</div>
@@ -315,7 +317,7 @@
                     </div>
                     <div class="route-quick-info">
                         <span class="route-quick-time">
-                            ${direction === 'to_station' ? '🏫' : '🚃'} ${escapeHtml(departureTime)} 発
+                            ${direction === 'to_station' ? '<img src="assets/image/school-flag-svgrepo-com.svg" />' : '<img src="assets/image/train-svgrepo-com.svg" />'} ${escapeHtml(departureTime)} 発
                         </span>
                         <span class="expand-icon">▼</span>
                     </div>
@@ -338,24 +340,27 @@
 
         if (direction === 'to_station') {
             html = `
+                
                 <div class="route-step">
-                    <div class="route-step-icon">🏫</div>
+                <img src="assets/image/school-flag-svgrepo-com.svg" />
                     <div class="route-step-content">
-                        <div class="route-step-time">愛知工業大学 発 ${escapeHtml(route.shuttle_departure)}</div>
-                        <div class="route-step-detail">シャトルバスで出発</div>
+                    <div class="route-step-time">愛知工業大学 発 ${escapeHtml(route.shuttle_departure)}</div>
+                    <div class="route-step-detail">シャトルバスで出発</div>
                     </div>
                 </div>
+
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🚌</div>
+                <img src="assets/image/bus-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 着 ${escapeHtml(route.shuttle_arrival)}</div>
                         <div class="route-step-detail">シャトルバス約5分</div>
                     </div>
                 </div>
+
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">⏱️</div>
+                <img src="assets/image/time-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
                         <div class="route-step-detail">リニモへ乗り換え</div>
@@ -363,7 +368,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🚃</div>
+                    <img src="assets/image/train-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 発 ${escapeHtml(route.linimo_departure)}</div>
                         <div class="route-step-detail">リニモで出発</div>
@@ -371,7 +376,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🏁</div>
+                    <img src="assets/image/flag-2-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">${escapeHtml(route.destination_name)} 着 ${escapeHtml(route.destination_arrival)}</div>
                         <div class="route-step-detail">到着</div>
@@ -381,7 +386,7 @@
         } else {
             html = `
                 <div class="route-step">
-                    <div class="route-step-icon">🚃</div>
+                    <img src="assets/image/train-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">${escapeHtml(route.origin_name)} 発 ${escapeHtml(route.linimo_departure)}</div>
                         <div class="route-step-detail">リニモで出発</div>
@@ -389,7 +394,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🚃</div>
+                    <img src="assets/image/train-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 着 ${escapeHtml(route.linimo_arrival)}</div>
                         <div class="route-step-detail">リニモ約${escapeHtml(route.linimo_time)}分</div>
@@ -397,7 +402,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">⏱️</div>
+                    <img src="assets/image/time-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
                         <div class="route-step-detail">シャトルバスへ乗り換え</div>
@@ -405,7 +410,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🚌</div>
+                    <img src="assets/image/bus-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">八草駅 発 ${escapeHtml(route.shuttle_departure)}</div>
                         <div class="route-step-detail">シャトルバスで出発</div>
@@ -413,7 +418,7 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 <div class="route-step">
-                    <div class="route-step-icon">🏁</div>
+                    <img src="assets/image/flag-2-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time">愛知工業大学 着 ${escapeHtml(route.shuttle_arrival)}</div>
                         <div class="route-step-detail">到着</div>
@@ -557,7 +562,7 @@
         // 方向切り替えイベント
         const directionSelect = document.getElementById('direction');
         if (directionSelect) {
-            directionSelect.addEventListener('change', function() {
+            directionSelect.addEventListener('change', function () {
                 toggleDirectionFields(this.value);
             });
             toggleDirectionFields(directionSelect.value);
