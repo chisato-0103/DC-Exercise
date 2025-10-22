@@ -109,6 +109,8 @@
 
             // フォーム値を復元
             document.getElementById('direction').value = currentDirection;
+            // 方向に応じて目的地/出発地の表示を切り替え
+            toggleDirectionFields(currentDirection);
             if (currentDirection === 'to_station') {
                 document.getElementById('destination').value = currentDestination;
             } else if (currentDirection === 'to_university') {
