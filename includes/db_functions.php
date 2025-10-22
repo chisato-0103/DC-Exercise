@@ -202,13 +202,20 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
 
             $linimo = $linimoTrains[0];
 
+            // 実際の乗り換え時間を計算
+            $actualTransferTime = calculateDuration($yagusaArrivalTime, $linimo['departure_time']);
+
+            // 設定値以上の乗り換え時間が必要な場合は除外
+            if ($actualTransferTime > $transferTime) {
+                continue;
+            }
+
             // 目的地到着時刻を計算
             $destinationArrivalTime = addMinutes($linimo['departure_time'], $linimoTravelTime);
 
             // 総所要時間と待ち時間を計算
             $totalTime = calculateDuration($currentTime, $destinationArrivalTime);
             $waitingTime = calculateDuration($currentTime, $shuttle['departure_time']);
-            $actualTransferTime = calculateDuration($yagusaArrivalTime, $linimo['departure_time']);
 
             $routes[] = [
                 'shuttle_departure' => formatTime($shuttle['departure_time']),
@@ -304,10 +311,17 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
 
             $shuttle = $shuttleBuses[0];
 
+            // 実際の乗り換え時間を計算（八草駅到着 → シャトルバス出発）
+            $actualTransferTime = calculateDuration($yagusaArrivalTime, $shuttle['departure_time']);
+
+            // 設定値以上の乗り換え時間が必要な場合は除外
+            if ($actualTransferTime > $transferTime) {
+                continue;
+            }
+
             // 総所要時間と待ち時間を計算
             $totalTime = calculateDuration($originDepartureTime, $shuttle['arrival_time']);
             $waitingTime = calculateDuration($currentTime, $originDepartureTime);
-            $actualTransferTime = calculateDuration($yagusaArrivalTime, $shuttle['departure_time']);
 
             $routes[] = [
                 'linimo_departure' => formatTime($originDepartureTime),
