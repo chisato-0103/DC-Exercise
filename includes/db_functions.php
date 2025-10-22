@@ -181,6 +181,34 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
             return [];
         }
 
+        // 八草駅が目的地の場合はシャトルバスのみ
+        if ($destinationCode === 'yagusa') {
+            // 次のシャトルバス（大学→八草駅）を取得
+            $shuttleBuses = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, $limit);
+
+            $routes = [];
+            foreach ($shuttleBuses as $shuttle) {
+                $departure = $shuttle['departure_time'];
+                $arrival = $shuttle['arrival_time'];
+                $travelTime = calculateDuration($departure, $arrival);
+                $waitingTime = calculateDuration($currentTime, $departure);
+
+                $routes[] = [
+                    'shuttle_departure' => formatTime($departure),
+                    'shuttle_arrival' => formatTime($arrival),
+                    'linimo_departure' => null,
+                    'destination_arrival' => formatTime($arrival),
+                    'transfer_time' => 0,
+                    'total_time' => $travelTime,
+                    'waiting_time' => $waitingTime,
+                    'destination_name' => $destinationInfo['station_name']
+                ];
+            }
+
+            return $routes;
+        }
+
+        // リニモ駅が目的地の場合はシャトルバス + リニモで計算
         $linimoTravelTime = (int)$destinationInfo['travel_time_from_yagusa'];
 
         // 次のシャトルバス（大学→八草駅）を取得
