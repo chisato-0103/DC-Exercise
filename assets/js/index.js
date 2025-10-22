@@ -60,9 +60,8 @@
             const destinationSelect = document.getElementById('destination');
             const originSelect = document.getElementById('origin');
 
-            // 目的地：リニモ駅のみ（八草駅除外）
-            const stationOptions = stations
-                .filter(station => station.station_code !== 'yagusa')
+            // 目的地：リニモ駅 + 八草駅
+            const destinationOptions = stations
                 .map(station => `
                     <option value="${escapeHtml(station.station_code)}">
                         ${escapeHtml(station.station_name)}
@@ -72,10 +71,16 @@
             // 出発地：リニモ駅 + 八草駅
             const originOptions = `
                 <option value="yagusa">八草駅</option>
-                ${stationOptions}
+                ${stations
+                    .filter(station => station.station_code !== 'yagusa')
+                    .map(station => `
+                        <option value="${escapeHtml(station.station_code)}">
+                            ${escapeHtml(station.station_name)}
+                        </option>
+                    `).join('')}
             `;
 
-            if (destinationSelect) destinationSelect.innerHTML = stationOptions;
+            if (destinationSelect) destinationSelect.innerHTML = destinationOptions;
             if (originSelect) originSelect.innerHTML = originOptions;
 
         } catch (error) {
