@@ -545,12 +545,13 @@ body {
 
 .countdown.urgent {
     background-color: var(--danger-color);
-    animation: pulse 1s infinite;
+    animation: pulse 3s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    0% { opacity: 1; }      /* 0秒から2秒間（67%）、100%をキープ */
+    27% { opacity: 0.5; }        /* 中間で70%に点滅 */
+    55%, 100% { opacity: 1; }         /* 100%に戻す */
 }
 
 .next-departure-details {
@@ -670,7 +671,7 @@ body {
 }
 
 .route-step-time {
-    
+
     border-bottom: 2px solid white; /* アンダーラインを太くできる */
     padding-bottom: 2px;            /* 下に少し余白を作る */
 }
@@ -685,4 +686,3 @@ img{
     font-size: 0.9em;
     opacity: 0.8;
 }
-
