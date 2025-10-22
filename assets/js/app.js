@@ -57,7 +57,7 @@
             // 出発したらページをリロード（次の便を表示するため）
             setTimeout(function() {
                 location.reload();
-            }, 500); // 500ms後にリロード
+            }, 3000); // 3秒後にリロード
             return;
         }
 
