@@ -6,6 +6,9 @@
 (function() {
     'use strict';
 
+    // リロード中フラグ（出発時刻到達後のカウントダウン表示を防ぐ）
+    let isReloading = false;
+
     /**
      * 現在時刻を更新する関数
      */
@@ -49,10 +52,17 @@
 
         if (diff <= 0) {
             countdownElement.textContent = '出発しました';
+            // リロード中フラグを立てる
+            isReloading = true;
             // 出発したらページをリロード（次の便を表示するため）
             setTimeout(function() {
                 location.reload();
             }, 500); // 500ms後にリロード
+            return;
+        }
+
+        // リロード中なら以下の処理をスキップ
+        if (isReloading) {
             return;
         }
 
