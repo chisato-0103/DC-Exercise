@@ -47,8 +47,12 @@
         const minutesLeft = Math.floor(diff / 60);
         const secondsLeft = diff % 60;
 
-        if (minutesLeft < 0) {
+        if (diff <= 0) {
             countdownElement.textContent = '出発しました';
+            // 出発したらページをリロード（次の便を表示するため）
+            setTimeout(function() {
+                location.reload();
+            }, 500); // 500ms後にリロード
             return;
         }
 
@@ -78,15 +82,6 @@
         });
     }
 
-    /**
-     * ページを自動リロードする関数（1分ごと）
-     */
-    function setupAutoReload() {
-        // 1分ごとにページをリロード
-        setInterval(function() {
-            location.reload();
-        }, 60000); // 60秒 = 1分
-    }
 
     /**
      * 初期化処理
@@ -102,9 +97,6 @@
 
         // 折りたたみ機能をセットアップ
         setupCollapsibles();
-
-        // 1分ごとに自動リロード
-        setupAutoReload();
 
         console.log('愛工大交通情報システム: 初期化完了');
     }
