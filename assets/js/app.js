@@ -14,14 +14,11 @@
         if (!currentTimeElement) return;
 
         const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth() + 1;
-        const day = now.getDate();
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
-        const formattedTime = `現在時刻: ${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
         currentTimeElement.textContent = formattedTime;
     }
 

@@ -15,8 +15,11 @@
 
     <div class="container">
         <!-- 現在時刻 -->
-        <div class="current-time">
-            現在時刻: 読み込み中...
+        <div class="current-time-wrapper">
+            <div class="current-time-label">⏰ 現在時刻</div>
+            <div class="current-time">
+                読み込み中...
+            </div>
         </div>
 
         <!-- ルート検索（折りたたみ可能） -->
@@ -26,7 +29,7 @@
                 <span class="collapsible-icon">▼</span>
             </div>
             <div class="collapsible-content">
-                <form class="search-form" method="GET" action="index.html">
+                <form class="search-form" method="GET" action="index.html" id="search-form">
                     <div class="form-group">
                         <label for="direction">方向を選択</label>
                         <select name="direction" id="direction" onchange="toggleDirectionFields(this.value)">

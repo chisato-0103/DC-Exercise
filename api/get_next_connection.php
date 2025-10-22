@@ -28,7 +28,6 @@ try {
 
     // 現在時刻
     $currentTime = getCurrentTime();
-    $currentDateTime = date('Y年n月j日 H:i:s');
     $diaType = getCurrentDiaType();
     $dayType = getCurrentDayType();
 
@@ -43,11 +42,19 @@ try {
         $routes = calculateUniversityToStation($destination, $time, $limit);
         $fromName = '愛知工業大学';
         $toName = getStationName($destination);
-    } elseif ($direction === 'to_university' && isValidStationCode($origin)) {
-        // リニモ各駅 → 大学
-        $routes = calculateStationToUniversity($origin, $time, $limit);
-        $fromName = getStationName($origin);
-        $toName = '愛知工業大学';
+    } elseif ($direction === 'to_university') {
+        // リニモ各駅または八草駅 → 大学
+        if ($origin === 'yagusa') {
+            // 八草駅 → 大学
+            $routes = calculateYagusaToUniversity($time, $limit);
+            $fromName = '八草駅';
+            $toName = '愛知工業大学';
+        } elseif (isValidStationCode($origin)) {
+            // リニモ駅 → 大学
+            $routes = calculateStationToUniversity($origin, $time, $limit);
+            $fromName = getStationName($origin);
+            $toName = '愛知工業大学';
+        }
     }
 
     // ルートがない場合、最終便・初便情報を取得
@@ -67,8 +74,8 @@ try {
                 'is_before_service' => $currentHour < 8,
                 'is_after_service' => $currentHour >= 22
             ];
-        } else {
-            // 駅→大学の場合、シャトルバスの情報を取得
+        } elseif ($direction === 'to_university') {
+            // 駅→大学またはして八草駅→大学の場合、シャトルバスの情報を取得
             $lastBus = getLastShuttleBus('to_university', $diaType);
             $firstBus = getFirstShuttleBus('to_university', $diaType);
 
@@ -90,7 +97,7 @@ try {
 
     // レスポンス
     jsonResponse(true, [
-        'current_time' => $currentDateTime,
+        'current_time' => $currentTime,
         'dia_type' => $diaType,
         'dia_description' => $diaDescription,
         'day_type' => $dayType,

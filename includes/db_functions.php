@@ -416,3 +416,47 @@ function getFirstShuttleBus($direction, $diaType) {
         return null;
     }
 }
+
+/**
+ * 八草駅 → 大学
+ *
+ * @param string $currentTime 現在時刻（HH:MM:SS）
+ * @param int $limit 取得件数
+ * @return array 乗り継ぎルートの配列
+ */
+function calculateYagusaToUniversity($currentTime, $limit = 3) {
+    try {
+        $diaType = getCurrentDiaType();
+
+        // 次のシャトルバス（八草→大学）を取得
+        $shuttles = getNextShuttleBuses('to_university', $currentTime, $diaType, $limit);
+
+        $routes = [];
+        foreach ($shuttles as $shuttle) {
+            $departure = $shuttle['departure_time'];
+            $arrival = $shuttle['arrival_time'];
+            $travelTime = calculateDuration($departure, $arrival);
+            $waitingTime = calculateDuration($currentTime, $departure);
+
+            $routes[] = [
+                'origin_name' => '八草駅',
+                'destination_name' => '愛知工業大学',
+                'shuttle_departure' => $departure,
+                'shuttle_arrival' => $arrival,
+                'shuttle_time' => $travelTime,
+                'linimo_departure' => null,
+                'linimo_arrival' => null,
+                'linimo_time' => 0,
+                'transfer_time' => 0,
+                'waiting_time' => $waitingTime,
+                'total_time' => $travelTime
+            ];
+        }
+
+        return $routes;
+
+    } catch (Exception $e) {
+        logError('Failed to calculate Yagusa to University route', $e);
+        return [];
+    }
+}
