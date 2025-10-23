@@ -141,6 +141,12 @@ The repository includes PDF timetables:
 
 These PDFs are the authoritative source for timetable data and should be parsed to populate the database.
 
+## Deployment
+
+For EC2 deployment instructions and important configuration details, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+**⚠️  Critical**: EC2 requires a `.env` file with database credentials. See DEPLOYMENT.md for setup instructions.
+
 ## Implementation Status
 
 ### Phase 1 (Completed) ✅
