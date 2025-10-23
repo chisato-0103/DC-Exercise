@@ -5,6 +5,27 @@
  * 使用前に、以下の定数を環境に合わせて変更してください
  */
 
+// .env ファイルから環境変数を読み込む
+if (file_exists(__DIR__ . '/../.env')) {
+    $envFile = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($envFile as $line) {
+        // コメント行をスキップ
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+        // KEY=VALUE 形式をパース
+        if (strpos($line, '=') !== false) {
+            [$key, $value] = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            // 環境変数に設定
+            if (!getenv($key)) {
+                putenv($key . '=' . $value);
+            }
+        }
+    }
+}
+
 // データベース接続情報
 // 環境変数があればそれを使用、なければローカル開発用のデフォルト値
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
