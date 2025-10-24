@@ -769,10 +769,12 @@ img{
     display: flex;
     gap: 1rem;
     margin-top: 1.5rem;
+    justify-content: center;
 }
 
 .form-actions .btn {
     flex: 1;
+    text-align: center;
 }
 
 .success-message {
