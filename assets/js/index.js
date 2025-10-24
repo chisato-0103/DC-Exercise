@@ -156,10 +156,6 @@
 
         const { routes, from_name, to_name, service_info, dia_description } = apiResponse.data;
 
-        // デバッグ出力
-        console.log('API Response:', apiResponse.data);
-        console.log('Service Info:', service_info);
-
         // 次の便（最初のルート）
         if (routes && routes.length > 0) {
             renderNextDeparture(routes[0], currentDirection);
@@ -601,15 +597,6 @@
             return;
         }
 
-        // デバッグ出力
-        console.log('renderNoService called with:', {
-            is_before_service: serviceInfo.is_before_service,
-            is_after_service: serviceInfo.is_after_service,
-            next_day_first: serviceInfo.next_day_first,
-            bg_color: serviceInfo.bg_color,
-            text_color: serviceInfo.text_color
-        });
-
         // 背景色と文字色を設定
         const bgColor = serviceInfo.bg_color || '#0052a3';
         const textColor = serviceInfo.text_color || '#ffffff';
@@ -637,7 +624,6 @@
                 `;
             }
         } else if (serviceInfo.is_after_service) {
-            console.log('is_after_service is true, rendering end of service message');
             html += `<strong>🌙 本日の運行は終了しました</strong>`;
             if (serviceInfo.last) {
                 html += `<p>最終便: ${escapeHtml(serviceInfo.last)} 発（${escapeHtml(serviceInfo.direction_text)}）</p>`;
@@ -650,7 +636,6 @@
                 `;
             }
             if (serviceInfo.next_day_first) {
-                console.log('next_day_first exists:', serviceInfo.next_day_first);
                 // 翌日の日付を取得
                 const tomorrow = new Date();
                 tomorrow.setDate(tomorrow.getDate() + 1);
@@ -671,8 +656,6 @@
                         </p>
                     `;
                 }
-            } else {
-                console.log('next_day_first is null or undefined');
             }
         } else {
             html += `
@@ -696,11 +679,8 @@
         }
 
         html += '</div>';
-        console.log('Final HTML:', html);
         container.innerHTML = html;
         container.style.display = 'block';
-        console.log('Container display style set to:', container.style.display);
-        console.log('Container element:', container);
     }
 
     /**
