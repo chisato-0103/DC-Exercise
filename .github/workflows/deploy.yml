@@ -23,5 +23,14 @@ jobs:
             cd /var/www/html
             sudo git pull origin main
             sudo chown -R www-data:www-data /var/www/html
+
+            # Update Linimo timetable data
+            echo "Updating Linimo timetable data..."
+            sudo mysql ait_transport < /var/www/html/sql/linimo_weekday_to_yagusa.sql
+            sudo mysql ait_transport < /var/www/html/sql/linimo_holiday_to_yagusa.sql
+            sudo mysql ait_transport < /var/www/html/sql/linimo_weekday_to_fujigaoka.sql
+            sudo mysql ait_transport < /var/www/html/sql/linimo_holiday_to_fujigaoka.sql
+            echo "✅ Linimo timetable updated"
+
             sudo systemctl restart apache2
 
