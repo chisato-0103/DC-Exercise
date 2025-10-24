@@ -38,12 +38,17 @@
             }
 
             const noticesContainer = document.querySelector('.notices .collapsible-content');
-            noticesContainer.innerHTML = notices.map(notice => `
+            noticesContainer.innerHTML = notices.map(notice => {
+                // 日付をフォーマット（YYYY-MM-DD）
+                const startDate = notice.start_date ? notice.start_date.split(' ')[0] : '';
+                return `
                 <div class="notice-item ${notice.notice_type === 'suspension' ? 'danger' : (notice.notice_type === 'delay' ? 'warning' : '')}">
                     <div class="notice-title">${escapeHtml(notice.title)}</div>
+                    ${startDate ? `<div class="notice-date">${escapeHtml(startDate)}</div>` : ''}
                     <div class="notice-content">${escapeHtml(notice.content)}</div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
         } catch (error) {
             console.error('Failed to load notices:', error);
