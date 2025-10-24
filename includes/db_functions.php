@@ -231,15 +231,30 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
             $linimo = $linimoTrains[0];
             $yagusaDepartureTime = $linimo['departure_time'];
 
-            // 目的地駅の時刻表から対応する出発時刻を取得
-            $destinationLinimoTrains = getNextLinimoTrains($destinationCode, 'to_fujigaoka', $yagusaDepartureTime, $dayType, 1);
+            // 目的地駅での推定到着時刻を計算
+            $estimatedArrivalTime = addMinutes($yagusaDepartureTime, $linimoTravelTime);
+
+            // 目的地駅の時刻表から推定到着時刻に最も近い出発時刻を取得
+            $destinationLinimoTrains = getNextLinimoTrains($destinationCode, 'to_fujigaoka', $yagusaDepartureTime, $dayType, 5);
 
             if (empty($destinationLinimoTrains)) {
                 continue;
             }
 
-            $destinationLinimo = $destinationLinimoTrains[0];
-            $destinationArrivalTime = $destinationLinimo['departure_time'];
+            // 推定到着時刻に最も近い出発時刻を探す
+            $destinationArrivalTime = null;
+            $minDifference = PHP_INT_MAX;
+            foreach ($destinationLinimoTrains as $candidate) {
+                $difference = abs(compareTime($candidate['departure_time'], $estimatedArrivalTime));
+                if ($difference < $minDifference) {
+                    $minDifference = $difference;
+                    $destinationArrivalTime = $candidate['departure_time'];
+                }
+            }
+
+            if (!$destinationArrivalTime) {
+                continue;
+            }
 
             // 実際の乗り換え時間を計算
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $yagusaDepartureTime);
