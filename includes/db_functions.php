@@ -141,13 +141,15 @@ function getActiveNotices($target = 'all') {
         $sql = "SELECT * FROM notices
                 WHERE is_active = 1
                 AND start_date <= :current_datetime
-                AND (end_date IS NULL OR end_date >= :current_datetime)
-                AND (target = :target OR target = 'all')
+                AND (end_date IS NULL OR end_date >= :end_datetime)
+                AND (target = :target OR target = :all_target)
                 ORDER BY start_date DESC";
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':current_datetime', $currentDateTime, PDO::PARAM_STR);
+        $stmt->bindValue(':end_datetime', $currentDateTime, PDO::PARAM_STR);
         $stmt->bindValue(':target', $target, PDO::PARAM_STR);
+        $stmt->bindValue(':all_target', 'all', PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll();
