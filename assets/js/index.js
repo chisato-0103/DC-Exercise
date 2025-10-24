@@ -154,14 +154,18 @@
             return;
         }
 
-        const { routes, from_name, to_name, service_info } = apiResponse.data;
+        const { routes, from_name, to_name, service_info, dia_description } = apiResponse.data;
+
+        // デバッグ出力
+        console.log('API Response:', apiResponse.data);
+        console.log('Service Info:', service_info);
 
         // 次の便（最初のルート）
         if (routes && routes.length > 0) {
             renderNextDeparture(routes[0], currentDirection);
             renderOtherRoutes(routes.slice(1), currentDirection);
         } else {
-            renderNoService(service_info);
+            renderNoService(service_info, dia_description);
         }
     }
 
@@ -584,7 +588,7 @@
     /**
      * 運行なしの場合の表示
      */
-    function renderNoService(serviceInfo) {
+    function renderNoService(serviceInfo, diaDescription) {
         const container = document.querySelector('.next-departure');
 
         if (!serviceInfo) {
@@ -597,7 +601,21 @@
             return;
         }
 
-        let html = '<div class="error-message">';
+        // デバッグ出力
+        console.log('renderNoService called with:', {
+            is_before_service: serviceInfo.is_before_service,
+            is_after_service: serviceInfo.is_after_service,
+            next_day_first: serviceInfo.next_day_first,
+            bg_color: serviceInfo.bg_color,
+            text_color: serviceInfo.text_color
+        });
+
+        // 背景色と文字色を設定
+        const bgColor = serviceInfo.bg_color || '#0052a3';
+        const textColor = serviceInfo.text_color || '#ffffff';
+        const errorMessageStyle = `style="background: linear-gradient(135deg, ${bgColor}, ${bgColor}); color: ${textColor}; border: none; text-align: center; padding: 2rem 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);"`;
+
+        let html = `<div class="error-message" ${errorMessageStyle}>`;
 
         if (serviceInfo.is_before_service) {
             html += `
@@ -611,17 +629,50 @@
                     </p>
                 `;
             }
+            if (diaDescription) {
+                html += `
+                    <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">
+                        ${escapeHtml(diaDescription)}
+                    </p>
+                `;
+            }
         } else if (serviceInfo.is_after_service) {
+            console.log('is_after_service is true, rendering end of service message');
             html += `<strong>🌙 本日の運行は終了しました</strong>`;
             if (serviceInfo.last) {
                 html += `<p>最終便: ${escapeHtml(serviceInfo.last)} 発（${escapeHtml(serviceInfo.direction_text)}）</p>`;
             }
-            if (serviceInfo.first) {
+            if (diaDescription) {
                 html += `
-                    <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2);">
-                        明日の初便: <strong>${escapeHtml(serviceInfo.first)} 発</strong>（${escapeHtml(serviceInfo.direction_text)}）
+                    <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">
+                        ${escapeHtml(diaDescription)}
                     </p>
                 `;
+            }
+            if (serviceInfo.next_day_first) {
+                console.log('next_day_first exists:', serviceInfo.next_day_first);
+                // 翌日の日付を取得
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const formattedDate = formatDate(tomorrow);
+
+                html += `
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2);">
+                        翌日始発: <strong>${escapeHtml(serviceInfo.next_day_first)} 発</strong>（${formattedDate}、${escapeHtml(serviceInfo.direction_text)}）
+                    </p>
+                `;
+
+                // 翌日のダイヤ情報を表示
+                if (serviceInfo.next_day_dia_type) {
+                    html += `
+                        <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">
+                            ダイヤ${escapeHtml(serviceInfo.next_day_dia_type)}
+                            ${serviceInfo.next_day_dia_description ? `（${escapeHtml(serviceInfo.next_day_dia_description)}）` : ''}
+                        </p>
+                    `;
+                }
+            } else {
+                console.log('next_day_first is null or undefined');
             }
         } else {
             html += `
@@ -635,10 +686,31 @@
                     </p>
                 `;
             }
+            if (diaDescription) {
+                html += `
+                    <p style="font-size: 0.85em; margin-top: 8px; opacity: 0.9;">
+                        ${escapeHtml(diaDescription)}
+                    </p>
+                `;
+            }
         }
 
         html += '</div>';
+        console.log('Final HTML:', html);
         container.innerHTML = html;
+        container.style.display = 'block';
+        console.log('Container display style set to:', container.style.display);
+        console.log('Container element:', container);
+    }
+
+    /**
+     * 日付をフォーマット（YYYY年MM月DD日）
+     */
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}年${month}月${day}日`;
     }
 
     /**

@@ -21,6 +21,9 @@ try {
     $time = $_GET['time'] ?? getCurrentTime();
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : (int)getSetting('result_limit', RESULT_LIMIT);
 
+    // デバッグ用：時刻をテストするためのパラメータ
+    $testHour = isset($_GET['test_hour']) ? (int)$_GET['test_hour'] : null;
+
     // バリデーション
     if (!isValidTime($time)) {
         jsonResponse(false, null, '無効な時刻形式です');
@@ -59,33 +62,59 @@ try {
 
     // ルートがない場合、最終便・初便情報を取得
     if (empty($routes)) {
-        $currentHour = (int)date('H');
+        // デバッグ用：test_hourがセットされている場合はそれを使用
+        $currentHour = $testHour !== null ? $testHour : (int)date('H');
+        $currentTime = getCurrentTime();
 
         if ($direction === 'to_station') {
             // 大学→駅の場合、シャトルバスの情報を取得
             $lastBus = getLastShuttleBus('to_yagusa', $diaType);
             $firstBus = getFirstShuttleBus('to_yagusa', $diaType);
 
+            // 次の日のダイヤを取得（翌日のダイヤが異なる場合に対応）
+            $nextDayDiaType = getNextDayDiaType();
+            $nextDayFirstBus = getFirstShuttleBus('to_yagusa', $nextDayDiaType);
+
+            // 翌日のダイヤ説明を取得
+            $nextDayDiaDescription = $DIA_TYPE_DESCRIPTIONS[$nextDayDiaType] ?? "ダイヤ{$nextDayDiaType}";
+
             $serviceInfo = [
                 'type' => 'shuttle',
                 'direction_text' => '八草駅行き',
                 'last' => $lastBus ? formatTime($lastBus['departure_time']) : null,
                 'first' => $firstBus ? formatTime($firstBus['departure_time']) : null,
+                'next_day_first' => $nextDayFirstBus ? formatTime($nextDayFirstBus['departure_time']) : null,
+                'next_day_dia_type' => $nextDayDiaType,
+                'next_day_dia_description' => $nextDayDiaDescription,
                 'is_before_service' => $currentHour < 8,
-                'is_after_service' => $currentHour >= 22
+                'is_after_service' => $currentHour >= 22,
+                'bg_color' => $currentHour >= 22 ? '#1e3a5f' : '#0052a3',
+                'text_color' => '#ffffff'
             ];
         } elseif ($direction === 'to_university') {
             // 駅→大学またはして八草駅→大学の場合、シャトルバスの情報を取得
             $lastBus = getLastShuttleBus('to_university', $diaType);
             $firstBus = getFirstShuttleBus('to_university', $diaType);
 
+            // 次の日のダイヤを取得
+            $nextDayDiaType = getNextDayDiaType();
+            $nextDayFirstBus = getFirstShuttleBus('to_university', $nextDayDiaType);
+
+            // 翌日のダイヤ説明を取得
+            $nextDayDiaDescription = $DIA_TYPE_DESCRIPTIONS[$nextDayDiaType] ?? "ダイヤ{$nextDayDiaType}";
+
             $serviceInfo = [
                 'type' => 'shuttle',
                 'direction_text' => '大学行き',
                 'last' => $lastBus ? formatTime($lastBus['departure_time']) : null,
                 'first' => $firstBus ? formatTime($firstBus['departure_time']) : null,
+                'next_day_first' => $nextDayFirstBus ? formatTime($nextDayFirstBus['departure_time']) : null,
+                'next_day_dia_type' => $nextDayDiaType,
+                'next_day_dia_description' => $nextDayDiaDescription,
                 'is_before_service' => $currentHour < 8,
-                'is_after_service' => $currentHour >= 22
+                'is_after_service' => $currentHour >= 22,
+                'bg_color' => $currentHour >= 22 ? '#1e3a5f' : '#0052a3',
+                'text_color' => '#ffffff'
             ];
         }
     }

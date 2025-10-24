@@ -399,6 +399,27 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* next-departure内のエラーメッセージ（運行終了など）をセンタリング */
+.next-departure .error-message {
+    background: linear-gradient(135deg, var(--primary-color), #0052a3);
+    color: var(--white);
+    border: none;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.next-departure .error-message strong {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.next-departure .error-message p {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
 /* ===================================
    レスポンシブ対応（タブレット以上）
    =================================== */
@@ -758,7 +779,7 @@ img{
     min-height: 150px;
 }
 
-.error-message {
+.form-group .error-message {
     color: var(--danger-color);
     font-size: 0.85rem;
     margin-top: 0.25rem;
