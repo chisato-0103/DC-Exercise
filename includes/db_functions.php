@@ -231,7 +231,13 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
             $linimo = $linimoTrains[0];
 
             // 目的地到着時刻を計算
-            $destinationArrivalTime = addMinutes($linimo['departure_time'], $linimoTravelTime);
+            // 藤が丘駅と八草駅は到着時刻、それ以外の中間駅は出発時刻を表示
+            if ($destinationCode === 'fujigaoka' || $destinationCode === 'yagusa') {
+                $destinationArrivalTime = addMinutes($linimo['departure_time'], $linimoTravelTime);
+            } else {
+                // 中間駅の場合は目的地での出発時刻を表示
+                $destinationArrivalTime = $linimo['departure_time'];
+            }
 
             // 実際の乗り換え時間を計算
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $linimo['departure_time']);
