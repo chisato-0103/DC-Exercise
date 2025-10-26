@@ -23,11 +23,13 @@
 
 ## 技術スタック
 
-- **フロントエンド**: HTML5, CSS3, JavaScript (Vanilla)
-- **バックエンド**: PHP 7.4以上
-- **データベース**: MySQL 5.7以上
-- **開発環境**: MAMP (Mac, Apache, MySQL, PHP)
-- **バージョン管理**: Git
+| 項目 | 技術 | バージョン |
+|------|------|-----------|
+| フロントエンド | HTML5, CSS3, JavaScript (Vanilla) | ES6+ |
+| バックエンド | PHP | 7.4以上 |
+| データベース | MySQL | 5.7以上 |
+| サーバー | Apache + MAMP | - |
+| バージョン管理 | Git | - |
 
 ## ディレクトリ構成
 
@@ -43,8 +45,8 @@
 │   ├── database.php       # DB接続設定
 │   └── settings.php       # システム設定（ダイヤ自動判定含む）
 ├── includes/
-│   ├── functions.php      # 共通関数
-│   └── db_functions.php   # DB操作関数
+│   ├── functions.php      # 共通関数（時刻計算、ダイヤ判定、翌日ダイヤ判定など）
+│   └── db_functions.php   # DB操作関数（検索、乗り継ぎ計算など）
 ├── assets/
 │   ├── css/
 │   │   └── style.css      # スタイルシート
@@ -105,10 +107,33 @@ MAMPを使用する場合は、MAMPを起動し、プロジェクトフォルダ
 
 ## 使い方
 
-1. ブラウザで `http://localhost:8888/DC-Exercise/index.html` にアクセス
-2. トップ画面で次の便の情報が自動表示されます
-3. 「ルート検索」セクションで目的地を選択して検索可能
-4. ダイヤは日付・曜日から自動判定されます
+### 基本的な操作
+
+1. **ブラウザでアクセス**
+   ```
+   http://localhost:8888/DC-Exercise/index.html
+   ```
+
+2. **トップ画面で次の便を確認**
+   - 現在時刻から次に乗れるシャトルバスとリニモの情報が自動表示されます
+   - 「次に乗るシャトルバス」「次に乗るリニモ」など、方向に応じた情報が表示されます
+   - カウントダウンタイマーで待ち時間を表示
+
+3. **ルート検索セクションを使用**
+   - 「📍 ルート検索」セクションを展開（タップ/クリック）
+   - 方向を選択（大学→リニモ各駅 / リニモ各駅→大学）
+   - 目的地または出発地を選択
+   - 「検索」ボタンをタップ
+
+4. **運行時間外の表示**
+   - **朝8時前**: 「⏰ 運行開始前」と本日の初便情報を表示
+   - **夜22時以降**: 「🌙 本日の運行は終了しました」と翌日の始発情報を表示
+
+### 自動判定される情報
+
+- **ダイヤ種別（A/B/C）**: 日付・曜日から自動判定
+- **翌日のダイヤ**: 運行終了時に翌日のダイヤ種別を自動判定
+- **最適な乗り継ぎ**: 待ち時間が最小となるルートを自動計算
 
 ## 開発ロードマップ
 
@@ -130,59 +155,7 @@ MAMPを使用する場合は、MAMPを起動し、プロジェクトフォルダ
 ## 詳細設計
 
 詳細な設計については [CLAUDE.md](CLAUDE.md) を参照してください。
-
-## デプロイ方法
-
-### ローカル環境（開発）
-```
-http://localhost:8888/DC-Exercise/index.html
-```
-
-### 本番環境へのデプロイ
-
-#### オプション1: レンタルサーバー（推奨）
-
-**無料PHPホスティング:**
-- **InfinityFree**: https://infinityfree.net/
-- **000webhost**: https://www.000webhost.com/
-
-**手順:**
-1. FTPクライアント（FileZilla等）でファイルをアップロード
-2. phpMyAdminでデータベースをセットアップ
-3. `config/database.php` を本番環境用に編集
-
-#### オプション2: VPS/クラウド
-
-**推奨サービス:**
-- さくらのVPS（月額1,000円〜）
-- AWS EC2（無料枠あり）
-- Google Cloud Platform
-
-**必要な設定:**
-```bash
-# Apache + PHP + MySQLのインストール
-sudo apt update
-sudo apt install apache2 php mysql-server
-
-# プロジェクトのデプロイ
-cd /var/www/html
-git clone [your-repo-url]
-
-# データベースのセットアップ
-mysql -u root -p < sql/setup.sql
-mysql -u root -p < sql/complete_shuttle_a.sql
-mysql -u root -p < sql/complete_shuttle_bc.sql
-mysql -u root -p < sql/complete_linimo_all_stations_*.sql
-```
-
-#### オプション3: Dockerコンテナ（高度）
-
-```dockerfile
-# Dockerfile例
-FROM php:8.1-apache
-RUN docker-php-ext-install pdo pdo_mysql
-COPY . /var/www/html/
-```
+本番環境へのデプロイ方法については [DEPLOYMENT.md](DEPLOYMENT.md) を参照してください。
 
 ## 著作権・免責事項
 
