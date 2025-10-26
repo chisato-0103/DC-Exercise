@@ -101,42 +101,45 @@ function getSetting($key, $default = null) {
 }
 
 /**
- * 現在のダイヤ種別を判定（自動判定）
+ * 現在のダイヤ種別を判定（DB照会）
  *
- * @return string ダイヤ種別（A/B/C）
+ * @param string $date 判定対象日付（YYYY-MM-DD形式、省略時は本日）
+ * @return string ダイヤ種別（A/B/C）、運休の場合は'holiday'
  *
  * ダイヤ種別の判定ロジック:
- * - Aダイヤ: 4-7月, 10-1月の平日（授業期間）
- * - Bダイヤ: 土曜日（通年）
- * - Cダイヤ: 8-9月, 2-3月の平日（学校休業期間）
+ * - shuttle_scheduleテーブルから指定日付のダイヤを照会
+ * - データがない場合はAダイヤにフォールバック
+ * - 運休日は'holiday'を返す
  */
-function getCurrentDiaType() {
-    $month = (int)date('n');     // 1-12
-    $dayOfWeek = (int)date('w'); // 0=日曜, 1=月曜, ..., 6=土曜
-
-    // 土曜日は常にBダイヤ
-    if ($dayOfWeek === 6) {
-        return 'B';
+function getCurrentDiaType($date = null) {
+    // 日付を指定されていない場合は本日を使用
+    if ($date === null) {
+        $date = date('Y-m-d');
     }
 
-    // 日曜日は運行なし（念のためCダイヤ扱い）
-    if ($dayOfWeek === 0) {
-        return 'C';
-    }
+    try {
+        require_once __DIR__ . '/database.php';
+        $pdo = getDbConnection();
 
-    // 平日の判定
-    // 8月、9月、2月、3月 → Cダイヤ（学校休業期間）
-    if (in_array($month, [2, 3, 8, 9])) {
-        return 'C';
-    }
+        // shuttle_scheduleテーブルから指定日のダイヤを照会
+        $sql = "SELECT dia_type FROM shuttle_schedule WHERE operation_date = :date LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+        $stmt->execute();
 
-    // 4-7月、10-1月の平日 → Aダイヤ（授業期間）
-    if (in_array($month, [4, 5, 6, 7, 10, 11, 12, 1])) {
-        return 'A';
-    }
+        $result = $stmt->fetch();
+        if ($result) {
+            return $result['dia_type'];
+        }
 
-    // それ以外（念のため）
-    return getSetting('current_dia_type', CURRENT_DIA_TYPE);
+        // データがない場合はAダイヤにフォールバック
+        return getSetting('current_dia_type', CURRENT_DIA_TYPE);
+
+    } catch (Exception $e) {
+        error_log('Error getting diagram type from database: ' . $e->getMessage());
+        // エラーが発生した場合はAダイヤにフォールバック
+        return getSetting('current_dia_type', CURRENT_DIA_TYPE);
+    }
 }
 
 /**
