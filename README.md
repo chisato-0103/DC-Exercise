@@ -125,9 +125,8 @@ https://ait-traffic.ddns.net/
 ### 基本的な操作
 
 1. **ブラウザでアクセス**
-   ```
-   http://localhost:8888/DC-Exercise/index.html
-   ```
+   - ローカル開発環境: `http://localhost:8888/DC-Exercise/index.html`
+   - 本番環境: `https://ait-traffic.ddns.net/`
 
 2. **トップ画面で次の便を確認**
    - 現在時刻から次に乗れるシャトルバスとリニモの情報が自動表示されます
