@@ -118,6 +118,32 @@ All APIs return JSON responses with structure:
 }
 ```
 
+## End-of-Day Service Display Feature
+
+When the service ends (22:00 or later), the system automatically displays:
+
+1. **End-of-Service Message**: "🌙 本日の運行は終了しました" (Today's service has ended)
+2. **Last Bus Information**: Time and direction of the last bus
+3. **Current Diagram Type**: Current day's diagram type (A/B/C) with description
+4. **Next Day's First Bus**:
+   - Departure time
+   - Date in format YYYY年MM月DD日 (e.g., 2025年10月25日)
+   - Direction (Yagusa or University)
+   - Next day's diagram type (A/B/C) with description
+
+### Implementation Details
+
+**Backend (`api/get_next_connection.php`)**:
+- When no routes are found and `current_hour >= 22`, service info is generated
+- `getNextDayDiaType()` automatically determines the next day's diagram type
+- Response includes `next_day_dia_type` and `next_day_dia_description`
+- Background color changes based on service status (`bg_color` field)
+
+**Frontend (`assets/js/index.js`)**:
+- `renderNoService()` function renders the end-of-day message
+- Message is center-aligned and styled with gradient background
+- `formatDate()` function formats dates in Japanese format
+
 ## Development Notes
 
 - **Mobile-First**: Responsive design prioritizing smartphone users
@@ -131,6 +157,7 @@ All APIs return JSON responses with structure:
 - **Performance**: Target page load < 3 seconds (achieved with static HTML)
 - **Maintainability**: All configurable parameters in settings files, not hardcoded
 - **Auto Dia Detection**: A/B/C diagram types automatically determined by date and day of week
+- **End-of-Day Display**: Automatically triggered at 22:00, informing users of next day's first bus
 
 ## Data Sources
 
@@ -155,6 +182,7 @@ For EC2 deployment instructions and important configuration details, see [DEPLOY
 - ✅ Bi-directional transfer search
 - ✅ Next available connection display
 - ✅ Automatic diagram type detection
+- ✅ Service end-of-day display with next day's first bus information
 - ✅ Notices display feature
 - ✅ Frontend/Backend separation (HTML + REST API)
 - ✅ Mobile-first responsive UI
