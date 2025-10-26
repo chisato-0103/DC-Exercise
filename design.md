@@ -68,6 +68,17 @@
     - 翌日のダイヤ種別（A/B/C）説明
   - セッションカラー：時刻に応じて背景色が変更
 
+#### ✅ 2.1.7 お問い合わせ機能
+- **問い合わせページ** (`contact.html`)：
+  - ユーザーからのお問い合わせフォーム
+  - 名前、メールアドレス、問い合わせ内容を入力
+  - バリデーション機能
+
+- **デーベース管理** (`contacts`テーブル)：
+  - 問い合わせ内容を保存
+  - 送信日時、対応状況を記録
+  - 管理画面での参照・返信対応（将来実装）
+
 ### 2.2 非機能要件
 
 #### ✅ 2.2.1 レスポンシブデザイン
@@ -126,11 +137,13 @@
 ```
 /DC-Exercise/
 ├── index.html             # トップページ（SPA）
+├── contact.html           # お問い合わせページ
 ├── api/                   # Backend REST APIs
 │   ├── get_next_connection.php    # 次の便取得
 │   ├── search_connection.php      # 乗り継ぎ検索
 │   ├── get_stations.php           # 駅リスト取得
-│   └── get_notices.php            # お知らせ取得
+│   ├── get_notices.php            # お知らせ取得
+│   └── contact_submit.php         # お問い合わせ送信処理
 ├── config/
 │   ├── database.php       # DB接続設定
 │   └── settings.php       # システム設定（ダイヤ自動判定含む）
@@ -143,15 +156,17 @@
 │   └── js/
 │       ├── api.js         # API通信モジュール
 │       ├── app.js         # 共通処理（折りたたみ、カウントダウン）
-│       └── index.js       # トップページ用ロジック（24KB）
+│       └── index.js       # トップページ用ロジック
 └── sql/                   # DB初期化・データ投入スクリプト
-    ├── setup.sql          # テーブル作成
-    ├── complete_shuttle_a.sql        # Aダイヤデータ
-    ├── complete_shuttle_bc.sql       # B/Cダイヤデータ
-    ├── complete_linimo_all_stations_weekday_to_fujigaoka.sql
-    ├── complete_linimo_all_stations_weekday_to_yagusa.sql
-    ├── complete_linimo_all_stations_holiday_to_fujigaoka.sql
-    └── complete_linimo_all_stations_holiday_to_yagusa.sql
+    ├── setup.sql                  # テーブル作成
+    ├── complete_shuttle_a.sql     # シャトルバスAダイヤ
+    ├── complete_shuttle_bc.sql    # シャトルバスB/Cダイヤ
+    ├── shuttle_schedule_fy2025.sql # FY2025運行日程（NEW）
+    ├── linimo_weekday_to_fujigaoka.sql
+    ├── linimo_weekday_to_yagusa.sql
+    ├── linimo_holiday_to_fujigaoka.sql
+    ├── linimo_holiday_to_yagusa.sql
+    └── create_contacts_table.sql  # お問い合わせテーブル
 ```
 
 ---
@@ -171,6 +186,19 @@
 ```
 
 **データ件数**: 9駅
+
+#### shuttle_schedule（シャトルバス運行日程）※NEW
+```sql
+- id: INT PRIMARY KEY
+- operation_date: DATE UNIQUE
+- dia_type: ENUM('A', 'B', 'C', 'holiday')
+- fiscal_year: INT
+- is_operational: BOOLEAN DEFAULT TRUE
+- remarks: VARCHAR(255)
+```
+
+**用途**: 日付ごとのダイヤ種別を管理。自動ダイヤ判定に使用。
+**データ件数**: 約365日分（FY2025: 2025年4月～2026年3月）
 
 #### shuttle_bus_timetable（シャトルバス時刻表）
 ```sql
@@ -394,26 +422,51 @@ $stmt->bindValue(':param', $value, PDO::PARAM_STR);
 5. 待ち時間でソート、上位N件を返す
 ```
 
-### 7.2 ダイヤ自動判定ロジック
+### 7.2 ダイヤ自動判定ロジック（DB照会方式）
+
+**変更**: 以前のロジック関数から **DB照会方式** に変更
 
 ```php
-function getCurrentDiaType() {
-    $month = (int)date('n');
-    $dayOfWeek = (int)date('w'); // 0=日, 6=土
+function getCurrentDiaType($date = null) {
+    // 日付を指定されていない場合は本日を使用
+    if ($date === null) {
+        $date = date('Y-m-d');
+    }
 
-    // 土曜日 → Bダイヤ
-    if ($dayOfWeek === 6) return 'B';
+    try {
+        $pdo = getDbConnection();
 
-    // 日曜日 → 運行なし（Cダイヤ扱い）
-    if ($dayOfWeek === 0) return 'C';
+        // shuttle_scheduleテーブルから指定日のダイヤを照会
+        $sql = "SELECT dia_type FROM shuttle_schedule WHERE operation_date = :date LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+        $stmt->execute();
 
-    // 8,9,2,3月の平日 → Cダイヤ
-    if (in_array($month, [2, 3, 8, 9])) return 'C';
+        $result = $stmt->fetch();
+        if ($result) {
+            return $result['dia_type'];  // A, B, C, or 'holiday'
+        }
 
-    // 4-7,10-1月の平日 → Aダイヤ
-    return 'A';
+        // データがない場合はAダイヤにフォールバック
+        return getSetting('current_dia_type', CURRENT_DIA_TYPE);
+
+    } catch (Exception $e) {
+        error_log('Error getting diagram type: ' . $e->getMessage());
+        return getSetting('current_dia_type', CURRENT_DIA_TYPE);
+    }
 }
 ```
+
+**メリット**:
+- 運行日程の変更が容易（PDFから転記してSQLで投入）
+- 祝日や特別な日程に対応可能
+- 過去・未来の任意の日付で判定可能
+- 運行なし（`holiday`）の状態を明示的に管理
+
+**データ管理**:
+- データソース: PDF「シャトルバス運行日程.pdf」
+- 投入スクリプト: `sql/shuttle_schedule_fy2025.sql`
+- 更新方法: 新学年度ごとに SQLスクリプトを投入
 
 ---
 
@@ -492,8 +545,10 @@ VALUES ('info', 'all', 'お知らせタイトル', '内容', '2025-10-01', '2025
 - ✅ リニモ（八草〜藤が丘、全9駅、平日/休日）
 - ✅ 双方向乗り継ぎ検索
 - ✅ 次の便自動表示
-- ✅ ダイヤ自動判定
+- ✅ ダイヤ自動判定（DB照会方式に更新）
+- ✅ 運行日程DBテーブル（shuttle_schedule）管理
 - ✅ お知らせ表示機能
+- ✅ お問い合わせ機能
 - ✅ フロント/バックエンド分離
 - ✅ モバイルファーストUI
 - ✅ カウントダウン表示
@@ -501,6 +556,7 @@ VALUES ('info', 'all', 'お知らせタイトル', '内容', '2025-10-01', '2025
 
 ### Phase 2（将来実装予定）
 - 管理画面（お知らせ・設定管理）
+- お問い合わせ管理画面
 - 愛知環状線の追加
 
 ---

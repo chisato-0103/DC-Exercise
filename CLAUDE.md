@@ -98,6 +98,33 @@ total_time = shuttle_time + transfer_time + linimo_time
 waiting_time = next_departure - current_time
 ```
 
+## Diagram Type Detection (Updated: DB-Based)
+
+**Previous**: Automatic calculation based on date and day of week logic
+**Current**: Query-based detection from `shuttle_schedule` table
+
+### Implementation Details
+
+**Backend (`config/settings.php` - `getCurrentDiaType()` function)**:
+- Queries `shuttle_schedule` table for the specified date
+- Returns diagram type: `A` (Regular weekday), `B` (Saturday), `C` (School vacation), or `holiday` (No service)
+- Fallback to default setting if no data found
+- Supports both current date and custom date parameter
+
+**Database Table: `shuttle_schedule`**
+```sql
+- id: INT PRIMARY KEY
+- operation_date: DATE UNIQUE (e.g., 2025-04-03)
+- dia_type: ENUM('A', 'B', 'C', 'holiday')
+- fiscal_year: INT (e.g., 2025)
+- is_operational: BOOLEAN
+- remarks: VARCHAR(255)
+```
+
+**Data Source**: FY2025 (2025-04 to 2026-03) schedule from PDF timetable
+- File: `sql/shuttle_schedule_fy2025.sql`
+- Contains complete operation calendar with diagram assignments
+
 ## Configuration Management
 
 Frequently changed settings should be managed via `config/settings.php` or `system_settings` table:
