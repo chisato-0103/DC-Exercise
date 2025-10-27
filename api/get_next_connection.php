@@ -78,6 +78,18 @@ try {
             // 翌日のダイヤ説明を取得
             $nextDayDiaDescription = $DIA_TYPE_DESCRIPTIONS[$nextDayDiaType] ?? "ダイヤ{$nextDayDiaType}";
 
+            // 最終便の時刻を参照して運行終了を判定
+            $isAfterService = false;
+            if ($lastBus && $lastBus['departure_time']) {
+                // 最終便時刻と現在時刻を比較
+                $lastBusTime = strtotime($lastBus['departure_time']);
+                $currentTimeObj = strtotime($currentTime);
+                $isAfterService = $currentTimeObj > $lastBusTime;
+            } elseif ($currentHour >= 22) {
+                // 最終便が取得できない場合は22:00で判定
+                $isAfterService = true;
+            }
+
             $serviceInfo = [
                 'type' => 'shuttle',
                 'direction_text' => '八草駅行き',
@@ -87,8 +99,8 @@ try {
                 'next_day_dia_type' => $nextDayDiaType,
                 'next_day_dia_description' => $nextDayDiaDescription,
                 'is_before_service' => $currentHour < 8,
-                'is_after_service' => $currentHour >= 22,
-                'bg_color' => $currentHour >= 22 ? '#1e3a5f' : '#0052a3',
+                'is_after_service' => $isAfterService,
+                'bg_color' => $isAfterService ? '#1e3a5f' : '#0052a3',
                 'text_color' => '#ffffff'
             ];
         } elseif ($direction === 'to_university') {
@@ -103,6 +115,18 @@ try {
             // 翌日のダイヤ説明を取得
             $nextDayDiaDescription = $DIA_TYPE_DESCRIPTIONS[$nextDayDiaType] ?? "ダイヤ{$nextDayDiaType}";
 
+            // 最終便の時刻を参照して運行終了を判定
+            $isAfterService = false;
+            if ($lastBus && $lastBus['departure_time']) {
+                // 最終便時刻と現在時刻を比較
+                $lastBusTime = strtotime($lastBus['departure_time']);
+                $currentTimeObj = strtotime($currentTime);
+                $isAfterService = $currentTimeObj > $lastBusTime;
+            } elseif ($currentHour >= 22) {
+                // 最終便が取得できない場合は22:00で判定
+                $isAfterService = true;
+            }
+
             $serviceInfo = [
                 'type' => 'shuttle',
                 'direction_text' => '大学行き',
@@ -112,8 +136,8 @@ try {
                 'next_day_dia_type' => $nextDayDiaType,
                 'next_day_dia_description' => $nextDayDiaDescription,
                 'is_before_service' => $currentHour < 8,
-                'is_after_service' => $currentHour >= 22,
-                'bg_color' => $currentHour >= 22 ? '#1e3a5f' : '#0052a3',
+                'is_after_service' => $isAfterService,
+                'bg_color' => $isAfterService ? '#1e3a5f' : '#0052a3',
                 'text_color' => '#ffffff'
             ];
         }

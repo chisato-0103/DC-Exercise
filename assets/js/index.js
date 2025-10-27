@@ -657,25 +657,6 @@
                     `;
                 }
             }
-        } else {
-            html += `
-                <strong>お知らせ</strong>
-                <p>現在、表示可能な乗り継ぎルートがありません。</p>
-            `;
-            if (serviceInfo.last) {
-                html += `
-                    <p style="font-size: 0.9em; margin-top: 8px;">
-                        最終便: ${escapeHtml(serviceInfo.last)} 発（${escapeHtml(serviceInfo.direction_text)}）
-                    </p>
-                `;
-            }
-            if (diaDescription) {
-                html += `
-                    <p style="font-size: 0.85em; margin-top: 8px; opacity: 0.9;">
-                        ${escapeHtml(diaDescription)}
-                    </p>
-                `;
-            }
         }
 
         html += '</div>';
