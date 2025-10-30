@@ -417,7 +417,7 @@
                         </div>
                         <div class="route-arrow" style="color: white;">↓</div>
                         <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
-                            <img src="assets/image/flag-2-svgrepo-com 2.svg" />
+                            <img src="assets/image/flag-2-svgrepo-com.svg" />
                             <div class="route-step-content">
                                 <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_options[0].destination_arrival))}</div>
                                 <div class="route-step-detail">到着</div>
@@ -778,7 +778,7 @@
                     </div>
                     <div class="route-arrow">↓</div>
                     <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
-                        <img src="assets/image/flag-2-svgrepo-com 2.svg" />
+                        <img src="assets/image/flag-2-svgrepo-com.svg" />
                         <div class="route-step-content">
                             <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_options[0].destination_arrival))}</div>
                             <div class="route-step-detail">到着</div>

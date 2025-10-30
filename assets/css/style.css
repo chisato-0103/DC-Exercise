@@ -674,6 +674,11 @@ body {
     color: #003366;
 }
 
+/* ===== ルートカード簡略版内のステップ線を非表示 ===== */
+.route-card-compact .route-step::after {
+    display: none;
+}
+
 
 
 /* ===== 改良版ルート表示 ===== */
