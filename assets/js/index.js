@@ -239,7 +239,7 @@
 
         // リニモ選択ラジオボタンにイベントリスナーを追加
         setTimeout(() => {
-            const radioButtons = container.querySelectorAll('input[type="radio"][data-route]');
+            const radioButtons = container.querySelectorAll('input[type="radio"][name^="linimo_option_"]');
             const linimoSegmentLabels = container.querySelectorAll('.linimo-segment-label');
             const linimoSegmentButtons = container.querySelectorAll('.linimo-segment-button');
 
@@ -670,29 +670,67 @@
                 </div>
 
                 <div class="route-arrow">↓</div>
-                <div class="route-step">
-                <img src="assets/image/time-svgrepo-com.svg" />
+                <div class="route-step transfer-time-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
+                    <img src="assets/image/time-svgrepo-com.svg" />
                     <div class="route-step-content">
-                        <div class="route-step-time">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
+                        <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
                         <div class="route-step-detail">リニモへ乗り換え</div>
                     </div>
                 </div>
                 <div class="route-arrow">↓</div>
-                <div class="route-step">
-                    <img src="assets/image/train-svgrepo-com.svg" />
-                    <div class="route-step-content">
-                        <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_departure))}</div>
-                        <div class="route-step-detail">リニモで出発</div>
+                ${route.linimo_options && route.linimo_options.length > 0 ? `
+                    <div style="margin: 1rem 0;">
+                        <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後のリニモを選択</div>
+                        <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="linimo-segment-container">
+                            ${route.linimo_options.map((option, index) => {
+                                const isSelected = index === 0;
+                                return `
+                                    <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="linimo-segment-label">
+                                        <input type="radio" name="linimo_option_compact_${route.shuttle_departure}"
+                                               value="${index}"
+                                               data-route='${JSON.stringify(route)}'
+                                               data-index="${index}"
+                                               ${isSelected ? 'checked' : ''}
+                                               style="display: none;">
+                                        <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="linimo-segment-button">
+                                            <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
+                                                ${escapeHtml(option.linimo_departure)}
+                                            </div>
+                                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                                着${escapeHtml(option.destination_arrival)}
+                                            </div>
+                                        </div>
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
                     </div>
-                </div>
-                <div class="route-arrow">↓</div>
-                <div class="route-step">
-                    <img src="assets/image/flag-2-svgrepo-com.svg" />
-                    <div class="route-step-content">
-                        <div class="route-step-time">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.destination_arrival))}</div>
-                        <div class="route-step-detail">到着</div>
+                    <div class="route-arrow">↓</div>
+                    <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
+                        <img src="assets/image/flag-2-svgrepo-com 2.svg" />
+                        <div class="route-step-content">
+                            <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_options[0].destination_arrival))}</div>
+                            <div class="route-step-detail">到着</div>
+                        </div>
                     </div>
-                </div>
+                ` : `
+                    <div class="route-arrow">↓</div>
+                    <div class="route-step">
+                        <img src="assets/image/train-svgrepo-com.svg" />
+                        <div class="route-step-content">
+                            <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_departure))}</div>
+                            <div class="route-step-detail">リニモで出発</div>
+                        </div>
+                    </div>
+                    <div class="route-arrow">↓</div>
+                    <div class="route-step">
+                        <img src="assets/image/flag-2-svgrepo-com.svg" />
+                        <div class="route-step-content">
+                            <div class="route-step-time">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.destination_arrival))}</div>
+                            <div class="route-step-detail">到着</div>
+                        </div>
+                    </div>
+                `}
             `;
         } else {
             // リニモ駅 → 大学 または 八草駅 → 大学
@@ -734,29 +772,68 @@
                         </div>
                     </div>
                     <div class="route-arrow">↓</div>
-                    <div class="route-step">
+                    <div class="route-step transfer-time-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
                         <img src="assets/image/time-svgrepo-com.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
+                            <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
                             <div class="route-step-detail">シャトルバスへ乗り換え</div>
                         </div>
                     </div>
                     <div class="route-arrow">↓</div>
-                    <div class="route-step">
-                        <img src="assets/image/bus-svgrepo-com.svg" />
-                        <div class="route-step-content">
-                            <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_departure))}</div>
-                            <div class="route-step-detail">シャトルバスで出発</div>
+                    ${route.shuttle_options && route.shuttle_options.length > 0 ? `
+                        <div style="margin: 1rem 0;">
+                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">シャトルバスを選択</div>
+                            <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="shuttle-segment-container">
+                                ${route.shuttle_options.map((option, index) => {
+                                    const isSelected = index === 0;
+                                    return `
+                                        <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="shuttle-segment-label">
+                                            <input type="radio" name="shuttle_option_compact_${route.linimo_departure}"
+                                                   value="${index}"
+                                                   data-route='${JSON.stringify(route)}'
+                                                   data-index="${index}"
+                                                   data-direction="to_university"
+                                                   ${isSelected ? 'checked' : ''}
+                                                   style="display: none;">
+                                            <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
+                                                <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
+                                                    ${escapeHtml(option.shuttle_departure)}
+                                                </div>
+                                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                                    着${escapeHtml(option.shuttle_arrival)}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
-                    </div>
-                    <div class="route-arrow">↓</div>
-                    <div class="route-step">
-                        <img src="assets/image/flag-2-svgrepo-com.svg" />
-                        <div class="route-step-content">
-                            <div class="route-step-time">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_arrival))}</div>
-                            <div class="route-step-detail">到着</div>
+                        <div class="route-arrow">↓</div>
+                        <div class="route-step arrival-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
+                            <img src="assets/image/school-flag-svgrepo-com 2.svg" />
+                            <div class="route-step-content">
+                                <div class="route-step-time arrival-time-display">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_options[0].shuttle_arrival))}</div>
+                                <div class="route-step-detail">到着</div>
+                            </div>
                         </div>
-                    </div>
+                    ` : `
+                        <div class="route-arrow">↓</div>
+                        <div class="route-step">
+                            <img src="assets/image/bus-svgrepo-com.svg" />
+                            <div class="route-step-content">
+                                <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_departure))}</div>
+                                <div class="route-step-detail">シャトルバスで出発</div>
+                            </div>
+                        </div>
+                        <div class="route-arrow">↓</div>
+                        <div class="route-step">
+                            <img src="assets/image/flag-2-svgrepo-com.svg" />
+                            <div class="route-step-content">
+                                <div class="route-step-time">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_arrival))}</div>
+                                <div class="route-step-detail">到着</div>
+                            </div>
+                        </div>
+                    `}
                 `;
             }
         }
