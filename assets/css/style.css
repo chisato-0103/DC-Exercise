@@ -519,7 +519,7 @@ body {
 }
 
 .collapsible.active .collapsible-content {
-    max-height: 1000px;
+    max-height: 2000px;
 }
 
 /* ===================================
@@ -588,7 +588,7 @@ body {
 }
 
 .next-departure.expanded .next-departure-details {
-    max-height: 1000px;
+    max-height: 2000px;
 }
 
 .next-departure .route-step-time {

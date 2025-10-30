@@ -223,13 +223,14 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
             $yagusaArrivalTime = $shuttle['arrival_time'];
             $minLinimoTime = addMinutes($yagusaArrivalTime, $transferTime);
 
-            // 接続可能なリニモを取得（八草駅から）
-            $linimoTrains = getNextLinimoTrains('yagusa', 'to_fujigaoka', $minLinimoTime, $dayType, 1);
+            // 接続可能なリニモを複数本取得（八草駅から）
+            $linimoTrains = getNextLinimoTrains('yagusa', 'to_fujigaoka', $minLinimoTime, $dayType, 3);
 
             if (empty($linimoTrains)) {
                 continue;
             }
 
+            // 最初のリニモをメインルートとする
             $linimo = $linimoTrains[0];
             $yagusaDepartureTime = $linimo['departure_time'];
 
@@ -265,6 +266,23 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
             $totalTime = calculateDuration($currentTime, $destinationArrivalTime);
             $waitingTime = calculateDuration($currentTime, $shuttle['departure_time']);
 
+            // リニモ選択肢を生成（複数本）
+            $linimoOptions = [];
+            foreach ($linimoTrains as $option) {
+                $optionDepartureTime = $option['departure_time'];
+                $optionArrivalTime = addMinutes($optionDepartureTime, $linimoTravelTime);
+                $optionTransferTime = calculateDuration($yagusaArrivalTime, $optionDepartureTime);
+                $optionTotalTime = calculateDuration($currentTime, $optionArrivalTime);
+
+                $linimoOptions[] = [
+                    'linimo_departure' => formatTime($optionDepartureTime),
+                    'destination_arrival' => formatTime($optionArrivalTime),
+                    'transfer_time' => $optionTransferTime,
+                    'total_time' => $optionTotalTime,
+                    'linimo_time' => $linimoTravelTime
+                ];
+            }
+
             $routes[] = [
                 'shuttle_departure' => formatTime($shuttle['departure_time']),
                 'shuttle_arrival' => formatTime($yagusaArrivalTime),
@@ -273,7 +291,8 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
                 'transfer_time' => $actualTransferTime,
                 'total_time' => $totalTime,
                 'waiting_time' => $waitingTime,
-                'destination_name' => $destinationInfo['station_name']
+                'destination_name' => $destinationInfo['station_name'],
+                'linimo_options' => $linimoOptions
             ];
 
             if (count($routes) >= $limit) {
@@ -350,8 +369,8 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
             // 乗り換え時間を加算
             $minShuttleTime = addMinutes($yagusaArrivalTime, $transferTime);
 
-            // 接続可能なシャトルバスを取得
-            $shuttleBuses = getNextShuttleBuses('to_university', $minShuttleTime, $diaType, 1);
+            // 接続可能なシャトルバスを複数本取得
+            $shuttleBuses = getNextShuttleBuses('to_university', $minShuttleTime, $diaType, 3);
 
             if (empty($shuttleBuses)) {
                 continue;
@@ -366,6 +385,22 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
             // 実際の乗り換え時間を計算（八草駅到着 → シャトルバス出発）
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $shuttle['departure_time']);
 
+            // シャトルバス選択肢を生成（複数本）
+            $shuttleOptions = [];
+            foreach ($shuttleBuses as $option) {
+                $optionDepartureTime = $option['departure_time'];
+                $optionArrivalTime = $option['arrival_time'];
+                $optionTransferTime = calculateDuration($yagusaArrivalTime, $optionDepartureTime);
+                $optionTotalTime = calculateDuration($currentTime, $optionArrivalTime);
+
+                $shuttleOptions[] = [
+                    'shuttle_departure' => formatTime($optionDepartureTime),
+                    'shuttle_arrival' => formatTime($optionArrivalTime),
+                    'transfer_time' => $optionTransferTime,
+                    'total_time' => $optionTotalTime
+                ];
+            }
+
             $routes[] = [
                 'linimo_departure' => formatTime($originDepartureTime),
                 'linimo_arrival' => formatTime($yagusaArrivalTime),
@@ -376,6 +411,7 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
                 'waiting_time' => $waitingTime,
                 'linimo_time' => $linimoTravelTime,
                 'origin_name' => $originInfo['station_name'],
+                'shuttle_options' => $shuttleOptions,
                 // 互換性のため旧キー名も保持
                 'origin_departure' => formatTime($originDepartureTime),
                 'yagusa_arrival' => formatTime($yagusaArrivalTime),
@@ -485,8 +521,8 @@ function calculateYagusaToUniversity($currentTime, $limit = 3) {
     try {
         $diaType = getCurrentDiaType();
 
-        // 次のシャトルバス（八草→大学）を取得
-        $shuttles = getNextShuttleBuses('to_university', $currentTime, $diaType, $limit);
+        // 次のシャトルバス（八草→大学）を複数本取得
+        $shuttles = getNextShuttleBuses('to_university', $currentTime, $diaType, 3);
 
         $routes = [];
         foreach ($shuttles as $shuttle) {
@@ -494,6 +530,22 @@ function calculateYagusaToUniversity($currentTime, $limit = 3) {
             $arrival = $shuttle['arrival_time'];
             $travelTime = calculateDuration($departure, $arrival);
             $waitingTime = calculateDuration($currentTime, $departure);
+
+            // シャトルバス選択肢を生成（複数本）
+            $shuttleOptions = [];
+            foreach ($shuttles as $option) {
+                $optionDepartureTime = $option['departure_time'];
+                $optionArrivalTime = $option['arrival_time'];
+                $optionTravelTime = calculateDuration($optionDepartureTime, $optionArrivalTime);
+                $optionWaitingTime = calculateDuration($currentTime, $optionDepartureTime);
+
+                $shuttleOptions[] = [
+                    'shuttle_departure' => formatTime($optionDepartureTime),
+                    'shuttle_arrival' => formatTime($optionArrivalTime),
+                    'transfer_time' => 0,
+                    'total_time' => $optionTravelTime
+                ];
+            }
 
             $routes[] = [
                 'origin_name' => '八草駅',
@@ -506,8 +558,13 @@ function calculateYagusaToUniversity($currentTime, $limit = 3) {
                 'linimo_time' => 0,
                 'transfer_time' => 0,
                 'waiting_time' => $waitingTime,
-                'total_time' => $travelTime
+                'total_time' => $travelTime,
+                'shuttle_options' => $shuttleOptions
             ];
+
+            if (count($routes) >= $limit) {
+                break;
+            }
         }
 
         return $routes;
