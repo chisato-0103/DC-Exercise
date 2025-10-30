@@ -237,7 +237,7 @@
             this.classList.toggle('expanded');
         };
 
-        // リニモ選択ラジオボタンにイベントリスナーを追加
+        // リニモ選択ラジオボタンにイベントリスナーを追加（ルート１）
         setTimeout(() => {
             const radioButtons = container.querySelectorAll('input[type="radio"][name^="linimo_option_"]');
             const linimoSegmentLabels = container.querySelectorAll('.linimo-segment-label');
@@ -276,7 +276,7 @@
                 });
             });
 
-            // シャトルバス選択ウィジェット用のイベントリスナーを追加
+            // シャトルバス選択ウィジェット用のイベントリスナーを追加（ルート１）
             const shuttleRadioButtons = container.querySelectorAll('input[type="radio"][name^="shuttle_option_"]');
             const shuttleSegmentLabels = container.querySelectorAll('.shuttle-segment-label');
             const shuttleSegmentButtons = container.querySelectorAll('.shuttle-segment-button');
@@ -324,6 +324,7 @@
                 });
             }
         }, 0);
+
     }
 
     /**
@@ -621,7 +622,7 @@
             }
 
             html += `
-                <div class="route-card-compact" onclick="this.classList.toggle('expanded')">
+                <div class="route-card-compact" data-route-index="${index}">
                     <div class="route-header">
                         <span class="route-number">ルート ${index + 2}</span>
                         <span class="route-total-time">${escapeHtml(route.total_time)}分</span>
@@ -641,6 +642,76 @@
 
         container.innerHTML = html;
         container.style.display = 'block';
+
+        // すべてのイベントリスナーを一度に登録
+        setTimeout(() => {
+            // route-card-compact のクリックで展開/閉鎖
+            const routeCards = container.querySelectorAll('.route-card-compact');
+            routeCards.forEach((card) => {
+                card.addEventListener('click', function (e) {
+                    // セグメントコンテナ内のクリックは無視
+                    if (e.target.closest('.linimo-segment-container') || e.target.closest('.shuttle-segment-container')) {
+                        return;
+                    }
+                    this.classList.toggle('expanded');
+                });
+            });
+
+            // リニモセグメントボタンのクリックイベント（ラベル経由）
+            const allLinimoSegmentLabels = container.querySelectorAll('.linimo-segment-container .linimo-segment-label');
+            allLinimoSegmentLabels.forEach((label) => {
+                label.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+            });
+
+            // シャトルバスセグメントボタンのクリックイベント（ラベル経由）
+            const allShuttleSegmentLabels = container.querySelectorAll('.shuttle-segment-container .shuttle-segment-label');
+            allShuttleSegmentLabels.forEach((label) => {
+                label.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+            });
+
+            // リニモラジオボタンのchangeイベント
+            const allLinimoRadios = container.querySelectorAll('.linimo-segment-container input[type="radio"]');
+            allLinimoRadios.forEach((radio) => {
+                radio.addEventListener('change', function () {
+                    const route = JSON.parse(this.getAttribute('data-route'));
+                    const selectedIndex = parseInt(this.getAttribute('data-index'));
+                    updateLinimoChoice(this, route, selectedIndex);
+                }, true); // キャプチャフェーズで実行
+            });
+
+            // シャトルバスラジオボタンのchangeイベント
+            const allShuttleRadios = container.querySelectorAll('.shuttle-segment-container input[type="radio"]');
+            allShuttleRadios.forEach((radio) => {
+                radio.addEventListener('change', function () {
+                    const route = JSON.parse(this.getAttribute('data-route'));
+                    const selectedIndex = parseInt(this.getAttribute('data-index'));
+                    updateShuttleChoice(this, route, selectedIndex);
+                }, true); // キャプチャフェーズで実行
+            });
+
+            // スマホ時は縦並びに（幅が600px以下の場合）
+            if (window.innerWidth <= 600) {
+                const allLabels = container.querySelectorAll('.linimo-segment-label, .shuttle-segment-label');
+                allLabels.forEach((label) => {
+                    label.style.flex = '1 1 100%';
+                    label.style.minWidth = 'unset';
+                });
+            }
+        }, 0);
     }
 
     /**
@@ -679,24 +750,24 @@
                 </div>
                 <div class="route-arrow">↓</div>
                 ${route.linimo_options && route.linimo_options.length > 0 ? `
-                    <div style="margin: 1rem 0;">
-                        <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後のリニモを選択</div>
-                        <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="linimo-segment-container">
+                    <div style="margin: 1rem 0; padding: 1rem; border: 2px solid #0066cc; border-radius: 12px; background-color: #f9fbff;">
+                        <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: #0066cc; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後のリニモを選択</div>
+                        <div style="display: flex; flex-direction: row; gap: 0.5rem; padding: 0; border-radius: 8px; flex-wrap: wrap;" class="linimo-segment-container">
                             ${route.linimo_options.map((option, index) => {
                                 const isSelected = index === 0;
                                 return `
                                     <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="linimo-segment-label">
-                                        <input type="radio" name="linimo_option_compact_${route.shuttle_departure}"
+                                        <input type="radio" name="linimo_option_${route.shuttle_departure}"
                                                value="${index}"
                                                data-route='${JSON.stringify(route)}'
                                                data-index="${index}"
                                                ${isSelected ? 'checked' : ''}
-                                               style="display: none;">
-                                        <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="linimo-segment-button">
-                                            <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
+                                               style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
+                                        <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? '#e8f0fe' : 'transparent'}; border: 1px solid ${isSelected ? '#0066cc' : 'transparent'}; cursor: pointer;" class="linimo-segment-button">
+                                            <div style="font-size: 1.05rem; font-weight: 700; color: ${isSelected ? '#0066cc' : '#666'}; margin-bottom: 0.3rem;">
                                                 ${escapeHtml(option.linimo_departure)}
                                             </div>
-                                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                            <div style="font-size: 0.8rem; color: ${isSelected ? '#0066cc' : '#999'};">
                                                 着${escapeHtml(option.destination_arrival)}
                                             </div>
                                         </div>
@@ -781,25 +852,25 @@
                     </div>
                     <div class="route-arrow">↓</div>
                     ${route.shuttle_options && route.shuttle_options.length > 0 ? `
-                        <div style="margin: 1rem 0;">
-                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">シャトルバスを選択</div>
-                            <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="shuttle-segment-container">
+                        <div style="margin: 1rem 0; padding: 1rem; border: 2px solid #0066cc; border-radius: 12px; background-color: #f9fbff;">
+                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: #0066cc; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">シャトルバスを選択</div>
+                            <div style="display: flex; flex-direction: row; gap: 0.5rem; padding: 0; border-radius: 8px; flex-wrap: wrap;" class="shuttle-segment-container">
                                 ${route.shuttle_options.map((option, index) => {
                                     const isSelected = index === 0;
                                     return `
                                         <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="shuttle-segment-label">
-                                            <input type="radio" name="shuttle_option_compact_${route.linimo_departure}"
+                                            <input type="radio" name="shuttle_option_${route.linimo_departure}"
                                                    value="${index}"
                                                    data-route='${JSON.stringify(route)}'
                                                    data-index="${index}"
                                                    data-direction="to_university"
                                                    ${isSelected ? 'checked' : ''}
-                                                   style="display: none;">
-                                            <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
-                                                <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
+                                                   style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
+                                            <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? '#e8f0fe' : 'transparent'}; border: 1px solid ${isSelected ? '#0066cc' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
+                                                <div style="font-size: 1.05rem; font-weight: 700; color: ${isSelected ? '#0066cc' : '#666'}; margin-bottom: 0.3rem;">
                                                     ${escapeHtml(option.shuttle_departure)}
                                                 </div>
-                                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                                <div style="font-size: 0.8rem; color: ${isSelected ? '#0066cc' : '#999'};">
                                                     着${escapeHtml(option.shuttle_arrival)}
                                                 </div>
                                             </div>
@@ -1027,30 +1098,49 @@
      * シャトルバス選択時の動的更新
      */
     window.updateShuttleChoice = function(radio, route, selectedIndex) {
-        if (!radio.checked || !route.shuttle_options || !route.shuttle_options[selectedIndex]) {
+        if (!route.shuttle_options || !route.shuttle_options[selectedIndex]) {
             return;
         }
 
         const selectedOption = route.shuttle_options[selectedIndex];
 
         // ルート詳細内の情報を更新
-        const container = radio.closest('.next-departure-details') || radio.closest('.route-card-compact');
+        const container = radio.closest('.next-departure-details') || radio.closest('.route-card-compact') || radio.closest('.route-steps');
         if (!container) return;
 
         // セグメンテッドコントロールのボタンの見た目を更新
-        const allLabels = container.querySelectorAll('.shuttle-segment-label');
-        allLabels.forEach((label, index) => {
-            const labelDiv = label.querySelector('div');
-            if (labelDiv) {
-                if (index === selectedIndex) {
-                    labelDiv.style.backgroundColor = 'rgba(255,255,255,0.15)';
-                    labelDiv.style.border = '1px solid rgba(255,255,255,0.3)';
-                } else {
-                    labelDiv.style.backgroundColor = 'transparent';
-                    labelDiv.style.border = '1px solid transparent';
+        // 同じラジオボタングループ内のラベルのみを対象にする
+        const parentContainer = radio.closest('.shuttle-segment-container');
+
+        if (parentContainer) {
+            const allRadios = parentContainer.querySelectorAll('input[type="radio"]');
+            allRadios.forEach((r) => {
+                const label = r.closest('.shuttle-segment-label');
+                if (label) {
+                    const labelDiv = label.querySelector('.shuttle-segment-button');
+                    if (labelDiv) {
+                        if (r === radio) {
+                            // 選択されたラジオボタンに対応するボタン
+                            labelDiv.style.backgroundColor = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.15)' : '#e8f0fe';
+                            labelDiv.style.border = r.closest('.next-departure-details') ? '1px solid rgba(255,255,255,0.3)' : '1px solid #0066cc';
+                            // 子要素のテキスト色も更新
+                            const timeText = labelDiv.querySelector('div:first-child');
+                            const arrivalText = labelDiv.querySelector('div:last-child');
+                            if (timeText) timeText.style.color = r.closest('.next-departure-details') ? 'white' : '#0066cc';
+                            if (arrivalText) arrivalText.style.color = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.8)' : '#0066cc';
+                        } else {
+                            // 未選択のボタン
+                            labelDiv.style.backgroundColor = 'transparent';
+                            labelDiv.style.border = '1px solid transparent';
+                            const timeText = labelDiv.querySelector('div:first-child');
+                            const arrivalText = labelDiv.querySelector('div:last-child');
+                            if (timeText) timeText.style.color = r.closest('.next-departure-details') ? 'white' : '#666';
+                            if (arrivalText) arrivalText.style.color = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.8)' : '#999';
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // 大学到着時刻を更新
         const safeId = radio.name.replace(/shuttle_option_/, '').replace(/:/g, '-');
@@ -1102,30 +1192,49 @@
      * リニモ選択時の動的更新
      */
     window.updateLinimoChoice = function(radio, route, selectedIndex) {
-        if (!radio.checked || !route.linimo_options || !route.linimo_options[selectedIndex]) {
+        if (!route.linimo_options || !route.linimo_options[selectedIndex]) {
             return;
         }
 
         const selectedOption = route.linimo_options[selectedIndex];
 
         // ルート詳細内の情報を更新
-        const container = radio.closest('.next-departure-details') || radio.closest('.route-card-compact');
+        const container = radio.closest('.next-departure-details') || radio.closest('.route-card-compact') || radio.closest('.route-steps');
         if (!container) return;
 
         // セグメンテッドコントロールのボタンの見た目を更新
-        const allLabels = container.querySelectorAll('label');
-        allLabels.forEach((label, index) => {
-            const labelDiv = label.querySelector('div');
-            if (labelDiv) {
-                if (index === selectedIndex) {
-                    labelDiv.style.backgroundColor = 'rgba(255,255,255,0.15)';
-                    labelDiv.style.border = '1px solid rgba(255,255,255,0.3)';
-                } else {
-                    labelDiv.style.backgroundColor = 'transparent';
-                    labelDiv.style.border = '1px solid transparent';
+        // 同じラジオボタングループ内のラベルのみを対象にする
+        const parentContainer = radio.closest('.linimo-segment-container');
+
+        if (parentContainer) {
+            const allRadios = parentContainer.querySelectorAll('input[type="radio"]');
+            allRadios.forEach((r) => {
+                const label = r.closest('.linimo-segment-label');
+                if (label) {
+                    const labelDiv = label.querySelector('.linimo-segment-button');
+                    if (labelDiv) {
+                        if (r === radio) {
+                            // 選択されたラジオボタンに対応するボタン
+                            labelDiv.style.backgroundColor = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.15)' : '#e8f0fe';
+                            labelDiv.style.border = r.closest('.next-departure-details') ? '1px solid rgba(255,255,255,0.3)' : '1px solid #0066cc';
+                            // 子要素のテキスト色も更新
+                            const timeText = labelDiv.querySelector('div:first-child');
+                            const arrivalText = labelDiv.querySelector('div:last-child');
+                            if (timeText) timeText.style.color = r.closest('.next-departure-details') ? 'white' : '#0066cc';
+                            if (arrivalText) arrivalText.style.color = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.8)' : '#0066cc';
+                        } else {
+                            // 未選択のボタン
+                            labelDiv.style.backgroundColor = 'transparent';
+                            labelDiv.style.border = '1px solid transparent';
+                            const timeText = labelDiv.querySelector('div:first-child');
+                            const arrivalText = labelDiv.querySelector('div:last-child');
+                            if (timeText) timeText.style.color = r.closest('.next-departure-details') ? 'white' : '#666';
+                            if (arrivalText) arrivalText.style.color = r.closest('.next-departure-details') ? 'rgba(255,255,255,0.8)' : '#999';
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // 目的地到着時刻を更新
         const safeId = route.shuttle_departure.replace(/:/g, '-');

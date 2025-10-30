@@ -655,6 +655,25 @@ body {
     transform: rotate(180deg);
 }
 
+/* ===== ルートカード簡略版内のテキスト色調整 ===== */
+.route-card-compact .route-step-time {
+    color: #003366;
+    border-bottom: none;
+}
+
+.route-card-compact .route-step-detail {
+    color: #666;
+}
+
+/* ===== ルートカード簡略版内のサマリー色調整 ===== */
+.route-card-compact .summary-label {
+    color: #666;
+}
+
+.route-card-compact .summary-value {
+    color: #003366;
+}
+
 
 
 /* ===== 改良版ルート表示 ===== */
@@ -697,10 +716,9 @@ body {
     margin-top: 1rem;
 }
 
-.route-step-time {
-
-    border-bottom: 2px solid white; /* アンダーラインを太くできる */
-    padding-bottom: 2px;            /* 下に少し余白を作る */
+.next-departure .route-step-time {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 2px;
 }
 
 
