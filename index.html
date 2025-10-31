@@ -39,12 +39,30 @@
             <div class="collapsible-content">
                 <form class="search-form" method="GET" action="index.html" id="search-form">
                     <div class="form-group">
-                        <label for="direction">方向を選択</label>
-                        <select name="direction" id="direction" onchange="toggleDirectionFields(this.value)">
-                            <option value="to_station">🏫 大学 → 🚃 リニモ各駅</option>
-                            <option value="to_university">🚃 リニモ各駅 → 🏫 大学</option>
-                        </select>
+                        <label>路線と方向を選択</label>
+                        <div class="route-selection">
+                            <label class="radio-option">
+                                <input type="radio" name="route_option" value="to_linimo" checked onchange="setRouteOption(this.value)">
+                                <span>🏫 大学 → 🚃 リニモ駅</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="route_option" value="from_linimo" onchange="setRouteOption(this.value)">
+                                <span>🚃 リニモ駅 → 🏫 大学</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="route_option" value="to_aichi_kanjo" onchange="setRouteOption(this.value)">
+                                <span>🏫 大学 → 🚆 愛知環状線駅</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="route_option" value="from_aichi_kanjo" onchange="setRouteOption(this.value)">
+                                <span>🚆 愛知環状線駅 → 🏫 大学</span>
+                            </label>
+                        </div>
                     </div>
+
+                    <!-- 隠し入力フィールド -->
+                    <input type="hidden" name="direction" id="direction" value="to_station">
+                    <input type="hidden" name="line_code" id="line_code" value="linimo">
 
                     <div class="form-group" id="destination-group">
                         <label for="destination">目的地を選択</label>

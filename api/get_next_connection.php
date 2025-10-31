@@ -8,6 +8,7 @@
 require_once __DIR__ . '/../config/settings.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/db_functions.php';
+require_once __DIR__ . '/../includes/db_functions_generic.php';
 
 // CORSヘッダー（必要に応じて）
 header('Access-Control-Allow-Origin: *');
@@ -16,6 +17,7 @@ header('Content-Type: application/json; charset=utf-8');
 try {
     // パラメータ取得
     $direction = $_GET['direction'] ?? 'to_station'; // to_station or to_university
+    $lineCode = $_GET['line_code'] ?? 'linimo'; // linimo or aichi_kanjo
     $destination = $_GET['destination'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
     $origin = $_GET['origin'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
     $time = $_GET['time'] ?? getCurrentTime();
@@ -41,20 +43,32 @@ try {
     $serviceInfo = null;
 
     if ($direction === 'to_station' && isValidStationCode($destination)) {
-        // 大学 → リニモ各駅
-        $routes = calculateUniversityToStation($destination, $time, $limit);
+        // 大学 → 路線駅
+        if ($lineCode === 'linimo') {
+            // リニモ駅へ
+            $routes = calculateUniversityToStation($destination, $time, $limit);
+        } elseif ($lineCode === 'aichi_kanjo') {
+            // 愛知環状線駅へ
+            $routes = calculateUniversityToRail($lineCode, $destination, $time, $limit);
+        }
         $fromName = '愛知工業大学';
         $toName = getStationName($destination);
     } elseif ($direction === 'to_university') {
-        // リニモ各駅または八草駅 → 大学
+        // 路線駅または八草駅 → 大学
         if ($origin === 'yagusa') {
             // 八草駅 → 大学
             $routes = calculateYagusaToUniversity($time, $limit);
             $fromName = '八草駅';
             $toName = '愛知工業大学';
         } elseif (isValidStationCode($origin)) {
-            // リニモ駅 → 大学
-            $routes = calculateStationToUniversity($origin, $time, $limit);
+            // 路線駅 → 大学
+            if ($lineCode === 'linimo') {
+                // リニモ駅から
+                $routes = calculateStationToUniversity($origin, $time, $limit);
+            } elseif ($lineCode === 'aichi_kanjo') {
+                // 愛知環状線駅から
+                $routes = calculateRailToUniversity($lineCode, $origin, $time, $limit);
+            }
             $fromName = getStationName($origin);
             $toName = '愛知工業大学';
         }
@@ -156,6 +170,7 @@ try {
         'day_type' => $dayType,
         'day_description' => $dayDescription,
         'direction' => $direction,
+        'line_code' => $lineCode,
         'from_name' => $fromName,
         'to_name' => $toName,
         'routes' => $routes,

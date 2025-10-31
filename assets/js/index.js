@@ -8,6 +8,7 @@
 
     let stations = [];
     let currentDirection = 'to_station';
+    let currentLineCode = 'linimo';
     let currentDestination = 'fujigaoka';
     let currentOrigin = 'fujigaoka';
 
@@ -17,9 +18,11 @@
     function getURLParams() {
         const params = new URLSearchParams(window.location.search);
         const direction = params.get('direction') || 'to_station';
+        const lineCode = params.get('line_code') || 'linimo';
 
         return {
             direction: direction,
+            lineCode: lineCode,
             destination: params.get('destination') || 'fujigaoka',
             origin: params.get('origin') || 'fujigaoka'
         };
@@ -62,31 +65,66 @@
         try {
             stations = await API.getStations();
 
-            const destinationSelect = document.getElementById('destination');
-            const originSelect = document.getElementById('origin');
+            // 路線別に駅をフィルタリング
+            const filterStationsByLine = (lineCode) => {
+                return stations.filter(station => {
+                    const code = station.station_code;
+                    if (lineCode === 'linimo') {
+                        // リニモ駅：yagusa, tojishiryokan_minami, ... , fujigaoka
+                        // 愛知環状線の駅を除外
+                        return !code.includes('kanjo') &&
+                               !['yamaguchi', 'setoguchi', 'setoshi', 'nakamizuno', 'kozoji',
+                                 'sasabara', 'homi', 'kaizu', 'shigo', 'aikan_umetsubo',
+                                 'shin_toyota', 'shin_uwagoromo', 'mikawa_toyota', 'suenohara',
+                                 'ekaku', 'mikawa_kamigo', 'daimon_kitano', 'naka_okazaki',
+                                 'mutsuna', 'okazaki'].includes(code);
+                    } else if (lineCode === 'aichi_kanjo') {
+                        // 愛知環状線駅のみ（yagusa + kanjo系 + 岡崎方面の駅）
+                        return code.includes('kanjo') ||
+                               ['yakusa', 'yamaguchi', 'setoguchi', 'setoshi', 'nakamizuno', 'kozoji',
+                                'sasabara', 'homi', 'kaizu', 'shigo', 'aikan_umetsubo',
+                                'shin_toyota', 'shin_uwagoromo', 'mikawa_toyota', 'suenohara',
+                                'ekaku', 'mikawa_kamigo', 'daimon_kitano', 'naka_okazaki',
+                                'mutsuna', 'okazaki'].includes(code);
+                    }
+                    return true;
+                });
+            };
 
-            // 目的地：リニモ駅 + 八草駅
-            const destinationOptions = stations
-                .map(station => `
-                    <option value="${escapeHtml(station.station_code)}">
-                        ${escapeHtml(station.station_name)}
-                    </option>
-                `).join('');
+            const updateStationSelects = (lineCode) => {
+                const destinationSelect = document.getElementById('destination');
+                const originSelect = document.getElementById('origin');
+                const filteredStations = filterStationsByLine(lineCode);
 
-            // 出発地：リニモ駅 + 八草駅
-            const originOptions = `
-                <option value="yagusa">八草駅</option>
-                ${stations
-                    .filter(station => station.station_code !== 'yagusa')
+                // 目的地オプション（八草を除外）
+                const destinationOptions = filteredStations
+                    .filter(s => s.station_code !== 'yagusa' && s.station_code !== 'yakusa')
                     .map(station => `
                         <option value="${escapeHtml(station.station_code)}">
                             ${escapeHtml(station.station_name)}
                         </option>
-                    `).join('')}
-            `;
+                    `).join('');
 
-            if (destinationSelect) destinationSelect.innerHTML = destinationOptions;
-            if (originSelect) originSelect.innerHTML = originOptions;
+                // 出発地オプション（八草を含める）
+                const originOptions = `
+                    <option value="yagusa">八草駅</option>
+                    ${filteredStations
+                        .filter(station => station.station_code !== 'yagusa' && station.station_code !== 'yakusa')
+                        .map(station => `
+                            <option value="${escapeHtml(station.station_code)}">
+                                ${escapeHtml(station.station_name)}
+                            </option>
+                        `).join('')}
+                `;
+
+                if (destinationSelect) destinationSelect.innerHTML = destinationOptions;
+                if (originSelect) originSelect.innerHTML = originOptions;
+            };
+
+            // リニモを初期状態で表示
+            updateStationSelects('linimo');
+            // グローバルにupdateStationSelectsを公開（後で使用）
+            window.updateStationSelects = updateStationSelects;
 
         } catch (error) {
             console.error('Failed to load stations:', error);
@@ -99,12 +137,14 @@
     async function loadNextConnection() {
         const params = getURLParams();
         currentDirection = params.direction;
+        currentLineCode = params.lineCode;
         currentDestination = params.destination;
         currentOrigin = params.origin;
 
         try {
             const data = await API.getNextConnection(
                 currentDirection,
+                currentLineCode,
                 currentDirection === 'to_station' ? currentDestination : null,
                 currentDirection === 'to_university' ? currentOrigin : null
             );
@@ -114,6 +154,13 @@
 
             // フォーム値を復元
             document.getElementById('direction').value = currentDirection;
+            document.getElementById('line_code').value = currentLineCode;
+
+            // 駅を更新
+            if (window.updateStationSelects) {
+                window.updateStationSelects(currentLineCode);
+            }
+
             // 方向に応じて目的地/出発地の表示を切り替え
             toggleDirectionFields(currentDirection);
             if (currentDirection === 'to_station') {
@@ -1269,5 +1316,46 @@
                 }
             });
         }
+    };
+
+    /**
+     * 路線と方向を設定する
+     */
+    window.setRouteOption = function(routeOption) {
+        let direction, lineCode;
+
+        switch (routeOption) {
+            case 'to_linimo':
+                direction = 'to_station';
+                lineCode = 'linimo';
+                break;
+            case 'from_linimo':
+                direction = 'to_university';
+                lineCode = 'linimo';
+                break;
+            case 'to_aichi_kanjo':
+                direction = 'to_station';
+                lineCode = 'aichi_kanjo';
+                break;
+            case 'from_aichi_kanjo':
+                direction = 'to_university';
+                lineCode = 'aichi_kanjo';
+                break;
+            default:
+                direction = 'to_station';
+                lineCode = 'linimo';
+        }
+
+        // 隠し入力フィールドを更新
+        document.getElementById('direction').value = direction;
+        document.getElementById('line_code').value = lineCode;
+
+        // 駅を更新
+        if (window.updateStationSelects) {
+            window.updateStationSelects(lineCode);
+        }
+
+        // 方向に応じて表示を切り替え
+        toggleDirectionFields(direction);
     };
 })();

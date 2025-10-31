@@ -45,12 +45,13 @@ const API = (function() {
     /**
      * 次の乗り継ぎルートを取得
      * @param {string} direction - 方向 ('to_station' or 'to_university')
+     * @param {string} lineCode - 路線コード ('linimo' or 'aichi_kanjo')
      * @param {string} destination - 目的地駅コード (direction='to_station'の場合)
      * @param {string} origin - 出発地駅コード (direction='to_university'の場合)
      * @returns {Promise<Object>} - ルート情報
      */
-    async function getNextConnection(direction, destination = null, origin = null) {
-        const params = { direction };
+    async function getNextConnection(direction, lineCode = 'linimo', destination = null, origin = null) {
+        const params = { direction, line_code: lineCode };
 
         if (direction === 'to_station' && destination) {
             params.destination = destination;
