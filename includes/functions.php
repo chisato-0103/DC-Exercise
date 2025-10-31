@@ -163,6 +163,7 @@ function isValidTime($time) {
  */
 function isValidStationCode($stationCode) {
     $validCodes = [
+        // リニモ駅
         'yagusa',
         'tojishiryokan_minami',
         'ai_chikyuhaku_kinen_koen',
@@ -171,7 +172,31 @@ function isValidStationCode($stationCode) {
         'nagakute_kosenjo',
         'irigaike_koen',
         'hanamizuki_dori',
-        'fujigaoka'
+        'fujigaoka',
+        // 愛知環状線駅（23駅）
+        'okazaki',
+        'mutsuna',
+        'naka_okazaki',
+        'kita_okazaki',
+        'daimon',
+        'kitano_masuzuka',
+        'mikawa_kamigo',
+        'ekaku',
+        'suenohara',
+        'mikawa_toyota',
+        'shin_uwagoromo',
+        'shin_toyota',
+        'aikan_umetsubo',
+        'shigo',
+        'kaizu',
+        'homi',
+        'sasabara',
+        'yakusa',
+        'yamaguchi',
+        'setoguchi',
+        'setoshi',
+        'nakamizuno',
+        'kozoji'
     ];
     return in_array($stationCode, $validCodes, true);
 }
