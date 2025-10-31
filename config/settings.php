@@ -143,9 +143,9 @@ function getCurrentDiaType($date = null) {
 }
 
 /**
- * リニモの曜日種別を判定
+ * 曜日種別を判定（rail_timetableで使用）
  *
- * @return string 曜日種別（weekday_green/holiday_red）
+ * @return string 曜日種別（weekday/holiday）
  */
 function getCurrentDayType() {
     // 実際の実装では、現在の日付と月から判定
@@ -155,13 +155,13 @@ function getCurrentDayType() {
 
     // 土日の場合
     if ($dayOfWeek === 0 || $dayOfWeek === 6) {
-        return 'holiday_red';
+        return 'holiday';
     }
 
-    // 8月、9月、2月、3月は赤時刻
+    // 8月、9月、2月、3月は休日扱い
     if (in_array($month, [2, 3, 8, 9])) {
-        return 'holiday_red';
+        return 'holiday';
     }
 
-    return 'weekday_green';
+    return 'weekday';
 }
