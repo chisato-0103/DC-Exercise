@@ -940,3 +940,36 @@ img{
     font-size: 0.95rem;
     color: var(--text-color);
 }
+
+/* ===================================
+   リニモ/愛知環状線選択ウィジェット
+   =================================== */
+/* 非選択時：常に border を持つ（色は透明） */
+.next-departure .linimo-segment-button,
+.next-departure .shuttle-segment-button,
+.results .linimo-segment-button,
+.results .shuttle-segment-button {
+    border: 1px solid transparent;
+}
+
+/* ダーク系（ルート1）のハイライト */
+.next-departure .linimo-segment-label input[type="radio"]:checked ~ .linimo-segment-button {
+    background-color: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.next-departure .shuttle-segment-label input[type="radio"]:checked ~ .shuttle-segment-button {
+    background-color: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* 白系（他のルート）のハイライト */
+.results .linimo-segment-label input[type="radio"]:checked ~ .linimo-segment-button {
+    background-color: #e8f0fe;
+    border-color: #0066cc;
+}
+
+.results .shuttle-segment-label input[type="radio"]:checked ~ .shuttle-segment-button {
+    background-color: #e8f0fe;
+    border-color: #0066cc;
+}

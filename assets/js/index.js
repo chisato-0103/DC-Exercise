@@ -20,11 +20,29 @@
         const direction = params.get('direction') || 'to_station';
         const lineCode = params.get('line_code') || 'linimo';
 
+        // direction に基づいて、対応するパラメータのみを取得
+        let destination = null;
+        let origin = null;
+
+        if (direction === 'to_station') {
+            // 大学 → 駅の場合は destination のみ使用
+            destination = params.get('destination') || 'fujigaoka';
+        } else if (direction === 'to_university') {
+            // 駅 → 大学の場合は origin のみ使用
+            origin = params.get('origin') || 'fujigaoka';
+        }
+
+        // テスト用パラメータを取得
+        const testDate = params.get('test_date');
+        const testTime = params.get('test_time');
+
         return {
             direction: direction,
             lineCode: lineCode,
-            destination: params.get('destination') || 'fujigaoka',
-            origin: params.get('origin') || 'fujigaoka'
+            destination: destination,
+            origin: origin,
+            testDate: testDate,
+            testTime: testTime
         };
     }
 
@@ -68,24 +86,12 @@
             // 路線別に駅をフィルタリング
             const filterStationsByLine = (lineCode) => {
                 return stations.filter(station => {
-                    const code = station.station_code;
                     if (lineCode === 'linimo') {
-                        // リニモ駅：yagusa, tojishiryokan_minami, ... , fujigaoka
-                        // 愛知環状線の駅を除外
-                        return !code.includes('kanjo') &&
-                               !['yamaguchi', 'setoguchi', 'setoshi', 'nakamizuno', 'kozoji',
-                                 'sasabara', 'homi', 'kaizu', 'shigo', 'aikan_umetsubo',
-                                 'shin_toyota', 'shin_uwagoromo', 'mikawa_toyota', 'suenohara',
-                                 'ekaku', 'mikawa_kamigo', 'daimon_kitano', 'naka_okazaki',
-                                 'mutsuna', 'okazaki'].includes(code);
+                        // リニモ駅のみ（8駅）か転乗ハブの八草
+                        return station.line_type === 'linimo' || station.station_code === 'yakusa';
                     } else if (lineCode === 'aichi_kanjo') {
-                        // 愛知環状線駅のみ（yagusa + kanjo系 + 岡崎方面の駅）
-                        return code.includes('kanjo') ||
-                               ['yakusa', 'yamaguchi', 'setoguchi', 'setoshi', 'nakamizuno', 'kozoji',
-                                'sasabara', 'homi', 'kaizu', 'shigo', 'aikan_umetsubo',
-                                'shin_toyota', 'shin_uwagoromo', 'mikawa_toyota', 'suenohara',
-                                'ekaku', 'mikawa_kamigo', 'daimon_kitano', 'naka_okazaki',
-                                'mutsuna', 'okazaki'].includes(code);
+                        // 愛知環状線駅のみ（23駅 + yakusa）
+                        return station.line_type === 'aichi_kanjo';
                     }
                     return true;
                 });
@@ -96,9 +102,15 @@
                 const originSelect = document.getElementById('origin');
                 const filteredStations = filterStationsByLine(lineCode);
 
-                // 目的地オプション（八草を除外）
-                const destinationOptions = filteredStations
-                    .filter(s => s.station_code !== 'yagusa' && s.station_code !== 'yakusa')
+                // 駅を order_index でソート（実際の駅の順番）
+                const sortedStations = [...filteredStations].sort((a, b) => {
+                    const indexA = a.order_index || 0;
+                    const indexB = b.order_index || 0;
+                    return indexA - indexB;
+                });
+
+                // 目的地オプション
+                const destinationOptions = sortedStations
                     .map(station => `
                         <option value="${escapeHtml(station.station_code)}">
                             ${escapeHtml(station.station_name)}
@@ -106,16 +118,12 @@
                     `).join('');
 
                 // 出発地オプション（八草を含める）
-                const originOptions = `
-                    <option value="yagusa">八草駅</option>
-                    ${filteredStations
-                        .filter(station => station.station_code !== 'yagusa' && station.station_code !== 'yakusa')
-                        .map(station => `
-                            <option value="${escapeHtml(station.station_code)}">
-                                ${escapeHtml(station.station_name)}
-                            </option>
-                        `).join('')}
-                `;
+                const originOptions = sortedStations
+                    .map(station => `
+                        <option value="${escapeHtml(station.station_code)}">
+                            ${escapeHtml(station.station_name)}
+                        </option>
+                    `).join('');
 
                 if (destinationSelect) destinationSelect.innerHTML = destinationOptions;
                 if (originSelect) originSelect.innerHTML = originOptions;
@@ -146,7 +154,9 @@
                 currentDirection,
                 currentLineCode,
                 currentDirection === 'to_station' ? currentDestination : null,
-                currentDirection === 'to_university' ? currentOrigin : null
+                currentDirection === 'to_university' ? currentOrigin : null,
+                params.testDate,
+                params.testTime
             );
 
             // 現在時刻とダイヤ情報を更新
@@ -155,6 +165,18 @@
             // フォーム値を復元
             document.getElementById('direction').value = currentDirection;
             document.getElementById('line_code').value = currentLineCode;
+
+            // ラジオボタンを復元
+            let routeOption = 'to_linimo';  // デフォルト
+            if (currentDirection === 'to_university') {
+                routeOption = currentLineCode === 'aichi_kanjo' ? 'from_aichi_kanjo' : 'from_linimo';
+            } else {
+                routeOption = currentLineCode === 'aichi_kanjo' ? 'to_aichi_kanjo' : 'to_linimo';
+            }
+            const radioButton = document.querySelector(`input[name="route_option"][value="${routeOption}"]`);
+            if (radioButton) {
+                radioButton.checked = true;
+            }
 
             // 駅を更新
             if (window.updateStationSelects) {
@@ -201,12 +223,16 @@
             return;
         }
 
-        const { routes, from_name, to_name, service_info, dia_description } = apiResponse.data;
+        const { routes, from_name, to_name, service_info, dia_description, direction, line_code } = apiResponse.data;
+
+        // APIから返された direction を使用（これがサーバーで確定した値）
+        const renderDirection = direction || currentDirection;
+        const renderLineCode = line_code || currentLineCode;
 
         // 次の便（最初のルート）
         if (routes && routes.length > 0) {
-            renderNextDeparture(routes[0], currentDirection);
-            renderOtherRoutes(routes.slice(1), currentDirection);
+            renderNextDeparture(routes[0], renderDirection, renderLineCode);
+            renderOtherRoutes(routes.slice(1), renderDirection, renderLineCode);
         } else {
             renderNoService(service_info, dia_description);
         }
@@ -227,7 +253,7 @@
     /**
      * 次の便を表示
      */
-    function renderNextDeparture(route, direction) {
+    function renderNextDeparture(route, direction, lineCode = 'linimo') {
         const container = document.querySelector('.next-departure');
         let departureTime = '';
         let title = '';
@@ -271,7 +297,7 @@
                 タップで詳細を表示 ▼
             </div>
             <div class="next-departure-details">
-                ${renderRouteDetails(route, direction)}
+                ${renderRouteDetails(route, direction, lineCode)}
             </div>
         `;
 
@@ -375,9 +401,80 @@
     }
 
     /**
+     * リニモ/愛知環状線選択時に到着時刻を更新
+     */
+    function updateLinimoChoice(radioButton, route, selectedIndex) {
+        const railOptions = route.rail_options || route.linimo_options || [];
+        if (selectedIndex < 0 || selectedIndex >= railOptions.length) {
+            return;
+        }
+
+        const selectedOption = railOptions[selectedIndex];
+        const container = radioButton.closest('.linimo-segment-container');
+
+        // 到着時刻を更新
+        const arrivalTimeDisplay = container
+            ?.parentElement?.nextElementSibling?.nextElementSibling?.querySelector('.arrival-time-display');
+
+        if (arrivalTimeDisplay) {
+            const destination = route.destination_name || '';
+            const arrivalTime = formatTimeWithoutSeconds(selectedOption.destination_arrival);
+            arrivalTimeDisplay.textContent = `${escapeHtml(destination)} 着 ${escapeHtml(arrivalTime)}`;
+        }
+
+        // 総所要時間を更新（ルート１の場合）
+        const totalTimeDisplay = document.querySelector('.next-departure .route-total-time');
+        if (totalTimeDisplay && selectedOption.total_time) {
+            totalTimeDisplay.textContent = `${escapeHtml(selectedOption.total_time)}分`;
+        }
+
+        // 乗り換え時間を更新
+        const transferTimeDisplay = container
+            ?.parentElement?.previousElementSibling?.previousElementSibling?.querySelector('.transfer-time-display');
+        if (transferTimeDisplay && selectedOption.transfer_time !== undefined) {
+            transferTimeDisplay.textContent = `乗り換え時間: ${escapeHtml(selectedOption.transfer_time)}分`;
+        }
+    }
+
+    /**
+     * シャトルバス選択時に到着時刻を更新（駅→大学の場合）
+     */
+    function updateShuttleChoice(radioButton, route, selectedIndex) {
+        const shuttleOptions = route.shuttle_options || [];
+        if (selectedIndex < 0 || selectedIndex >= shuttleOptions.length) {
+            return;
+        }
+
+        const selectedOption = shuttleOptions[selectedIndex];
+        const container = radioButton.closest('.shuttle-segment-container');
+
+        // 到着時刻を更新
+        const arrivalTimeDisplay = container
+            ?.parentElement?.nextElementSibling?.nextElementSibling?.querySelector('.arrival-time-display');
+
+        if (arrivalTimeDisplay) {
+            const arrivalTime = formatTimeWithoutSeconds(selectedOption.shuttle_arrival);
+            arrivalTimeDisplay.textContent = `愛知工業大学 着 ${escapeHtml(arrivalTime)}`;
+        }
+
+        // 総所要時間を更新（ルート１の場合）
+        const totalTimeDisplay = document.querySelector('.next-departure .route-total-time');
+        if (totalTimeDisplay && selectedOption.total_time) {
+            totalTimeDisplay.textContent = `${escapeHtml(selectedOption.total_time)}分`;
+        }
+
+        // 乗り換え時間を更新
+        const transferTimeDisplay = container
+            ?.parentElement?.previousElementSibling?.previousElementSibling?.querySelector('.transfer-time-display');
+        if (transferTimeDisplay && selectedOption.transfer_time !== undefined) {
+            transferTimeDisplay.textContent = `乗り換え時間: ${escapeHtml(selectedOption.transfer_time)}分`;
+        }
+    }
+
+    /**
      * ルート詳細を生成
      */
-    function renderRouteDetails(route, direction) {
+    function renderRouteDetails(route, direction, lineCode = 'linimo') {
         let html = '<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);"><div class="route-steps" style="color: white;">';
 
         if (direction === 'to_station') {
@@ -420,25 +517,29 @@
                     </div>
                 `;
 
-                // リニモ選択ウィジェット（セグメンテッドコントロール風）
-                if (route.linimo_options && route.linimo_options.length > 0) {
+                // 路線別の選択ウィジェット
+                const railOptions = lineCode === 'aichi_kanjo' ? route.rail_options : route.linimo_options;
+                const railName = lineCode === 'aichi_kanjo' ? '愛知環状線' : 'リニモ';
+
+                if (railOptions && railOptions.length > 0) {
                     html += `
                         <div class="route-arrow" style="color: white;">↓</div>
                         <div class="route-step transfer-time-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
                             <img src="assets/image/time-svgrepo-com 2.svg" />
                             <div class="route-step-content">
                                 <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
-                                <div class="route-step-detail">リニモへ乗り換え</div>
+                                <div class="route-step-detail">${railName}へ乗り換え</div>
                             </div>
                         </div>
                         <div class="route-arrow" style="color: white;">↓</div>
                         <div style="margin: 1rem 0;">
-                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後のリニモを選択</div>
+                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後の${railName}を選択</div>
                             <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="linimo-segment-container">
                     `;
 
-                    route.linimo_options.forEach((option, index) => {
+                    railOptions.forEach((option, index) => {
                         const isSelected = index === 0;
+                        const railDepartureField = lineCode === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
                         html += `
                             <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="linimo-segment-label">
                                 <input type="radio" name="linimo_option_${route.shuttle_departure}"
@@ -447,9 +548,9 @@
                                        data-index="${index}"
                                        ${isSelected ? 'checked' : ''}
                                        style="display: none;">
-                                <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="linimo-segment-button">
+                                <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; cursor: pointer;" class="linimo-segment-button">
                                     <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
-                                        ${escapeHtml(option.linimo_departure)}
+                                        ${escapeHtml(option[railDepartureField])}
                                     </div>
                                     <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
                                         着${escapeHtml(option.destination_arrival)}
@@ -466,7 +567,7 @@
                         <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
                             <img src="assets/image/flag-2-svgrepo-com.svg" />
                             <div class="route-step-content">
-                                <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_options[0].destination_arrival))}</div>
+                                <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(railOptions[0].destination_arrival))}</div>
                                 <div class="route-step-detail">到着</div>
                             </div>
                         </div>
@@ -491,54 +592,18 @@
                     </div>
                 `;
 
-                // シャトルバス選択ウィジェット（八草駅→大学）
-                if (route.shuttle_options && route.shuttle_options.length > 0) {
-                    html += `
-                        <div class="route-arrow" style="color: white;">↓</div>
-                        <div style="margin: 1rem 0;">
-                            <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">シャトルバスを選択</div>
-                            <div style="display: flex; flex-direction: row; gap: 0.5rem; background-color: rgba(255,255,255,0.08); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap;" class="shuttle-segment-container">
-                    `;
-
-                    route.shuttle_options.forEach((option, index) => {
-                        const isSelected = index === 0;
-                        html += `
-                            <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="shuttle-segment-label">
-                                <input type="radio" name="shuttle_option_${route.shuttle_departure}"
-                                       value="${index}"
-                                       data-route='${JSON.stringify(route)}'
-                                       data-index="${index}"
-                                       ${isSelected ? 'checked' : ''}
-                                       style="display: none;">
-                                <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
-                                    <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
-                                        ${escapeHtml(option.shuttle_departure)}
-                                    </div>
-                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
-                                        着${escapeHtml(option.shuttle_arrival)}
-                                    </div>
-                                </div>
-                            </label>
-                        `;
-                    });
-
-                    html += `
-                            </div>
-                        </div>
-                        <div class="route-arrow" style="color: white;">↓</div>
-                        <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
-                            <img src="assets/image/school-flag-svgrepo-com 2.svg" />
-                            <div class="route-step-content">
-                                <div class="route-step-time arrival-time-display">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_options[0].shuttle_arrival))}</div>
-                                <div class="route-step-detail">到着</div>
-                            </div>
+                // 八草駅→大学の場合は、シャトルバス選択肢なしでシンプルに表示
+                html += `
+                    <div class="route-arrow" style="color: white;">↓</div>
+                    <div class="route-step">
+                        <img src="assets/image/school-flag-svgrepo-com 2.svg" />
+                        <div class="route-step-content">
+                            <div class="route-step-time">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_arrival))}</div>
+                            <div class="route-step-detail">到着</div>
                         </div>
                     </div>
-                    `;
-                } else {
-                    html += `
-                    `;
-                }
+                </div>
+                `;
             } else {
                 // リニモ駅 → 大学
                 html += `
@@ -587,7 +652,7 @@
                                        data-direction="to_university"
                                        ${isSelected ? 'checked' : ''}
                                        style="display: none;">
-                                <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}; border: 1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
+                                <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; cursor: pointer;" class="shuttle-segment-button">
                                     <div style="font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.3rem;">
                                         ${escapeHtml(option.shuttle_departure)}
                                     </div>
@@ -641,7 +706,7 @@
     /**
      * 他のルートを表示
      */
-    function renderOtherRoutes(routes, direction) {
+    function renderOtherRoutes(routes, direction, lineCode = 'linimo') {
         const container = document.querySelector('.results');
 
         if (!routes || routes.length === 0) {
@@ -681,7 +746,7 @@
                         <span class="expand-icon">▼</span>
                     </div>
                     <div class="route-steps">
-                        ${renderCompactRouteSteps(route, direction)}
+                        ${renderCompactRouteSteps(route, direction, lineCode)}
                     </div>
                 </div>
             `;
@@ -764,7 +829,7 @@
     /**
      * コンパクトルート詳細を生成
      */
-    function renderCompactRouteSteps(route, direction) {
+    function renderCompactRouteSteps(route, direction, lineCode = 'linimo') {
         let html = '';
 
         if (direction === 'to_station') {
@@ -792,16 +857,17 @@
                     <img src="assets/image/time-svgrepo-com.svg" />
                     <div class="route-step-content">
                         <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
-                        <div class="route-step-detail">リニモへ乗り換え</div>
+                        <div class="route-step-detail">${lineCode === 'aichi_kanjo' ? '愛知環状線' : 'リニモ'}へ乗り換え</div>
                     </div>
                 </div>
                 <div class="route-arrow">↓</div>
-                ${route.linimo_options && route.linimo_options.length > 0 ? `
+                ${(route.rail_options || route.linimo_options) && (route.rail_options || route.linimo_options).length > 0 ? `
                     <div style="margin: 1rem 0; padding: 1rem; border: 2px solid #0066cc; border-radius: 12px; background-color: #f9fbff;">
-                        <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: #0066cc; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後のリニモを選択</div>
+                        <div style="font-size: 0.85rem; margin-bottom: 0.8rem; color: #0066cc; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">乗り換え後の${lineCode === 'aichi_kanjo' ? '愛知環状線' : 'リニモ'}を選択</div>
                         <div style="display: flex; flex-direction: row; gap: 0.5rem; padding: 0; border-radius: 8px; flex-wrap: wrap;" class="linimo-segment-container">
-                            ${route.linimo_options.map((option, index) => {
+                            ${(route.rail_options || route.linimo_options).map((option, index) => {
                                 const isSelected = index === 0;
+                                const railDepartureField = lineCode === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
                                 return `
                                     <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="linimo-segment-label">
                                         <input type="radio" name="linimo_option_${route.shuttle_departure}"
@@ -810,11 +876,11 @@
                                                data-index="${index}"
                                                ${isSelected ? 'checked' : ''}
                                                style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
-                                        <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? '#e8f0fe' : 'transparent'}; border: 1px solid ${isSelected ? '#0066cc' : 'transparent'}; cursor: pointer;" class="linimo-segment-button">
-                                            <div style="font-size: 1.05rem; font-weight: 700; color: ${isSelected ? '#0066cc' : '#666'}; margin-bottom: 0.3rem;">
-                                                ${escapeHtml(option.linimo_departure)}
+                                        <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; cursor: pointer;" class="linimo-segment-button">
+                                            <div style="font-size: 1.05rem; font-weight: 700; color: #666; margin-bottom: 0.3rem;">
+                                                ${escapeHtml(option[railDepartureField])}
                                             </div>
-                                            <div style="font-size: 0.8rem; color: ${isSelected ? '#0066cc' : '#999'};">
+                                            <div style="font-size: 0.8rem; color: #999;">
                                                 着${escapeHtml(option.destination_arrival)}
                                             </div>
                                         </div>
@@ -827,7 +893,7 @@
                     <div class="route-step arrival-step" data-shuttle-departure="${route.shuttle_departure.replace(/:/g, '-')}">
                         <img src="assets/image/flag-2-svgrepo-com.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_options[0].destination_arrival))}</div>
+                            <div class="route-step-time arrival-time-display">${escapeHtml(route.destination_name)} 着 ${escapeHtml(formatTimeWithoutSeconds((route.rail_options || route.linimo_options)[0].destination_arrival))}</div>
                             <div class="route-step-detail">到着</div>
                         </div>
                     </div>
@@ -913,11 +979,11 @@
                                                    data-direction="to_university"
                                                    ${isSelected ? 'checked' : ''}
                                                    style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
-                                            <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; background-color: ${isSelected ? '#e8f0fe' : 'transparent'}; border: 1px solid ${isSelected ? '#0066cc' : 'transparent'}; cursor: pointer;" class="shuttle-segment-button">
-                                                <div style="font-size: 1.05rem; font-weight: 700; color: ${isSelected ? '#0066cc' : '#666'}; margin-bottom: 0.3rem;">
+                                            <div style="padding: 1rem 0.8rem; border-radius: 8px; text-align: center; transition: all 0.2s ease; cursor: pointer;" class="shuttle-segment-button">
+                                                <div style="font-size: 1.05rem; font-weight: 700; color: #666; margin-bottom: 0.3rem;">
                                                     ${escapeHtml(option.shuttle_departure)}
                                                 </div>
-                                                <div style="font-size: 0.8rem; color: ${isSelected ? '#0066cc' : '#999'};">
+                                                <div style="font-size: 0.8rem; color: #999;">
                                                     着${escapeHtml(option.shuttle_arrival)}
                                                 </div>
                                             </div>
@@ -1103,13 +1169,21 @@
     function toggleDirectionFields(direction) {
         const destinationGroup = document.getElementById('destination-group');
         const originGroup = document.getElementById('origin-group');
+        const destinationSelect = document.getElementById('destination');
+        const originSelect = document.getElementById('origin');
 
         if (direction === 'to_station') {
             destinationGroup.style.display = '';
             originGroup.style.display = 'none';
+            // 非表示の origin を form 送信から除外
+            originSelect.disabled = true;
+            destinationSelect.disabled = false;
         } else {
             destinationGroup.style.display = 'none';
             originGroup.style.display = '';
+            // 非表示の destination を form 送信から除外
+            destinationSelect.disabled = true;
+            originSelect.disabled = false;
         }
     }
 
