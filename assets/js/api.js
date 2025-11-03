@@ -48,15 +48,25 @@ const API = (function() {
      * @param {string} lineCode - 路線コード ('linimo' or 'aichi_kanjo')
      * @param {string} destination - 目的地駅コード (direction='to_station'の場合)
      * @param {string} origin - 出発地駅コード (direction='to_university'の場合)
+     * @param {string} testDate - テスト用日付 (YYYY-MM-DD形式、省略可)
+     * @param {string} testTime - テスト用時刻 (HH:MM:SS形式、省略可)
      * @returns {Promise<Object>} - ルート情報
      */
-    async function getNextConnection(direction, lineCode = 'linimo', destination = null, origin = null) {
+    async function getNextConnection(direction, lineCode = 'linimo', destination = null, origin = null, testDate = null, testTime = null) {
         const params = { direction, line_code: lineCode };
 
         if (direction === 'to_station' && destination) {
             params.destination = destination;
         } else if (direction === 'to_university' && origin) {
             params.origin = origin;
+        }
+
+        // テスト用パラメータを追加
+        if (testDate) {
+            params.test_date = testDate;
+        }
+        if (testTime) {
+            params.test_time = testTime;
         }
 
         return await fetchAPI('api/get_next_connection.php', params);
@@ -86,7 +96,7 @@ const API = (function() {
      */
     async function getStations() {
         const data = await fetchAPI('api/get_stations.php');
-        return data.stations || [];
+        return data.data?.stations || [];
     }
 
     /**
@@ -96,7 +106,7 @@ const API = (function() {
      */
     async function getNotices(type = 'all') {
         const data = await fetchAPI('api/get_notices.php', { type });
-        return data.notices || [];
+        return data.data?.notices || [];
     }
 
     // 公開API

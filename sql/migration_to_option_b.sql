@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS rail_timetable (
     station_name VARCHAR(50) NOT NULL COMMENT '駅名',
     direction VARCHAR(50) NOT NULL COMMENT '方向',
     departure_time TIME NOT NULL COMMENT '発車時刻',
-    day_type ENUM('weekday', 'holiday') NOT NULL DEFAULT 'weekday' COMMENT '曜日種別',
+    day_type ENUM('weekday_green', 'holiday_red') NOT NULL DEFAULT 'weekday_green' COMMENT '曜日種別',
     is_active BOOLEAN DEFAULT TRUE COMMENT '運行中フラグ',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (line_code) REFERENCES transport_lines(line_code),
@@ -63,11 +63,7 @@ SELECT
     station_name,
     direction,
     departure_time,
-    CASE day_type
-        WHEN 'weekday_green' THEN 'weekday'
-        WHEN 'holiday_red' THEN 'holiday'
-        ELSE 'weekday'
-    END AS day_type,
+    day_type,
     is_active
 FROM linimo_timetable;
 

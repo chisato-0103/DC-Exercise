@@ -59,12 +59,15 @@ function getNextRailTrains($lineCode, $stationCode, $direction, $currentTime, $d
  * @param string $destinationCode 目的地駅コード
  * @param string $currentTime 現在時刻（HH:MM:SS）
  * @param int $limit 取得件数
+ * @param string $dayType 曜日種別（'weekday_green' or 'holiday_red'、指定されない場合は自動判定）
  * @return array 乗り継ぎルートの配列
  */
-function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $limit = 3) {
+function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $limit = 3, $dayType = null) {
     try {
         $diaType = getCurrentDiaType();
-        $dayType = getCurrentDayType();
+        if ($dayType === null) {
+            $dayType = getCurrentDayType();
+        }
         $transferTime = (int)getSetting('transfer_time_minutes', TRANSFER_TIME_MINUTES);
 
         // 目的地の情報を取得
@@ -74,7 +77,7 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
         }
 
         // 八草駅が目的地の場合はシャトルバスのみ
-        if ($destinationCode === 'yakusa' || $destinationCode === 'yagusa') {
+        if ($destinationCode === 'yakusa') {
             $shuttleBuses = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, $limit);
 
             $routes = [];
@@ -122,28 +125,7 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
             $rail = $railTrains[0];
             $yagusaDepartureTime = $rail['departure_time'];
             $estimatedArrivalTime = addMinutes($yagusaDepartureTime, $railTravelTime);
-
-            // 目的地駅の時刻表から推定到着時刻に最も近い出発時刻を取得
-            $destinationRailTrains = getNextRailTrains($lineCode, $destinationCode, $railDirection, $yagusaDepartureTime, $dayType, 5);
-
-            if (empty($destinationRailTrains)) {
-                continue;
-            }
-
-            // 推定到着時刻に最も近い出発時刻を探す
-            $destinationArrivalTime = null;
-            $minDifference = PHP_INT_MAX;
-            foreach ($destinationRailTrains as $candidate) {
-                $difference = abs(compareTime($candidate['departure_time'], $estimatedArrivalTime));
-                if ($difference < $minDifference) {
-                    $minDifference = $difference;
-                    $destinationArrivalTime = $candidate['departure_time'];
-                }
-            }
-
-            if (!$destinationArrivalTime) {
-                continue;
-            }
+            $destinationArrivalTime = $estimatedArrivalTime;
 
             // 実際の乗り換え時間を計算
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $yagusaDepartureTime);
@@ -202,12 +184,15 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
  * @param string $originCode 出発駅コード
  * @param string $currentTime 現在時刻（HH:MM:SS）
  * @param int $limit 取得件数
+ * @param string $dayType 曜日種別（'weekday_green' or 'holiday_red'、指定されない場合は自動判定）
  * @return array 乗り継ぎルートの配列
  */
-function calculateRailToUniversity($lineCode, $originCode, $currentTime, $limit = 3) {
+function calculateRailToUniversity($lineCode, $originCode, $currentTime, $limit = 3, $dayType = null) {
     try {
         $diaType = getCurrentDiaType();
-        $dayType = getCurrentDayType();
+        if ($dayType === null) {
+            $dayType = getCurrentDayType();
+        }
         $transferTime = (int)getSetting('transfer_time_minutes', TRANSFER_TIME_MINUTES);
 
         // 出発駅の情報を取得

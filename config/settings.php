@@ -5,11 +5,32 @@
  * このファイルでシステム全体の設定を管理します
  */
 
+// .env ファイルから環境変数を読み込む（settings.phpが最初に呼び出されるため、ここで読み込む）
+if (file_exists(__DIR__ . '/../.env')) {
+    $envFile = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($envFile as $line) {
+        // コメント行をスキップ
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+        // KEY=VALUE 形式をパース
+        if (strpos($line, '=') !== false) {
+            [$key, $value] = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            // 環境変数に設定
+            if (!getenv($key)) {
+                putenv($key . '=' . $value);
+            }
+        }
+    }
+}
+
 // タイムゾーン設定
 date_default_timezone_set('Asia/Tokyo');
 
-// デバッグモード（本番環境では必ずfalseにしてください）
-define('DEBUG_MODE', true);
+// デバッグモード（環境変数で制御、デフォルトはfalse）
+define('DEBUG_MODE', (getenv('DEBUG_MODE') === 'true' || getenv('APP_ENV') === 'development'));
 
 // エラー表示設定
 if (DEBUG_MODE) {
@@ -28,20 +49,6 @@ define('SHUTTLE_TRAVEL_TIME', 5);     // シャトルバス所要時間（分）
 define('DEFAULT_DESTINATION', 'fujigaoka');  // デフォルト目的地
 define('RESULT_LIMIT', 3);            // 表示する乗り継ぎ候補数
 define('CURRENT_DIA_TYPE', 'A');      // 現在のダイヤ種別
-
-// リニモ各駅の八草駅からの所要時間（分）
-// ※ stationsテーブルから動的に取得することを推奨
-$LINIMO_TRAVEL_TIMES = [
-    'yagusa' => 0,
-    'tojishiryokan_minami' => 2,
-    'ai_chikyuhaku_kinen_koen' => 4,
-    'koen_nishi' => 6,
-    'geidai_dori' => 8,
-    'nagakute_kosenjo' => 10,
-    'irigaike_koen' => 12,
-    'hanamizuki_dori' => 14,
-    'fujigaoka' => 17
-];
 
 // ダイヤ種別の説明
 $DIA_TYPE_DESCRIPTIONS = [
@@ -145,23 +152,26 @@ function getCurrentDiaType($date = null) {
 /**
  * 曜日種別を判定（rail_timetableで使用）
  *
- * @return string 曜日種別（weekday/holiday）
+ * @return string 曜日種別（weekday_green または holiday_red）
+ *
+ * ロジック:
+ * - weekday_green: 4月〜7月、10月〜1月の平日
+ * - holiday_red: 土休日、8月、9月、2月、3月（平日含む）
  */
 function getCurrentDayType() {
-    // 実際の実装では、現在の日付と月から判定
-    // プロトタイプでは簡易判定
     $month = (int)date('n');
     $dayOfWeek = (int)date('w');
 
     // 土日の場合
     if ($dayOfWeek === 0 || $dayOfWeek === 6) {
-        return 'holiday';
+        return 'holiday_red';
     }
 
-    // 8月、9月、2月、3月は休日扱い
+    // 8月、9月、2月、3月は休日扱い（平日でも）
     if (in_array($month, [2, 3, 8, 9])) {
-        return 'holiday';
+        return 'holiday_red';
     }
 
-    return 'weekday';
+    // 4月〜7月、10月〜1月の平日
+    return 'weekday_green';
 }

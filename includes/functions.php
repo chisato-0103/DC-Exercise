@@ -164,7 +164,7 @@ function isValidTime($time) {
 function isValidStationCode($stationCode) {
     $validCodes = [
         // リニモ駅
-        'yagusa',
+        'yakusa',
         'tojishiryokan_minami',
         'ai_chikyuhaku_kinen_koen',
         'koen_nishi',
@@ -191,7 +191,6 @@ function isValidStationCode($stationCode) {
         'kaizu',
         'homi',
         'sasabara',
-        'yakusa',
         'yamaguchi',
         'setoguchi',
         'setoshi',
@@ -219,7 +218,8 @@ function isValidDiaType($diaType) {
  */
 function getStationName($stationCode) {
     $stationNames = [
-        'yagusa' => '八草',
+        // リニモ駅
+        'yakusa' => '八草',
         'tojishiryokan_minami' => '陶磁資料館南',
         'ai_chikyuhaku_kinen_koen' => '愛・地球博記念公園',
         'koen_nishi' => '公園西',
@@ -227,7 +227,30 @@ function getStationName($stationCode) {
         'nagakute_kosenjo' => '長久手古戦場',
         'irigaike_koen' => '杁ヶ池公園',
         'hanamizuki_dori' => 'はなみずき通',
-        'fujigaoka' => '藤が丘'
+        'fujigaoka' => '藤が丘',
+        // 愛知環状線駅（23駅）
+        'okazaki' => '岡崎',
+        'mutsuna' => '武豊',
+        'naka_okazaki' => '中岡崎',
+        'kita_okazaki' => '北岡崎',
+        'daimon' => '大門',
+        'kitano_masuzuka' => '北野増塚',
+        'mikawa_kamigo' => '三河上郷',
+        'ekaku' => '江角',
+        'suenohara' => '末野原',
+        'mikawa_toyota' => '三河豊田',
+        'shin_uwagoromo' => '新上ゴ衣',
+        'shin_toyota' => '新豊田',
+        'aikan_umetsubo' => '愛環梅坪',
+        'shigo' => '塩後',
+        'kaizu' => '海津',
+        'homi' => '豊見',
+        'sasabara' => '笹原',
+        'yamaguchi' => '山口',
+        'setoguchi' => '瀬戸口',
+        'setoshi' => '瀬戸市',
+        'nakamizuno' => '中水野',
+        'kozoji' => '幸次'
     ];
     return $stationNames[$stationCode] ?? $stationCode;
 }

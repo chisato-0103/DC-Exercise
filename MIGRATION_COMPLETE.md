@@ -81,7 +81,6 @@
 - `aichi_kanjo_timetable_actual.sql` - 実PDF基づくダイヤ（2,806レコード）
 
 ### ソースPDF
-- `/Users/x24014xx/Downloads/aichikanjousen/` ディレクトリ
 - 23駅 × 時刻表PDF = 23ファイル
 - 公式サイト: https://www.aichi-kanjo-railway.co.jp/
 
@@ -110,7 +109,7 @@
 ### 時刻確認の例
 
 **岡崎駅 → 高蔵寺方向（実運行時刻から抽出）**
-| 駅 | 駅順 | 時刻（06:14発） | 駅間| 
+| 駅 | 駅順 | 時刻（06:14発） | 駅間|
 |---|---|---|---|
 | 岡崎 | 1 | 06:14 | - |
 | 六名 | 2 | 06:17 | +3分 ✓ |
@@ -127,7 +126,7 @@
 ### 対応API
 - `api/get_next_connection.php` - 次の接続情報取得
   - リニモ ← → 愛知環状線の乗換案内に対応
-  
+
 - `api/search_connection.php` - 接続検索
   - 愛知環状線駅間の乗換検索が可能
 

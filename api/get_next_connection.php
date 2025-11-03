@@ -10,7 +10,8 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/db_functions.php';
 require_once __DIR__ . '/../includes/db_functions_generic.php';
 
-// CORSヘッダー（必要に応じて）
+// CORSヘッダー
+// ⚠️ 本番環境では '*' ではなく、特定のドメインに制限することを推奨
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 
@@ -18,23 +19,57 @@ try {
     // パラメータ取得
     $direction = $_GET['direction'] ?? 'to_station'; // to_station or to_university
     $lineCode = $_GET['line_code'] ?? 'linimo'; // linimo or aichi_kanjo
-    $destination = $_GET['destination'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
-    $origin = $_GET['origin'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
-    $time = $_GET['time'] ?? getCurrentTime();
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : (int)getSetting('result_limit', RESULT_LIMIT);
 
-    // デバッグ用：時刻をテストするためのパラメータ
-    $testHour = isset($_GET['test_hour']) ? (int)$_GET['test_hour'] : null;
+    // 方向に応じてパラメータを取得
+    if ($direction === 'to_station') {
+        $destination = $_GET['destination'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
+        $origin = null;
+    } else {
+        $origin = $_GET['origin'] ?? getSetting('default_destination', DEFAULT_DESTINATION);
+        $destination = null;
+    }
+
+    // テスト用パラメータ（デバッグモードのみ）
+    $testDate = null;
+    $testHour = null;
+    if (DEBUG_MODE && isset($_GET['test_date'])) {
+        $testDate = $_GET['test_date'];
+    }
+
+    if (DEBUG_MODE && isset($_GET['test_time'])) {
+        $time = $_GET['test_time'];
+        $testHour = (int)explode(':', $time)[0];  // test_time から時を抽出
+    } else {
+        $time = getCurrentTime();
+    }
 
     // バリデーション
     if (!isValidTime($time)) {
         jsonResponse(false, null, '無効な時刻形式です');
     }
 
-    // 現在時刻
-    $currentTime = getCurrentTime();
-    $diaType = getCurrentDiaType();
-    $dayType = getCurrentDayType();
+    // 現在時刻（テスト時刻またはリアルタイム時刻）
+    $currentTime = $time;
+    $diaType = getCurrentDiaType($testDate);
+
+    // テスト用日付がある場合はその日付で day_type を計算
+    if ($testDate) {
+        // テスト日付の曜日を計算
+        $timestamp = strtotime($testDate);
+        $month = (int)date('n', $timestamp);
+        $dayOfWeek = (int)date('w', $timestamp);
+
+        if ($dayOfWeek === 0 || $dayOfWeek === 6) {
+            $dayType = 'holiday_red';
+        } elseif (in_array($month, [2, 3, 8, 9])) {
+            $dayType = 'holiday_red';
+        } else {
+            $dayType = 'weekday_green';
+        }
+    } else {
+        $dayType = getCurrentDayType();
+    }
 
     // 乗り継ぎルートを計算
     $routes = [];
@@ -49,13 +84,13 @@ try {
             $routes = calculateUniversityToStation($destination, $time, $limit);
         } elseif ($lineCode === 'aichi_kanjo') {
             // 愛知環状線駅へ
-            $routes = calculateUniversityToRail($lineCode, $destination, $time, $limit);
+            $routes = calculateUniversityToRail($lineCode, $destination, $time, $limit, $dayType);
         }
         $fromName = '愛知工業大学';
         $toName = getStationName($destination);
     } elseif ($direction === 'to_university') {
         // 路線駅または八草駅 → 大学
-        if ($origin === 'yagusa') {
+        if ($origin === 'yakusa') {
             // 八草駅 → 大学
             $routes = calculateYagusaToUniversity($time, $limit);
             $fromName = '八草駅';
@@ -67,7 +102,7 @@ try {
                 $routes = calculateStationToUniversity($origin, $time, $limit);
             } elseif ($lineCode === 'aichi_kanjo') {
                 // 愛知環状線駅から
-                $routes = calculateRailToUniversity($lineCode, $origin, $time, $limit);
+                $routes = calculateRailToUniversity($lineCode, $origin, $time, $limit, $dayType);
             }
             $fromName = getStationName($origin);
             $toName = '愛知工業大学';
@@ -78,7 +113,7 @@ try {
     if (empty($routes)) {
         // デバッグ用：test_hourがセットされている場合はそれを使用
         $currentHour = $testHour !== null ? $testHour : (int)date('H');
-        $currentTime = getCurrentTime();
+        // 注: $currentTime は既に line 58 で $time に設定されているため、ここでは上書きしない
 
         if ($direction === 'to_station') {
             // 大学→駅の場合、シャトルバスの情報を取得
@@ -178,6 +213,13 @@ try {
     ]);
 
 } catch (Exception $e) {
+    http_response_code(500);
     logError('API Error in get_next_connection.php', $e);
-    jsonResponse(false, null, 'サーバーエラーが発生しました');
+
+    // 本番環境では例外詳細を隠す
+    $errorMessage = DEBUG_MODE
+        ? $e->getMessage()
+        : 'サーバーエラーが発生しました';
+
+    jsonResponse(false, null, $errorMessage);
 }

@@ -5,10 +5,10 @@
  * お問い合わせフォームからのデータを受け取ってDBに保存
  */
 
-header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/settings.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 try {
@@ -58,11 +58,7 @@ try {
     // バリデーションエラーがあれば返す
     if (!empty($errors)) {
         http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'errors' => $errors
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
+        jsonResponse(false, ['errors' => $errors]);
     }
 
     // IPアドレスを取得（スパム対策用）
@@ -86,16 +82,16 @@ try {
 
     // 成功レスポンス
     http_response_code(200);
-    echo json_encode([
-        'success' => true,
-        'message' => 'お問い合わせを送信いただきありがとうございます。'
-    ], JSON_UNESCAPED_UNICODE);
+    jsonResponse(true, ['message' => 'お問い合わせを送信いただきありがとうございます。']);
 
 } catch (Exception $e) {
-    logError('Error in contact_submit.php', $e);
     http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'サーバーエラーが発生しました。しばらく経ってからお試しください。'
-    ], JSON_UNESCAPED_UNICODE);
+    logError('Error in contact_submit.php', $e);
+
+    // 本番環境では例外詳細を隠す
+    $errorMessage = DEBUG_MODE
+        ? $e->getMessage()
+        : 'サーバーエラーが発生しました。しばらく経ってからお試しください。';
+
+    jsonResponse(false, null, $errorMessage);
 }

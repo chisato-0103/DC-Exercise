@@ -9,7 +9,8 @@ require_once __DIR__ . '/../config/settings.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/db_functions.php';
 
-// CORSヘッダー（必要に応じて）
+// CORSヘッダー
+// ⚠️ 本番環境では '*' ではなく、特定のドメインに制限することを推奨
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 
@@ -23,10 +24,12 @@ try {
 
     // バリデーション
     if (empty($from) || empty($to)) {
+        http_response_code(400);
         jsonResponse(false, null, '出発地と目的地を指定してください');
     }
 
     if (!isValidTime($time)) {
+        http_response_code(400);
         jsonResponse(false, null, '無効な時刻形式です');
     }
 
@@ -35,6 +38,7 @@ try {
     if ($direction === 'to_station' && $from === 'university') {
         // 大学→リニモ各駅
         if (!isValidStationCode($to)) {
+            http_response_code(400);
             jsonResponse(false, null, '無効な目的地コードです');
         }
         $routes = calculateUniversityToStation($to, $time, $limit);
@@ -44,6 +48,7 @@ try {
     } elseif ($direction === 'to_university' && $to === 'university') {
         // リニモ各駅→大学
         if (!isValidStationCode($from)) {
+            http_response_code(400);
             jsonResponse(false, null, '無効な出発地コードです');
         }
         $routes = calculateStationToUniversity($from, $time, $limit);
@@ -51,6 +56,7 @@ try {
         $toName = '愛知工業大学';
 
     } else {
+        http_response_code(400);
         jsonResponse(false, null, '現在、この区間の検索には対応していません');
     }
 
@@ -64,6 +70,13 @@ try {
     ]);
 
 } catch (Exception $e) {
+    http_response_code(500);
     logError('API Error in search_connection.php', $e);
-    jsonResponse(false, null, 'サーバーエラーが発生しました');
+
+    // 本番環境では例外詳細を隠す
+    $errorMessage = DEBUG_MODE
+        ? $e->getMessage()
+        : 'サーバーエラーが発生しました';
+
+    jsonResponse(false, null, $errorMessage);
 }
