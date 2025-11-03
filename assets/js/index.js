@@ -90,7 +90,7 @@
                         // リニモ駅のみ（8駅）か転乗ハブの八草
                         return station.line_type === 'linimo' || station.station_code === 'yakusa';
                     } else if (lineCode === 'aichi_kanjo') {
-                        // 愛知環状線駅のみ（23駅 + yakusa）
+                        // 愛知環状線駅（八草 + 23駅: 岡崎→高蔵寺）
                         return station.line_type === 'aichi_kanjo';
                     }
                     return true;
