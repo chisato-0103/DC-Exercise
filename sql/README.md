@@ -11,12 +11,16 @@
 ### シャトルバス時刻表
 - **complete_shuttle_a.sql** - Aダイヤ（授業期間平日）完全版
 - **complete_shuttle_bc.sql** - B/Cダイヤ（土曜・学校休業期間）完全版
+- **shuttle_schedule_fy2025.sql** - 運行日程（ダイヤ自動判定用）
 
-### リニモ時刻表
-- **complete_linimo_all_stations_weekday_to_fujigaoka.sql** - 平日（全駅→藤が丘方面）完全版
-- **complete_linimo_all_stations_weekday_to_yagusa.sql** - 平日（全駅→八草方面）完全版
-- **complete_linimo_all_stations_holiday_to_fujigaoka.sql** - 土休日（全駅→藤が丘方面）完全版
-- **complete_linimo_all_stations_holiday_to_yagusa.sql** - 土休日（全駅→八草方面）完全版
+### リニモ（藤が丘線）時刻表
+- **linimo_weekday_to_fujigaoka.sql** - 平日（全駅→藤が丘方面）完全版
+- **linimo_weekday_to_yagusa.sql** - 平日（全駅→八草方面）完全版
+- **linimo_holiday_to_fujigaoka.sql** - 土休日（全駅→藤が丘方面）完全版
+- **linimo_holiday_to_yagusa.sql** - 土休日（全駅→八草方面）完全版
+
+### 愛知環状線時刻表
+- **rebuild_aichi_kanjo_rail_timetable.sql** - 完全版（23駅、2,558件） ✅ NEW
 
 ## セットアップ手順
 
@@ -40,10 +44,16 @@ source /Applications/MAMP/htdocs/DC-Exercise/sql/complete_shuttle_bc.sql;
 ✅ **完全版**: PDFから抽出した全駅・全方向の正確なデータ
 
 ```sql
-source /Applications/MAMP/htdocs/DC-Exercise/sql/complete_linimo_all_stations_weekday_to_fujigaoka.sql;
-source /Applications/MAMP/htdocs/DC-Exercise/sql/complete_linimo_all_stations_weekday_to_yagusa.sql;
-source /Applications/MAMP/htdocs/DC-Exercise/sql/complete_linimo_all_stations_holiday_to_fujigaoka.sql;
-source /Applications/MAMP/htdocs/DC-Exercise/sql/complete_linimo_all_stations_holiday_to_yagusa.sql;
+source /Applications/MAMP/htdocs/DC-Exercise/sql/linimo_weekday_to_fujigaoka.sql;
+source /Applications/MAMP/htdocs/DC-Exercise/sql/linimo_weekday_to_yagusa.sql;
+source /Applications/MAMP/htdocs/DC-Exercise/sql/linimo_holiday_to_fujigaoka.sql;
+source /Applications/MAMP/htdocs/DC-Exercise/sql/linimo_holiday_to_yagusa.sql;
+```
+
+### 4. 愛知環状線時刻表の投入 ✅ NEW
+
+```sql
+source /Applications/MAMP/htdocs/DC-Exercise/sql/rebuild_aichi_kanjo_rail_timetable.sql;
 ```
 
 #### データ状況（全て完全版）:
@@ -155,8 +165,17 @@ source /path/to/your/sql/file.sql;
 - ✅ シャトルバス: B/Cダイヤ完全版
 - ✅ リニモ: 全駅・全方向・平日完全版
 - ✅ リニモ: 全駅・全方向・土休日完全版
+- ✅ 愛知環状線: 23駅完全版（2025-11-03実装）
+
+## 愛知環状線データ詳細
+- **実装日**: 2025年11月3日
+- **駅数**: 23駅
+- **総レコード数**: 2,558件
+- **方向**: to_kozoji（高蔵寺方面）、to_okazaki（岡崎方面）
+- **データ形式**: PDFから正確に抽出した平日ダイヤ（weekday_green）
+- **特徴**: 環状線のため全駅が両方向対応
 
 ## Phase 2以降の改善予定
-- [ ] 愛知環状線データの追加
 - [ ] お気に入り機能の実装
 - [ ] データ更新用の管理画面の実装
+- [ ] 愛知環状線の休日ダイヤ追加
