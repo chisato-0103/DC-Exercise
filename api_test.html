@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Diagnostic Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .result { background: #f5f5f5; padding: 10px; margin-top: 10px; border-radius: 4px; max-height: 400px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>🔍 API Diagnostic Test</h1>
+
+    <div class="test-section">
+        <h2>Current Server Time</h2>
+        <button onclick="testServerTime()">Get Server Time</button>
+        <div id="serverTimeResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>API Test: Get Next Connection (to_station, linimo, fujigaoka)</h2>
+        <button onclick="testAPIDefault()">Test API (Current Time)</button>
+        <div id="apiDefaultResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>API Test: Get Next Connection with 21:25:00</h2>
+        <button onclick="testAPI21_25()">Test API at 21:25:00</button>
+        <div id="api21_25Result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Database Check: Shuttle Bus Data</h2>
+        <button onclick="testShuttleData()">Check Shuttle Data (21:20-21:50)</button>
+        <div id="shuttleDataResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Full API Response (JSON)</h2>
+        <button onclick="testAPIFull()">Get Full Response</button>
+        <div id="apiFullResult" class="result"></div>
+    </div>
+
+    <script>
+        function resultDiv(elementId) {
+            return document.getElementById(elementId);
+        }
+
+        async function testServerTime() {
+            const div = resultDiv('serverTimeResult');
+            div.innerHTML = '<span class="info">Loading...</span>';
+
+            try {
+                const response = await fetch('api/get_next_connection.php');
+                const data = await response.json();
+                const serverTime = data.data.current_time;
+                const diaType = data.data.dia_type;
+                const dayType = data.data.day_type;
+
+                div.innerHTML = `<span class="success">✓ Server Time: ${serverTime}</span>
+Dia Type: ${diaType}
+Day Type: ${dayType}`;
+            } catch (e) {
+                div.innerHTML = `<span class="error">✗ Error: ${e.message}</span>`;
+            }
+        }
+
+        async function testAPIDefault() {
+            const div = resultDiv('apiDefaultResult');
+            div.innerHTML = '<span class="info">Loading...</span>';
+
+            try {
+                const response = await fetch('api/get_next_connection.php?direction=to_station&line_code=linimo&destination=fujigaoka');
+                const data = await response.json();
+
+                if (!data.success) {
+                    div.innerHTML = `<span class="error">API Error: ${data.error}</span>`;
+                    return;
+                }
+
+                const routesCount = data.data.routes.length;
+                const serviceInfo = data.data.service_info;
+
+                div.innerHTML = `<span class="${routesCount > 0 ? 'success' : 'error'}">
+Routes Count: ${routesCount}
+Service Info: ${serviceInfo ? JSON.stringify(serviceInfo, null, 2) : 'null'}
+</span>`;
+            } catch (e) {
+                div.innerHTML = `<span class="error">✗ Error: ${e.message}</span>`;
+            }
+        }
+
+        async function testAPI21_25() {
+            const div = resultDiv('api21_25Result');
+            div.innerHTML = '<span class="info">Loading...</span>';
+
+            try {
+                const response = await fetch('api/get_next_connection.php?direction=to_station&line_code=linimo&destination=fujigaoka&test_time=21:25:00');
+                const data = await response.json();
+
+                if (!data.success) {
+                    div.innerHTML = `<span class="error">API Error: ${data.error}</span>`;
+                    return;
+                }
+
+                const routesCount = data.data.routes.length;
+                const serviceInfo = data.data.service_info;
+
+                div.innerHTML = `<span class="${routesCount > 0 ? 'success' : 'error'}">
+Current Time: ${data.data.current_time}
+Routes Count: ${routesCount}
+Service Info: ${serviceInfo ? JSON.stringify(serviceInfo, null, 2) : 'null'}
+${routesCount > 0 ? 'First Route: ' + JSON.stringify(data.data.routes[0], null, 2) : ''}
+</span>`;
+            } catch (e) {
+                div.innerHTML = `<span class="error">✗ Error: ${e.message}</span>`;
+            }
+        }
+
+        async function testShuttleData() {
+            const div = resultDiv('shuttleDataResult');
+            div.innerHTML = '<span class="info">Shuttle data check - see browser network tab for API response</span>';
+        }
+
+        async function testAPIFull() {
+            const div = resultDiv('apiFullResult');
+            div.innerHTML = '<span class="info">Loading...</span>';
+
+            try {
+                const response = await fetch('api/get_next_connection.php?direction=to_station&line_code=linimo&destination=fujigaoka');
+                const data = await response.json();
+
+                div.innerHTML = `<span class="success">✓ Full Response:</span>
+${JSON.stringify(data, null, 2)}`;
+            } catch (e) {
+                div.innerHTML = `<span class="error">✗ Error: ${e.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
