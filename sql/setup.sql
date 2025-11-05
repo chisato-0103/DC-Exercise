@@ -9,6 +9,7 @@ USE ait_transport;
 -- 既存テーブルの削除（開発時のみ）
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS linimo_timetable;
+DROP TABLE IF EXISTS rail_timetable;
 DROP TABLE IF EXISTS shuttle_bus_timetable;
 DROP TABLE IF EXISTS stations;
 DROP TABLE IF EXISTS system_settings;
@@ -105,7 +106,25 @@ INSERT INTO shuttle_bus_timetable (dia_type, direction, departure_time, arrival_
 ('A', 'to_yagusa', '16:30:00', '16:35:00');
 
 -- ===================================
--- 3. リニモ時刻表テーブル
+-- 3. 汎用レール時刻表テーブル（愛知環状線など）
+-- ===================================
+CREATE TABLE rail_timetable (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    line_code VARCHAR(50) NOT NULL COMMENT '路線コード: aichi_kanjo など',
+    station_code VARCHAR(50) NOT NULL COMMENT '駅コード',
+    station_name VARCHAR(50) NOT NULL COMMENT '駅名',
+    direction VARCHAR(50) NOT NULL COMMENT '方向: to_kozoji（高蔵寺方面）, to_okazaki（岡崎方面）など',
+    departure_time TIME NOT NULL COMMENT '発車時刻',
+    day_type ENUM('weekday_green', 'holiday_red') NOT NULL COMMENT '曜日種別: weekday_green=平日(4-7,10-1月), holiday_red=土休日+学校休業期間(8,9,2,3月)',
+    is_active BOOLEAN DEFAULT TRUE COMMENT '運行中フラグ',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_line_station_direction (line_code, station_code, direction),
+    INDEX idx_line_day_type (line_code, day_type),
+    INDEX idx_departure_time (departure_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===================================
+-- 4. リニモ時刻表テーブル
 -- ===================================
 CREATE TABLE linimo_timetable (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -195,6 +214,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 -- 各テーブルの統計情報を更新
 ANALYZE TABLE stations;
 ANALYZE TABLE shuttle_bus_timetable;
+ANALYZE TABLE rail_timetable;
 ANALYZE TABLE linimo_timetable;
 ANALYZE TABLE notices;
 ANALYZE TABLE system_settings;
@@ -203,4 +223,5 @@ ANALYZE TABLE system_settings;
 SELECT 'データベースのセットアップが完了しました。' AS message;
 SELECT CONCAT('駅数: ', COUNT(*), '駅') AS stations_count FROM stations;
 SELECT CONCAT('シャトルバス時刻数: ', COUNT(*), '件') AS shuttle_count FROM shuttle_bus_timetable;
+SELECT CONCAT('レール時刻数: ', COUNT(*), '件') AS rail_count FROM rail_timetable;
 SELECT CONCAT('リニモ時刻数: ', COUNT(*), '件') AS linimo_count FROM linimo_timetable;
