@@ -20,7 +20,7 @@
 - **linimo_holiday_to_yagusa.sql** - 土休日（全駅→八草方面）完全版
 
 ### 愛知環状線時刻表
-- **rebuild_aichi_kanjo_rail_timetable.sql** - 完全版（23駅、2,558件） ✅ NEW
+- **rebuild_aichi_kanjo_rail_timetable.sql** - 完全版（23駅、2,943件） ✅ NEW
 
 ## セットアップ手順
 
@@ -170,9 +170,9 @@ source /path/to/your/sql/file.sql;
 ## 愛知環状線データ詳細
 - **実装日**: 2025年11月3日
 - **駅数**: 23駅
-- **総レコード数**: 2,558件
+- **総レコード数**: 2,943件
 - **方向**: to_kozoji（高蔵寺方面）、to_okazaki（岡崎方面）
-- **データ形式**: PDFから正確に抽出した平日ダイヤ（weekday_green）
+- **データ形式**: JSONから正確に抽出した平日ダイヤ（weekday_green）
 - **特徴**: 環状線のため全駅が両方向対応
 
 ## Phase 2以降の改善予定
