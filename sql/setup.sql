@@ -27,6 +27,7 @@ CREATE TABLE stations (
     station_name_en VARCHAR(100),
     order_index INT NOT NULL,
     travel_time_from_yakusa INT NOT NULL COMMENT '八草駅からの所要時間（分）',
+    line_type VARCHAR(50) COMMENT 'リニモ or 愛知環状線',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_station_code (station_code),
     INDEX idx_order_index (order_index)
@@ -34,16 +35,37 @@ CREATE TABLE stations (
 
 -- 駅マスタ初期データ
 -- 注意: 八草→陶磁資料館南は3分、その他の駅間は2分
-INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yakusa) VALUES
-('yakusa', '八草', 'Yakusa', 1, 0),
-('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3),
-('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5),
-('koen_nishi', '公園西', 'Koen Nishi', 4, 7),
-('geidai_dori', '芸大通', 'Geidai-dori', 5, 9),
-('nagakute_kosenjo', '長久手古戦場', 'Nagakute Kosenjo', 6, 11),
-('irigaike_koen', '杁ヶ池公園', 'Irigaike Koen', 7, 13),
-('hanamizuki_dori', 'はなみずき通', 'Hanamizuki-dori', 8, 15),
-('fujigaoka', '藤が丘', 'Fujigaoka', 9, 17);
+INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yakusa, line_type) VALUES
+('yakusa', '八草', 'Yakusa', 1, 0, NULL),
+('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3, 'linimo'),
+('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5, 'linimo'),
+('koen_nishi', '公園西', 'Koen Nishi', 4, 7, 'linimo'),
+('geidai_dori', '芸大通', 'Geidai-dori', 5, 9, 'linimo'),
+('nagakute_kosenjo', '長久手古戦場', 'Nagakute Kosenjo', 6, 11, 'linimo'),
+('irigaike_koen', '杁ヶ池公園', 'Irigaike Koen', 7, 13, 'linimo'),
+('hanamizuki_dori', 'はなみずき通', 'Hanamizuki-dori', 8, 15, 'linimo'),
+('fujigaoka', '藤が丘', 'Fujigaoka', 9, 17, 'linimo'),
+('okazaki', '岡崎', 'Okazaki', 10, 50, 'aichi_kanjo'),
+('nakaokazaki', '中岡崎', 'Naka-Okazaki', 11, 44, 'aichi_kanjo'),
+('kita_okazaki', '北岡崎', 'Kita-Okazaki', 12, 41, 'aichi_kanjo'),
+('mikawa_toyota', '三河豊田', 'Mikawa-Toyota', 13, 24, 'aichi_kanjo'),
+('shin_toyota', '新豊田', 'Shin-Toyota', 14, 18, 'aichi_kanjo'),
+('aikan_umetsubo', '愛環梅坪', 'Aikan-Umetsubo', 15, 15, 'aichi_kanjo'),
+('nakamizuno', '中水野', 'Nakamizuno', 16, 13, 'aichi_kanjo'),
+('setoshi', '瀬戸市', 'Setoshi', 17, 10, 'aichi_kanjo'),
+('setoguchi', '瀬戸口', 'Setoguchi', 18, 7, 'aichi_kanjo'),
+('sasabara', '篠原', 'Sasabara', 19, 4, 'aichi_kanjo'),
+('kitano_masuzuka', '北野桝塚', 'Kitano-Masuzuka', 20, 36, 'aichi_kanjo'),
+('mutsuna', '六名', 'Mutsuna', 21, 47, 'aichi_kanjo'),
+('shigo', '四郷', 'Shigo', 22, 12, 'aichi_kanjo'),
+('ekaku', '永覚', 'Ekaku', 23, 30, 'aichi_kanjo'),
+('homi', '保見', 'Homi', 24, 7, 'aichi_kanjo'),
+('kaizu', '貝津', 'Kaizu', 25, 9, 'aichi_kanjo'),
+('mikawa_kamigo', '三河上郷', 'Mikawa-Kamigo', 26, 33, 'aichi_kanjo'),
+('shin_uwagoromo', '新上挙母', 'Shin-Uwagoromo', 27, 21, 'aichi_kanjo'),
+('suenohara', '末野原', 'Suenohara', 28, 27, 'aichi_kanjo'),
+('yamaguchi', '山口', 'Yamaguchi', 29, 4, 'aichi_kanjo'),
+('kozoji', '高蔵寺', 'Kozoji', 30, 17, 'aichi_kanjo');
 
 -- ===================================
 -- 2. シャトルバス時刻表テーブル
@@ -119,6 +141,7 @@ CREATE TABLE rail_timetable (
     direction VARCHAR(50) NOT NULL COMMENT '方向: to_kozoji（高蔵寺方面）, to_okazaki（岡崎方面）など',
     departure_time TIME NOT NULL COMMENT '発車時刻',
     day_type ENUM('weekday_green', 'holiday_red') NOT NULL COMMENT '曜日種別: weekday_green=平日(4-7,10-1月), holiday_red=土休日+学校休業期間(8,9,2,3月)',
+    terminal VARCHAR(50) COMMENT '最終駅（愛知環状線用）',
     is_active BOOLEAN DEFAULT TRUE COMMENT '運行中フラグ',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_line_station_direction (line_code, station_code, direction),

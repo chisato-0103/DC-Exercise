@@ -104,7 +104,7 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
         }
 
         // 路線駅が目的地の場合はシャトルバス + 路線で計算
-        $railTravelTime = (int)$destinationInfo['travel_time_from_yagusa'];
+        $railTravelTime = (int)$destinationInfo['travel_time_from_yakusa'];
         $shuttleBuses = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, 10);
         $routes = [];
 
@@ -201,7 +201,7 @@ function calculateRailToUniversity($lineCode, $originCode, $currentTime, $limit 
             return [];
         }
 
-        $railTravelTime = (int)$originInfo['travel_time_from_yagusa'];
+        $railTravelTime = (int)$originInfo['travel_time_from_yakusa'];
 
         // 次の列車（出発駅→八草駅）を取得
         // リニモの場合は'to_yagusa'、愛知環状線の場合は'to_kozoji'など

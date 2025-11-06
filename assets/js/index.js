@@ -90,8 +90,8 @@
                         // リニモ駅のみ（8駅）か転乗ハブの八草
                         return station.line_type === 'linimo' || station.station_code === 'yakusa';
                     } else if (lineCode === 'aichi_kanjo') {
-                        // 愛知環状線駅（八草 + 23駅: 岡崎→高蔵寺）
-                        return station.line_type === 'aichi_kanjo';
+                        // 愛知環状線駅（23駅: 岡崎→高蔵寺）+ 八草駅（転乗ハブ）
+                        return station.line_type === 'aichi_kanjo' || station.station_code === 'yakusa';
                     }
                     return true;
                 });
@@ -624,11 +624,12 @@
                     </div>
                 `;
 
-                // シャトルバス選択ウィジェット（リニモ駅→大学）
+                // シャトルバス選択ウィジェット（リニモ駅→大学 または 愛知環状線駅→大学）
                 if (route.shuttle_options && route.shuttle_options.length > 0) {
+                    const railDeparture = route.linimo_departure || route.rail_departure;
                     html += `
                         <div class="route-arrow" style="color: white;">↓</div>
-                        <div class="route-step transfer-time-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
+                        <div class="route-step transfer-time-step" data-linimo-departure="${railDeparture.replace(/:/g, '-')}">
                             <img src="assets/image/time-svgrepo-com 2.svg" />
                             <div class="route-step-content">
                                 <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
@@ -645,7 +646,7 @@
                         const isSelected = index === 0;
                         html += `
                             <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="shuttle-segment-label">
-                                <input type="radio" name="shuttle_option_${route.linimo_departure}"
+                                <input type="radio" name="shuttle_option_${railDeparture}"
                                        value="${index}"
                                        data-route='${JSON.stringify(route)}'
                                        data-index="${index}"
@@ -668,7 +669,7 @@
                             </div>
                         </div>
                         <div class="route-arrow" style="color: white;">↓</div>
-                        <div class="route-step arrival-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
+                        <div class="route-step arrival-step" data-linimo-departure="${railDeparture.replace(/:/g, '-')}">
                             <img src="assets/image/school-flag-svgrepo-com 2.svg" />
                             <div class="route-step-content">
                                 <div class="route-step-time arrival-time-display">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_options[0].shuttle_arrival))}</div>
@@ -938,25 +939,28 @@
                     </div>
                 `;
             } else {
-                // リニモ駅 → 大学
+                // リニモ駅 → 大学 または 愛知環状線駅 → 大学
+                const railDeparture = route.linimo_departure || route.rail_departure;
+                const railArrival = route.linimo_arrival || route.rail_arrival;
+                const railTime = route.linimo_time || route.rail_time;
                 html = `
                     <div class="route-step">
                         <img src="assets/image/train-svgrepo-com.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">${escapeHtml(route.origin_name)} 発 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_departure))}</div>
-                            <div class="route-step-detail">リニモで出発</div>
+                            <div class="route-step-time">${escapeHtml(route.origin_name)} 発 ${escapeHtml(formatTimeWithoutSeconds(railDeparture))}</div>
+                            <div class="route-step-detail">${lineCode === 'aichi_kanjo' ? '愛知環状線' : 'リニモ'}で出発</div>
                         </div>
                     </div>
                     <div class="route-arrow">↓</div>
                     <div class="route-step">
                         <img src="assets/image/train-svgrepo-com.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">八草駅 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_arrival))}</div>
-                            <div class="route-step-detail">リニモ約${escapeHtml(route.linimo_time)}分</div>
+                            <div class="route-step-time">八草駅 着 ${escapeHtml(formatTimeWithoutSeconds(railArrival))}</div>
+                            <div class="route-step-detail">${lineCode === 'aichi_kanjo' ? '愛知環状線' : 'リニモ'}約${escapeHtml(railTime)}分</div>
                         </div>
                     </div>
                     <div class="route-arrow">↓</div>
-                    <div class="route-step transfer-time-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
+                    <div class="route-step transfer-time-step" data-linimo-departure="${railDeparture.replace(/:/g, '-')}">
                         <img src="assets/image/time-svgrepo-com.svg" />
                         <div class="route-step-content">
                             <div class="route-step-time transfer-time-display">乗り換え時間: ${escapeHtml(route.transfer_time)}分</div>
@@ -972,7 +976,7 @@
                                     const isSelected = index === 0;
                                     return `
                                         <label style="flex: 1 1 calc(33.333% - 0.4rem); min-width: 90px; margin: 0; cursor: pointer;" class="shuttle-segment-label">
-                                            <input type="radio" name="shuttle_option_${route.linimo_departure}"
+                                            <input type="radio" name="shuttle_option_${railDeparture}"
                                                    value="${index}"
                                                    data-route='${JSON.stringify(route)}'
                                                    data-index="${index}"
@@ -993,7 +997,7 @@
                             </div>
                         </div>
                         <div class="route-arrow">↓</div>
-                        <div class="route-step arrival-step" data-linimo-departure="${route.linimo_departure.replace(/:/g, '-')}">
+                        <div class="route-step arrival-step" data-linimo-departure="${railDeparture.replace(/:/g, '-')}">
                             <img src="assets/image/school-flag-svgrepo-com 2.svg" />
                             <div class="route-step-content">
                                 <div class="route-step-time arrival-time-display">愛知工業大学 着 ${escapeHtml(formatTimeWithoutSeconds(route.shuttle_options[0].shuttle_arrival))}</div>
