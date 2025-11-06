@@ -34,7 +34,7 @@ CREATE TABLE stations (
 
 -- 駅マスタ初期データ
 -- 注意: 八草→陶磁資料館南は3分、その他の駅間は2分
-INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yagusa) VALUES
+INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yakusa) VALUES
 ('yakusa', '八草', 'Yakusa', 1, 0),
 ('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5),
