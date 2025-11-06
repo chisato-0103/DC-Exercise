@@ -7,12 +7,15 @@ CREATE DATABASE IF NOT EXISTS ait_transport DEFAULT CHARACTER SET utf8mb4 COLLAT
 USE ait_transport;
 
 -- 既存テーブルの削除（開発時のみ）
+DROP TABLE IF EXISTS contacts;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS linimo_timetable;
 DROP TABLE IF EXISTS rail_timetable;
+DROP TABLE IF EXISTS shuttle_schedule;
 DROP TABLE IF EXISTS shuttle_bus_timetable;
 DROP TABLE IF EXISTS stations;
 DROP TABLE IF EXISTS system_settings;
+DROP TABLE IF EXISTS transport_lines;
 
 -- ===================================
 -- 1. 駅マスタテーブル
@@ -208,6 +211,55 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 ('shuttle_travel_time', '5', 'シャトルバス所要時間（分）');
 
 -- ===================================
+-- 6. シャトルバス運行日程テーブル
+-- ===================================
+CREATE TABLE shuttle_schedule (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    operation_date DATE UNIQUE NOT NULL COMMENT '運行日',
+    dia_type ENUM('A', 'B', 'C', 'holiday') NOT NULL COMMENT 'ダイヤ種別: A=授業期間平日, B=土曜日, C=学校休業期間, holiday=運行休止',
+    fiscal_year INT NOT NULL COMMENT '会計年度',
+    is_operational BOOLEAN DEFAULT TRUE COMMENT '運行フラグ',
+    remarks VARCHAR(255) COMMENT '備考',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_operation_date (operation_date),
+    INDEX idx_dia_type (dia_type),
+    INDEX idx_fiscal_year (fiscal_year)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===================================
+-- 7. 路線マスタテーブル
+-- ===================================
+CREATE TABLE transport_lines (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    line_code VARCHAR(50) UNIQUE NOT NULL COMMENT '路線コード: linimo, aichi_kanjo など',
+    line_name VARCHAR(100) NOT NULL COMMENT '路線名',
+    line_name_en VARCHAR(100) COMMENT '路線名（英語）',
+    transfer_hub VARCHAR(50) NOT NULL COMMENT '乗り継ぎ拠点駅',
+    typical_duration INT COMMENT '所要時間（分）',
+    remarks VARCHAR(255) COMMENT '備考',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_line_code (line_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===================================
+-- 8. お問い合わせテーブル
+-- ===================================
+CREATE TABLE contacts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL COMMENT '名前',
+    email VARCHAR(255) NOT NULL COMMENT 'メールアドレス',
+    subject VARCHAR(200) NOT NULL COMMENT '件名',
+    message TEXT NOT NULL COMMENT '本文',
+    ip_address VARCHAR(45) COMMENT 'IPアドレス',
+    status ENUM('new', 'read', 'replied') DEFAULT 'new' COMMENT 'ステータス: new=未読, read=既読, replied=返信済',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_email (email),
+    INDEX idx_status (status),
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ===================================
 -- インデックスとパフォーマンス最適化
 -- ===================================
 
@@ -218,10 +270,15 @@ ANALYZE TABLE rail_timetable;
 ANALYZE TABLE linimo_timetable;
 ANALYZE TABLE notices;
 ANALYZE TABLE system_settings;
+ANALYZE TABLE shuttle_schedule;
+ANALYZE TABLE transport_lines;
+ANALYZE TABLE contacts;
 
 -- セットアップ完了メッセージ
 SELECT 'データベースのセットアップが完了しました。' AS message;
 SELECT CONCAT('駅数: ', COUNT(*), '駅') AS stations_count FROM stations;
 SELECT CONCAT('シャトルバス時刻数: ', COUNT(*), '件') AS shuttle_count FROM shuttle_bus_timetable;
+SELECT CONCAT('シャトルバス運行日程: ', COUNT(*), '日') AS shuttle_schedule_count FROM shuttle_schedule;
 SELECT CONCAT('レール時刻数: ', COUNT(*), '件') AS rail_count FROM rail_timetable;
 SELECT CONCAT('リニモ時刻数: ', COUNT(*), '件') AS linimo_count FROM linimo_timetable;
+SELECT CONCAT('お知らせ数: ', COUNT(*), '件') AS notices_count FROM notices;
