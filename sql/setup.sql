@@ -26,7 +26,7 @@ CREATE TABLE stations (
     station_name VARCHAR(50) NOT NULL,
     station_name_en VARCHAR(100),
     order_index INT NOT NULL,
-    travel_time_from_yagusa INT NOT NULL COMMENT '八草駅からの所要時間（分）',
+    travel_time_from_yakusa INT NOT NULL COMMENT '八草駅からの所要時間（分）',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_station_code (station_code),
     INDEX idx_order_index (order_index)
@@ -35,7 +35,7 @@ CREATE TABLE stations (
 -- 駅マスタ初期データ
 -- 注意: 八草→陶磁資料館南は3分、その他の駅間は2分
 INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yagusa) VALUES
-('yagusa', '八草', 'Yagusa', 1, 0),
+('yakusa', '八草', 'Yakusa', 1, 0),
 ('tojishiryokan_minami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5),
 ('koen_nishi', '公園西', 'Koen Nishi', 4, 7),
@@ -146,28 +146,28 @@ CREATE TABLE linimo_timetable (
 -- リニモ時刻表データ（八草駅発→藤が丘方面、平日）サンプルデータ
 INSERT INTO linimo_timetable (station_code, station_name, direction, departure_time, day_type) VALUES
 -- 8時台
-('yagusa', '八草', 'to_fujigaoka', '08:02:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:10:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:18:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:26:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:33:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:40:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:48:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '08:56:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:02:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:10:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:18:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:26:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:33:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:40:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:48:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '08:56:00', 'weekday_green'),
 -- 9時台
-('yagusa', '八草', 'to_fujigaoka', '09:04:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:12:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:20:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:28:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:36:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:44:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '09:52:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:04:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:12:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:20:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:28:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:36:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:44:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '09:52:00', 'weekday_green'),
 -- 10時台
-('yagusa', '八草', 'to_fujigaoka', '10:00:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '10:08:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '10:16:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '10:24:00', 'weekday_green'),
-('yagusa', '八草', 'to_fujigaoka', '10:32:00', 'weekday_green');
+('yakusa', '八草', 'to_fujigaoka', '10:00:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '10:08:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '10:16:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '10:24:00', 'weekday_green'),
+('yakusa', '八草', 'to_fujigaoka', '10:32:00', 'weekday_green');
 
 -- ===================================
 -- 4. 運行情報・お知らせテーブル
@@ -243,9 +243,9 @@ CREATE TABLE transport_lines (
 
 -- 路線マスタ初期データ
 INSERT INTO transport_lines (line_code, line_name, line_name_en, transfer_hub, typical_duration, remarks) VALUES
-('shuttle', 'シャトルバス', 'Shuttle Bus', 'yagusa', 5, 'AIT Campus ↔ Yagusa Station'),
-('linimo', 'リニモ', 'Linimo', 'yagusa', 17, '愛知高速交通リニモ 八草駅 ↔ 藤が丘駅 全9駅'),
-('aichi_kanjo', '愛知環状線', 'Aichi Kanjo Line', 'yagusa', 45, 'JR東海 愛知環状線 八草駅 ↔ 岡崎駅方面');
+('shuttle', 'シャトルバス', 'Shuttle Bus', 'yakusa', 5, 'AIT Campus ↔ Yakusa Station'),
+('linimo', 'リニモ', 'Linimo', 'yakusa', 17, '愛知高速交通リニモ 八草駅 ↔ 藤が丘駅 全9駅'),
+('aichi_kanjo', '愛知環状線', 'Aichi Kanjo Line', 'yakusa', 45, 'JR東海 愛知環状線 八草駅 ↔ 岡崎駅方面');
 
 -- ===================================
 -- 8. お問い合わせテーブル
