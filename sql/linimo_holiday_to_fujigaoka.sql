@@ -24,7 +24,7 @@ DELETE FROM linimo_timetable WHERE direction = 'to_fujigaoka' AND day_type = 'ho
 -- ================================
 INSERT INTO linimo_timetable (station_code, station_name, direction, departure_time, day_type) VALUES
 -- 列車 1: 5:30 発
-('yagusa', '八草', 'to_fujigaoka', '5:30:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '5:30:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '5:31:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '5:33:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '5:35:00', 'holiday_red'),
@@ -34,7 +34,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '5:44:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '5:47:00', 'holiday_red'),
 -- 列車 2: 5:48 発
-('yagusa', '八草', 'to_fujigaoka', '5:48:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '5:48:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '5:49:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '5:51:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '5:53:00', 'holiday_red'),
@@ -44,7 +44,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:02:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '6:05:00', 'holiday_red'),
 -- 列車 3: 6:03 発
-('yagusa', '八草', 'to_fujigaoka', '6:03:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:03:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:04:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:06:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:08:00', 'holiday_red'),
@@ -54,7 +54,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:17:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '6:20:00', 'holiday_red'),
 -- 列車 4: 6:18 発
-('yagusa', '八草', 'to_fujigaoka', '6:18:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:18:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:19:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:21:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:23:00', 'holiday_red'),
@@ -64,7 +64,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:32:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '6:35:00', 'holiday_red'),
 -- 列車 5: 6:29 発
-('yagusa', '八草', 'to_fujigaoka', '6:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:34:00', 'holiday_red'),
@@ -74,7 +74,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '6:46:00', 'holiday_red'),
 -- 列車 6: 6:37 発
-('yagusa', '八草', 'to_fujigaoka', '6:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:42:00', 'holiday_red'),
@@ -84,7 +84,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '6:54:00', 'holiday_red'),
 -- 列車 7: 6:45 発
-('yagusa', '八草', 'to_fujigaoka', '6:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:50:00', 'holiday_red'),
@@ -94,7 +94,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '6:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:02:00', 'holiday_red'),
 -- 列車 8: 6:53 発
-('yagusa', '八草', 'to_fujigaoka', '6:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '6:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '6:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '6:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '6:58:00', 'holiday_red'),
@@ -104,7 +104,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:10:00', 'holiday_red'),
 -- 列車 9: 7:01 発
-('yagusa', '八草', 'to_fujigaoka', '7:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:06:00', 'holiday_red'),
@@ -114,7 +114,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:18:00', 'holiday_red'),
 -- 列車 10: 7:09 発
-('yagusa', '八草', 'to_fujigaoka', '7:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:14:00', 'holiday_red'),
@@ -124,7 +124,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:26:00', 'holiday_red'),
 -- 列車 11: 7:17 発
-('yagusa', '八草', 'to_fujigaoka', '7:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:22:00', 'holiday_red'),
@@ -134,7 +134,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:34:00', 'holiday_red'),
 -- 列車 12: 7:25 発
-('yagusa', '八草', 'to_fujigaoka', '7:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:30:00', 'holiday_red'),
@@ -144,7 +144,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:42:00', 'holiday_red'),
 -- 列車 13: 7:33 発
-('yagusa', '八草', 'to_fujigaoka', '7:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:38:00', 'holiday_red'),
@@ -154,7 +154,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:50:00', 'holiday_red'),
 -- 列車 14: 7:41 発
-('yagusa', '八草', 'to_fujigaoka', '7:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:46:00', 'holiday_red'),
@@ -164,7 +164,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '7:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '7:58:00', 'holiday_red'),
 -- 列車 15: 7:49 発
-('yagusa', '八草', 'to_fujigaoka', '7:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '7:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '7:54:00', 'holiday_red'),
@@ -174,7 +174,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:06:00', 'holiday_red'),
 -- 列車 16: 7:57 発
-('yagusa', '八草', 'to_fujigaoka', '7:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '7:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '7:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:02:00', 'holiday_red'),
@@ -184,7 +184,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:14:00', 'holiday_red'),
 -- 列車 17: 8:05 発
-('yagusa', '八草', 'to_fujigaoka', '8:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:10:00', 'holiday_red'),
@@ -194,7 +194,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:22:00', 'holiday_red'),
 -- 列車 18: 8:13 発
-('yagusa', '八草', 'to_fujigaoka', '8:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:18:00', 'holiday_red'),
@@ -204,7 +204,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:30:00', 'holiday_red'),
 -- 列車 19: 8:21 発
-('yagusa', '八草', 'to_fujigaoka', '8:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:26:00', 'holiday_red'),
@@ -214,7 +214,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:38:00', 'holiday_red'),
 -- 列車 20: 8:29 発
-('yagusa', '八草', 'to_fujigaoka', '8:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:34:00', 'holiday_red'),
@@ -224,7 +224,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:46:00', 'holiday_red'),
 -- 列車 21: 8:37 発
-('yagusa', '八草', 'to_fujigaoka', '8:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:42:00', 'holiday_red'),
@@ -234,7 +234,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '8:54:00', 'holiday_red'),
 -- 列車 22: 8:45 発
-('yagusa', '八草', 'to_fujigaoka', '8:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:50:00', 'holiday_red'),
@@ -244,7 +244,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '8:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:02:00', 'holiday_red'),
 -- 列車 23: 8:53 発
-('yagusa', '八草', 'to_fujigaoka', '8:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '8:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '8:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '8:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '8:58:00', 'holiday_red'),
@@ -254,7 +254,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:10:00', 'holiday_red'),
 -- 列車 24: 9:01 発
-('yagusa', '八草', 'to_fujigaoka', '9:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:06:00', 'holiday_red'),
@@ -264,7 +264,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:18:00', 'holiday_red'),
 -- 列車 25: 9:09 発
-('yagusa', '八草', 'to_fujigaoka', '9:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:14:00', 'holiday_red'),
@@ -274,7 +274,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:26:00', 'holiday_red'),
 -- 列車 26: 9:17 発
-('yagusa', '八草', 'to_fujigaoka', '9:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:22:00', 'holiday_red'),
@@ -284,7 +284,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:34:00', 'holiday_red'),
 -- 列車 27: 9:25 発
-('yagusa', '八草', 'to_fujigaoka', '9:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:30:00', 'holiday_red'),
@@ -294,7 +294,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:42:00', 'holiday_red'),
 -- 列車 28: 9:33 発
-('yagusa', '八草', 'to_fujigaoka', '9:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:38:00', 'holiday_red'),
@@ -304,7 +304,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:50:00', 'holiday_red'),
 -- 列車 29: 9:41 発
-('yagusa', '八草', 'to_fujigaoka', '9:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:46:00', 'holiday_red'),
@@ -314,7 +314,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '9:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '9:58:00', 'holiday_red'),
 -- 列車 30: 9:49 発
-('yagusa', '八草', 'to_fujigaoka', '9:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '9:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '9:54:00', 'holiday_red'),
@@ -324,7 +324,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:06:00', 'holiday_red'),
 -- 列車 31: 9:57 発
-('yagusa', '八草', 'to_fujigaoka', '9:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '9:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '9:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:02:00', 'holiday_red'),
@@ -334,7 +334,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:14:00', 'holiday_red'),
 -- 列車 32: 10:05 発
-('yagusa', '八草', 'to_fujigaoka', '10:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:10:00', 'holiday_red'),
@@ -344,7 +344,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:22:00', 'holiday_red'),
 -- 列車 33: 10:13 発
-('yagusa', '八草', 'to_fujigaoka', '10:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:18:00', 'holiday_red'),
@@ -354,7 +354,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:30:00', 'holiday_red'),
 -- 列車 34: 10:21 発
-('yagusa', '八草', 'to_fujigaoka', '10:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:26:00', 'holiday_red'),
@@ -364,7 +364,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:38:00', 'holiday_red'),
 -- 列車 35: 10:29 発
-('yagusa', '八草', 'to_fujigaoka', '10:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:34:00', 'holiday_red'),
@@ -374,7 +374,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:46:00', 'holiday_red'),
 -- 列車 36: 10:37 発
-('yagusa', '八草', 'to_fujigaoka', '10:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:42:00', 'holiday_red'),
@@ -384,7 +384,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '10:54:00', 'holiday_red'),
 -- 列車 37: 10:45 発
-('yagusa', '八草', 'to_fujigaoka', '10:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:50:00', 'holiday_red'),
@@ -394,7 +394,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '10:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:02:00', 'holiday_red'),
 -- 列車 38: 10:53 発
-('yagusa', '八草', 'to_fujigaoka', '10:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '10:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '10:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '10:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '10:58:00', 'holiday_red'),
@@ -404,7 +404,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:10:00', 'holiday_red'),
 -- 列車 39: 11:01 発
-('yagusa', '八草', 'to_fujigaoka', '11:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:06:00', 'holiday_red'),
@@ -414,7 +414,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:18:00', 'holiday_red'),
 -- 列車 40: 11:09 発
-('yagusa', '八草', 'to_fujigaoka', '11:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:14:00', 'holiday_red'),
@@ -424,7 +424,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:26:00', 'holiday_red'),
 -- 列車 41: 11:17 発
-('yagusa', '八草', 'to_fujigaoka', '11:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:22:00', 'holiday_red'),
@@ -434,7 +434,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:34:00', 'holiday_red'),
 -- 列車 42: 11:25 発
-('yagusa', '八草', 'to_fujigaoka', '11:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:30:00', 'holiday_red'),
@@ -444,7 +444,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:42:00', 'holiday_red'),
 -- 列車 43: 11:33 発
-('yagusa', '八草', 'to_fujigaoka', '11:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:38:00', 'holiday_red'),
@@ -454,7 +454,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:50:00', 'holiday_red'),
 -- 列車 44: 11:41 発
-('yagusa', '八草', 'to_fujigaoka', '11:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:46:00', 'holiday_red'),
@@ -464,7 +464,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '11:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '11:58:00', 'holiday_red'),
 -- 列車 45: 11:49 発
-('yagusa', '八草', 'to_fujigaoka', '11:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '11:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '11:54:00', 'holiday_red'),
@@ -474,7 +474,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:06:00', 'holiday_red'),
 -- 列車 46: 11:57 発
-('yagusa', '八草', 'to_fujigaoka', '11:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '11:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '11:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:02:00', 'holiday_red'),
@@ -484,7 +484,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:14:00', 'holiday_red'),
 -- 列車 47: 12:05 発
-('yagusa', '八草', 'to_fujigaoka', '12:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:10:00', 'holiday_red'),
@@ -494,7 +494,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:22:00', 'holiday_red'),
 -- 列車 48: 12:13 発
-('yagusa', '八草', 'to_fujigaoka', '12:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:18:00', 'holiday_red'),
@@ -504,7 +504,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:30:00', 'holiday_red'),
 -- 列車 49: 12:21 発
-('yagusa', '八草', 'to_fujigaoka', '12:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:26:00', 'holiday_red'),
@@ -514,7 +514,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:38:00', 'holiday_red'),
 -- 列車 50: 12:29 発
-('yagusa', '八草', 'to_fujigaoka', '12:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:34:00', 'holiday_red'),
@@ -524,7 +524,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:46:00', 'holiday_red'),
 -- 列車 51: 12:37 発
-('yagusa', '八草', 'to_fujigaoka', '12:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:42:00', 'holiday_red'),
@@ -534,7 +534,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '12:54:00', 'holiday_red'),
 -- 列車 52: 12:45 発
-('yagusa', '八草', 'to_fujigaoka', '12:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:50:00', 'holiday_red'),
@@ -544,7 +544,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '12:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:02:00', 'holiday_red'),
 -- 列車 53: 12:53 発
-('yagusa', '八草', 'to_fujigaoka', '12:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '12:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '12:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '12:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '12:58:00', 'holiday_red'),
@@ -554,7 +554,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:10:00', 'holiday_red'),
 -- 列車 54: 13:01 発
-('yagusa', '八草', 'to_fujigaoka', '13:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:06:00', 'holiday_red'),
@@ -564,7 +564,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:18:00', 'holiday_red'),
 -- 列車 55: 13:09 発
-('yagusa', '八草', 'to_fujigaoka', '13:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:14:00', 'holiday_red'),
@@ -574,7 +574,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:26:00', 'holiday_red'),
 -- 列車 56: 13:17 発
-('yagusa', '八草', 'to_fujigaoka', '13:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:22:00', 'holiday_red'),
@@ -584,7 +584,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:34:00', 'holiday_red'),
 -- 列車 57: 13:25 発
-('yagusa', '八草', 'to_fujigaoka', '13:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:30:00', 'holiday_red'),
@@ -594,7 +594,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:42:00', 'holiday_red'),
 -- 列車 58: 13:33 発
-('yagusa', '八草', 'to_fujigaoka', '13:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:38:00', 'holiday_red'),
@@ -604,7 +604,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:50:00', 'holiday_red'),
 -- 列車 59: 13:41 発
-('yagusa', '八草', 'to_fujigaoka', '13:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:46:00', 'holiday_red'),
@@ -614,7 +614,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '13:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '13:58:00', 'holiday_red'),
 -- 列車 60: 13:49 発
-('yagusa', '八草', 'to_fujigaoka', '13:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '13:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '13:54:00', 'holiday_red'),
@@ -624,7 +624,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:06:00', 'holiday_red'),
 -- 列車 61: 13:57 発
-('yagusa', '八草', 'to_fujigaoka', '13:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '13:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '13:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:02:00', 'holiday_red'),
@@ -634,7 +634,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:14:00', 'holiday_red'),
 -- 列車 62: 14:05 発
-('yagusa', '八草', 'to_fujigaoka', '14:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:10:00', 'holiday_red'),
@@ -644,7 +644,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:22:00', 'holiday_red'),
 -- 列車 63: 14:13 発
-('yagusa', '八草', 'to_fujigaoka', '14:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:18:00', 'holiday_red'),
@@ -654,7 +654,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:30:00', 'holiday_red'),
 -- 列車 64: 14:21 発
-('yagusa', '八草', 'to_fujigaoka', '14:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:26:00', 'holiday_red'),
@@ -664,7 +664,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:38:00', 'holiday_red'),
 -- 列車 65: 14:29 発
-('yagusa', '八草', 'to_fujigaoka', '14:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:34:00', 'holiday_red'),
@@ -674,7 +674,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:46:00', 'holiday_red'),
 -- 列車 66: 14:37 発
-('yagusa', '八草', 'to_fujigaoka', '14:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:42:00', 'holiday_red'),
@@ -684,7 +684,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '14:54:00', 'holiday_red'),
 -- 列車 67: 14:45 発
-('yagusa', '八草', 'to_fujigaoka', '14:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:50:00', 'holiday_red'),
@@ -694,7 +694,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '14:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:02:00', 'holiday_red'),
 -- 列車 68: 14:53 発
-('yagusa', '八草', 'to_fujigaoka', '14:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '14:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '14:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '14:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '14:58:00', 'holiday_red'),
@@ -704,7 +704,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:10:00', 'holiday_red'),
 -- 列車 69: 15:01 発
-('yagusa', '八草', 'to_fujigaoka', '15:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:06:00', 'holiday_red'),
@@ -714,7 +714,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:18:00', 'holiday_red'),
 -- 列車 70: 15:09 発
-('yagusa', '八草', 'to_fujigaoka', '15:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:14:00', 'holiday_red'),
@@ -724,7 +724,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:26:00', 'holiday_red'),
 -- 列車 71: 15:17 発
-('yagusa', '八草', 'to_fujigaoka', '15:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:22:00', 'holiday_red'),
@@ -734,7 +734,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:34:00', 'holiday_red'),
 -- 列車 72: 15:25 発
-('yagusa', '八草', 'to_fujigaoka', '15:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:30:00', 'holiday_red'),
@@ -744,7 +744,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:42:00', 'holiday_red'),
 -- 列車 73: 15:33 発
-('yagusa', '八草', 'to_fujigaoka', '15:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:38:00', 'holiday_red'),
@@ -754,7 +754,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:50:00', 'holiday_red'),
 -- 列車 74: 15:41 発
-('yagusa', '八草', 'to_fujigaoka', '15:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:46:00', 'holiday_red'),
@@ -764,7 +764,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '15:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '15:58:00', 'holiday_red'),
 -- 列車 75: 15:49 発
-('yagusa', '八草', 'to_fujigaoka', '15:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '15:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '15:54:00', 'holiday_red'),
@@ -774,7 +774,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:06:00', 'holiday_red'),
 -- 列車 76: 15:57 発
-('yagusa', '八草', 'to_fujigaoka', '15:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '15:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '15:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:02:00', 'holiday_red'),
@@ -784,7 +784,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:14:00', 'holiday_red'),
 -- 列車 77: 16:05 発
-('yagusa', '八草', 'to_fujigaoka', '16:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:10:00', 'holiday_red'),
@@ -794,7 +794,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:22:00', 'holiday_red'),
 -- 列車 78: 16:13 発
-('yagusa', '八草', 'to_fujigaoka', '16:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:18:00', 'holiday_red'),
@@ -804,7 +804,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:30:00', 'holiday_red'),
 -- 列車 79: 16:21 発
-('yagusa', '八草', 'to_fujigaoka', '16:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:26:00', 'holiday_red'),
@@ -814,7 +814,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:38:00', 'holiday_red'),
 -- 列車 80: 16:29 発
-('yagusa', '八草', 'to_fujigaoka', '16:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:34:00', 'holiday_red'),
@@ -824,7 +824,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:46:00', 'holiday_red'),
 -- 列車 81: 16:37 発
-('yagusa', '八草', 'to_fujigaoka', '16:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:42:00', 'holiday_red'),
@@ -834,7 +834,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '16:54:00', 'holiday_red'),
 -- 列車 82: 16:45 発
-('yagusa', '八草', 'to_fujigaoka', '16:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:50:00', 'holiday_red'),
@@ -844,7 +844,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '16:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:02:00', 'holiday_red'),
 -- 列車 83: 16:53 発
-('yagusa', '八草', 'to_fujigaoka', '16:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '16:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '16:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '16:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '16:58:00', 'holiday_red'),
@@ -854,7 +854,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:10:00', 'holiday_red'),
 -- 列車 84: 17:01 発
-('yagusa', '八草', 'to_fujigaoka', '17:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:06:00', 'holiday_red'),
@@ -864,7 +864,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:18:00', 'holiday_red'),
 -- 列車 85: 17:09 発
-('yagusa', '八草', 'to_fujigaoka', '17:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:14:00', 'holiday_red'),
@@ -874,7 +874,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:26:00', 'holiday_red'),
 -- 列車 86: 17:17 発
-('yagusa', '八草', 'to_fujigaoka', '17:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:22:00', 'holiday_red'),
@@ -884,7 +884,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:34:00', 'holiday_red'),
 -- 列車 87: 17:25 発
-('yagusa', '八草', 'to_fujigaoka', '17:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:30:00', 'holiday_red'),
@@ -894,7 +894,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:42:00', 'holiday_red'),
 -- 列車 88: 17:33 発
-('yagusa', '八草', 'to_fujigaoka', '17:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:38:00', 'holiday_red'),
@@ -904,7 +904,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:50:00', 'holiday_red'),
 -- 列車 89: 17:41 発
-('yagusa', '八草', 'to_fujigaoka', '17:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:46:00', 'holiday_red'),
@@ -914,7 +914,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '17:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '17:58:00', 'holiday_red'),
 -- 列車 90: 17:49 発
-('yagusa', '八草', 'to_fujigaoka', '17:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '17:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '17:54:00', 'holiday_red'),
@@ -924,7 +924,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:06:00', 'holiday_red'),
 -- 列車 91: 17:57 発
-('yagusa', '八草', 'to_fujigaoka', '17:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '17:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '17:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:02:00', 'holiday_red'),
@@ -934,7 +934,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:14:00', 'holiday_red'),
 -- 列車 92: 18:05 発
-('yagusa', '八草', 'to_fujigaoka', '18:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:10:00', 'holiday_red'),
@@ -944,7 +944,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:22:00', 'holiday_red'),
 -- 列車 93: 18:13 発
-('yagusa', '八草', 'to_fujigaoka', '18:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:18:00', 'holiday_red'),
@@ -954,7 +954,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:30:00', 'holiday_red'),
 -- 列車 94: 18:21 発
-('yagusa', '八草', 'to_fujigaoka', '18:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:26:00', 'holiday_red'),
@@ -964,7 +964,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:38:00', 'holiday_red'),
 -- 列車 95: 18:29 発
-('yagusa', '八草', 'to_fujigaoka', '18:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:34:00', 'holiday_red'),
@@ -974,7 +974,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:46:00', 'holiday_red'),
 -- 列車 96: 18:37 発
-('yagusa', '八草', 'to_fujigaoka', '18:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:42:00', 'holiday_red'),
@@ -984,7 +984,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '18:54:00', 'holiday_red'),
 -- 列車 97: 18:45 発
-('yagusa', '八草', 'to_fujigaoka', '18:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:50:00', 'holiday_red'),
@@ -994,7 +994,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '18:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:02:00', 'holiday_red'),
 -- 列車 98: 18:53 発
-('yagusa', '八草', 'to_fujigaoka', '18:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '18:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '18:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '18:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '18:58:00', 'holiday_red'),
@@ -1004,7 +1004,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:10:00', 'holiday_red'),
 -- 列車 99: 19:01 発
-('yagusa', '八草', 'to_fujigaoka', '19:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:06:00', 'holiday_red'),
@@ -1014,7 +1014,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:18:00', 'holiday_red'),
 -- 列車 100: 19:09 発
-('yagusa', '八草', 'to_fujigaoka', '19:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:14:00', 'holiday_red'),
@@ -1024,7 +1024,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:26:00', 'holiday_red'),
 -- 列車 101: 19:17 発
-('yagusa', '八草', 'to_fujigaoka', '19:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:22:00', 'holiday_red'),
@@ -1034,7 +1034,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:34:00', 'holiday_red'),
 -- 列車 102: 19:25 発
-('yagusa', '八草', 'to_fujigaoka', '19:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:30:00', 'holiday_red'),
@@ -1044,7 +1044,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:42:00', 'holiday_red'),
 -- 列車 103: 19:33 発
-('yagusa', '八草', 'to_fujigaoka', '19:33:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:33:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:34:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:36:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:38:00', 'holiday_red'),
@@ -1054,7 +1054,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:47:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:50:00', 'holiday_red'),
 -- 列車 104: 19:41 発
-('yagusa', '八草', 'to_fujigaoka', '19:41:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:41:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:42:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:44:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:46:00', 'holiday_red'),
@@ -1064,7 +1064,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '19:55:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '19:58:00', 'holiday_red'),
 -- 列車 105: 19:49 発
-('yagusa', '八草', 'to_fujigaoka', '19:49:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:49:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:50:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '19:52:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '19:54:00', 'holiday_red'),
@@ -1074,7 +1074,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:03:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:06:00', 'holiday_red'),
 -- 列車 106: 19:57 発
-('yagusa', '八草', 'to_fujigaoka', '19:57:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '19:57:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '19:58:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:00:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:02:00', 'holiday_red'),
@@ -1084,7 +1084,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:11:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:14:00', 'holiday_red'),
 -- 列車 107: 20:05 発
-('yagusa', '八草', 'to_fujigaoka', '20:05:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:05:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:06:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:08:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:10:00', 'holiday_red'),
@@ -1094,7 +1094,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:19:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:22:00', 'holiday_red'),
 -- 列車 108: 20:13 発
-('yagusa', '八草', 'to_fujigaoka', '20:13:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:13:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:14:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:16:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:18:00', 'holiday_red'),
@@ -1104,7 +1104,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:27:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:30:00', 'holiday_red'),
 -- 列車 109: 20:21 発
-('yagusa', '八草', 'to_fujigaoka', '20:21:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:21:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:22:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:24:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:26:00', 'holiday_red'),
@@ -1114,7 +1114,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:35:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:38:00', 'holiday_red'),
 -- 列車 110: 20:29 発
-('yagusa', '八草', 'to_fujigaoka', '20:29:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:29:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:30:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:32:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:34:00', 'holiday_red'),
@@ -1124,7 +1124,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:43:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:46:00', 'holiday_red'),
 -- 列車 111: 20:37 発
-('yagusa', '八草', 'to_fujigaoka', '20:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:42:00', 'holiday_red'),
@@ -1134,7 +1134,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '20:54:00', 'holiday_red'),
 -- 列車 112: 20:45 発
-('yagusa', '八草', 'to_fujigaoka', '20:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:50:00', 'holiday_red'),
@@ -1144,7 +1144,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '20:59:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:02:00', 'holiday_red'),
 -- 列車 113: 20:53 発
-('yagusa', '八草', 'to_fujigaoka', '20:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '20:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '20:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '20:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '20:58:00', 'holiday_red'),
@@ -1154,7 +1154,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:10:00', 'holiday_red'),
 -- 列車 114: 21:01 発
-('yagusa', '八草', 'to_fujigaoka', '21:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:06:00', 'holiday_red'),
@@ -1164,7 +1164,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:18:00', 'holiday_red'),
 -- 列車 115: 21:09 発
-('yagusa', '八草', 'to_fujigaoka', '21:09:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:09:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:10:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:12:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:14:00', 'holiday_red'),
@@ -1174,7 +1174,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:23:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:26:00', 'holiday_red'),
 -- 列車 116: 21:17 発
-('yagusa', '八草', 'to_fujigaoka', '21:17:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:17:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:18:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:20:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:22:00', 'holiday_red'),
@@ -1184,7 +1184,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:31:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:34:00', 'holiday_red'),
 -- 列車 117: 21:25 発
-('yagusa', '八草', 'to_fujigaoka', '21:25:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:25:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:26:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:28:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:30:00', 'holiday_red'),
@@ -1194,7 +1194,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:39:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:42:00', 'holiday_red'),
 -- 列車 118: 21:34 発
-('yagusa', '八草', 'to_fujigaoka', '21:34:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:34:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:35:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:37:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:39:00', 'holiday_red'),
@@ -1204,7 +1204,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:48:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '21:51:00', 'holiday_red'),
 -- 列車 119: 21:43 発
-('yagusa', '八草', 'to_fujigaoka', '21:43:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:43:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:44:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:46:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:48:00', 'holiday_red'),
@@ -1214,7 +1214,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '21:57:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:00:00', 'holiday_red'),
 -- 列車 120: 21:53 発
-('yagusa', '八草', 'to_fujigaoka', '21:53:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '21:53:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '21:54:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '21:56:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '21:58:00', 'holiday_red'),
@@ -1224,7 +1224,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '22:07:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:10:00', 'holiday_red'),
 -- 列車 121: 22:04 発
-('yagusa', '八草', 'to_fujigaoka', '22:04:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '22:04:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '22:05:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '22:07:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '22:09:00', 'holiday_red'),
@@ -1234,7 +1234,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '22:18:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:21:00', 'holiday_red'),
 -- 列車 122: 22:15 発
-('yagusa', '八草', 'to_fujigaoka', '22:15:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '22:15:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '22:16:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '22:18:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '22:20:00', 'holiday_red'),
@@ -1244,7 +1244,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '22:29:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:32:00', 'holiday_red'),
 -- 列車 123: 22:26 発
-('yagusa', '八草', 'to_fujigaoka', '22:26:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '22:26:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '22:27:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '22:29:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '22:31:00', 'holiday_red'),
@@ -1254,7 +1254,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '22:40:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:43:00', 'holiday_red'),
 -- 列車 124: 22:37 発
-('yagusa', '八草', 'to_fujigaoka', '22:37:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '22:37:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '22:38:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '22:40:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '22:42:00', 'holiday_red'),
@@ -1264,7 +1264,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '22:51:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '22:54:00', 'holiday_red'),
 -- 列車 125: 22:48 発
-('yagusa', '八草', 'to_fujigaoka', '22:48:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '22:48:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '22:49:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '22:51:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '22:53:00', 'holiday_red'),
@@ -1274,7 +1274,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '23:02:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '23:05:00', 'holiday_red'),
 -- 列車 126: 23:01 発
-('yagusa', '八草', 'to_fujigaoka', '23:01:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '23:01:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:02:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '23:04:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '23:06:00', 'holiday_red'),
@@ -1284,7 +1284,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '23:15:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '23:18:00', 'holiday_red'),
 -- 列車 127: 23:15 発
-('yagusa', '八草', 'to_fujigaoka', '23:15:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '23:15:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:16:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '23:18:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '23:20:00', 'holiday_red'),
@@ -1294,7 +1294,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '23:29:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '23:32:00', 'holiday_red'),
 -- 列車 128: 23:30 発
-('yagusa', '八草', 'to_fujigaoka', '23:30:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '23:30:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:31:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '23:33:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '23:35:00', 'holiday_red'),
@@ -1304,7 +1304,7 @@ INSERT INTO linimo_timetable (station_code, station_name, direction, departure_t
 ('hanamizuki_dori', 'はなみずき通', 'to_fujigaoka', '23:44:00', 'holiday_red'),
 ('fujigaoka', '藤が丘', 'to_fujigaoka', '23:47:00', 'holiday_red'),
 -- 列車 129: 23:45 発
-('yagusa', '八草', 'to_fujigaoka', '23:45:00', 'holiday_red'),
+('yakusa', '八草', 'to_fujigaoka', '23:45:00', 'holiday_red'),
 ('tojishiryokan_minami', '陶磁資料館南', 'to_fujigaoka', '23:46:00', 'holiday_red'),
 ('ai_chikyuhaku_kinen_koen', '愛・地球博記念公園', 'to_fujigaoka', '23:48:00', 'holiday_red'),
 ('koen_nishi', '公園西', 'to_fujigaoka', '23:50:00', 'holiday_red'),

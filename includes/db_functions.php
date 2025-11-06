@@ -211,7 +211,7 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
         }
 
         // リニモ駅が目的地の場合はシャトルバス + リニモで計算
-        $linimoTravelTime = (int)$destinationInfo['travel_time_from_yagusa'];
+        $linimoTravelTime = (int)$destinationInfo['travel_time_from_yakusa'];
 
         // 次のシャトルバス（大学→八草駅）を取得
         $shuttleBuses = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, 10);
@@ -331,7 +331,7 @@ function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
             return [];
         }
 
-        $linimoTravelTime = (int)$originInfo['travel_time_from_yagusa'];
+        $linimoTravelTime = (int)$originInfo['travel_time_from_yakusa'];
 
         // 次のリニモ（出発駅→八草駅）を取得
         // まず、出発駅から八草方面(to_yagusa)の時刻表を取得を試みる
