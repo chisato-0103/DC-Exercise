@@ -241,6 +241,12 @@ CREATE TABLE transport_lines (
     INDEX idx_line_code (line_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 路線マスタ初期データ
+INSERT INTO transport_lines (line_code, line_name, line_name_en, transfer_hub, typical_duration, remarks) VALUES
+('shuttle', 'シャトルバス', 'Shuttle Bus', 'yagusa', 5, 'AIT Campus ↔ Yagusa Station'),
+('linimo', 'リニモ', 'Linimo', 'yagusa', 17, '愛知高速交通リニモ 八草駅 ↔ 藤が丘駅 全9駅'),
+('aichi_kanjo', '愛知環状線', 'Aichi Kanjo Line', 'yagusa', 45, 'JR東海 愛知環状線 八草駅 ↔ 岡崎駅方面');
+
 -- ===================================
 -- 8. お問い合わせテーブル
 -- ===================================
@@ -281,4 +287,5 @@ SELECT CONCAT('シャトルバス時刻数: ', COUNT(*), '件') AS shuttle_count
 SELECT CONCAT('シャトルバス運行日程: ', COUNT(*), '日') AS shuttle_schedule_count FROM shuttle_schedule;
 SELECT CONCAT('レール時刻数: ', COUNT(*), '件') AS rail_count FROM rail_timetable;
 SELECT CONCAT('リニモ時刻数: ', COUNT(*), '件') AS linimo_count FROM linimo_timetable;
+SELECT CONCAT('路線マスタ数: ', COUNT(*), '路線') AS transport_lines_count FROM transport_lines;
 SELECT CONCAT('お知らせ数: ', COUNT(*), '件') AS notices_count FROM notices;
