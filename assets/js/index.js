@@ -940,9 +940,13 @@
                 `;
             } else {
                 // リニモ駅 → 大学 または 愛知環状線駅 → 大学
-                const railDeparture = route.linimo_departure || route.rail_departure;
-                const railArrival = route.linimo_arrival || route.rail_arrival;
-                const railTime = route.linimo_time || route.rail_time;
+                const railDepartureField = lineCode === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
+                const railArrivalField = lineCode === 'aichi_kanjo' ? 'rail_arrival' : 'linimo_arrival';
+                const railTimeField = lineCode === 'aichi_kanjo' ? 'rail_time' : 'linimo_time';
+
+                const railDeparture = route[railDepartureField];
+                const railArrival = route[railArrivalField];
+                const railTime = route[railTimeField];
                 html = `
                     <div class="route-step">
                         <img src="assets/image/train-svgrepo-com.svg" />
