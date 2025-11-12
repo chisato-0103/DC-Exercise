@@ -56,6 +56,7 @@ function getNextShuttleBuses($direction, $currentTime, $diaType, $limit = 5) {
  * @return array リニモの配列
  */
 function getNextLinimoTrains($stationCode, $direction, $currentTime, $dayType, $limit = 5) {
+    error_log("[DEBUG getNextLinimoTrains] dayType={$dayType}, stationCode={$stationCode}, direction={$direction}, currentTime={$currentTime}");
     try {
         $pdo = getDbConnection();
 
@@ -196,11 +197,15 @@ function getActiveNotices($target = 'all') {
  * @param int $limit 取得件数
  * @return array 乗り継ぎルートの配列
  */
-function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3) {
-    try {
-        // 現在のダイヤ種別と曜日種別を取得
-        $diaType = getCurrentDiaType();
+function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3, $dayType = null) {
+    if ($dayType === null) {
         $dayType = getCurrentDayType();
+        if ($dayType === 'weekday') $dayType = 'weekday_green';
+        if ($dayType === 'holiday') $dayType = 'holiday_red';
+    }
+    try {
+        // 現在のダイヤ種別のみ取得（dayTypeは上書きしない）
+        $diaType = getCurrentDiaType();
 
         // 乗り換え時間と所要時間を取得
         $transferTime = (int)getSetting('transfer_time_minutes', TRANSFER_TIME_MINUTES);
@@ -323,11 +328,15 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
  * @param int $limit 取得件数
  * @return array 乗り継ぎルートの配列
  */
-function calculateStationToUniversity($originCode, $currentTime, $limit = 3) {
-    try {
-        // 現在のダイヤ種別と曜日種別を取得
-        $diaType = getCurrentDiaType();
+function calculateStationToUniversity($originCode, $currentTime, $limit = 3, $dayType = null) {
+    if ($dayType === null) {
         $dayType = getCurrentDayType();
+        if ($dayType === 'weekday') $dayType = 'weekday_green';
+        if ($dayType === 'holiday') $dayType = 'holiday_red';
+    }
+    try {
+        // 現在のダイヤ種別のみ取得（dayTypeは上書きしない）
+        $diaType = getCurrentDiaType();
 
         // 乗り換え時間を取得
         $transferTime = (int)getSetting('transfer_time_minutes', TRANSFER_TIME_MINUTES);

@@ -20,6 +20,7 @@ try {
     $direction = $_GET['direction'] ?? 'to_station'; // to_station or to_university
     $lineCode = $_GET['line_code'] ?? 'linimo'; // linimo or aichi_kanjo
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : (int)getSetting('result_limit', RESULT_LIMIT);
+    error_log("[DEBUG get_next_connection] lineCode={$lineCode}, direction={$direction}, origin=" . ($_GET['origin'] ?? 'null') . ", destination=" . ($_GET['destination'] ?? 'null'));
 
     // 方向に応じてパラメータを取得
     if ($direction === 'to_station') {
@@ -30,46 +31,22 @@ try {
         $destination = null;
     }
 
-    // テスト用パラメータ（デバッグモードのみ）
-    $testDate = null;
-    $testHour = null;
-    if (DEBUG_MODE && isset($_GET['test_date'])) {
-        $testDate = $_GET['test_date'];
-    }
-
-    if (DEBUG_MODE && isset($_GET['test_time'])) {
-        $time = $_GET['test_time'];
-        $testHour = (int)explode(':', $time)[0];  // test_time から時を抽出
-    } else {
-        $time = getCurrentTime();
-    }
+    $time = getCurrentTime();
 
     // バリデーション
     if (!isValidTime($time)) {
         jsonResponse(false, null, '無効な時刻形式です');
     }
 
-    // 現在時刻（テスト時刻またはリアルタイム時刻）
+    // 現在時刻（リアルタイム時刻）
     $currentTime = $time;
-    $diaType = getCurrentDiaType($testDate);
+    $diaType = getCurrentDiaType();
 
-    // テスト用日付がある場合はその日付で day_type を計算
-    if ($testDate) {
-        // テスト日付の曜日を計算
-        $timestamp = strtotime($testDate);
-        $month = (int)date('n', $timestamp);
-        $dayOfWeek = (int)date('w', $timestamp);
+    $dayType = getCurrentDayType();
 
-        if ($dayOfWeek === 0 || $dayOfWeek === 6) {
-            $dayType = 'holiday_red';
-        } elseif (in_array($month, [2, 3, 8, 9])) {
-            $dayType = 'holiday_red';
-        } else {
-            $dayType = 'weekday_green';
-        }
-    } else {
-        $dayType = getCurrentDayType();
-    }
+    // 🚧 DB側の値に合わせる（ローカル＆サーバー両対応）
+    if ($dayType === 'weekday') $dayType = 'weekday_green';
+    if ($dayType === 'holiday') $dayType = 'holiday_red';
 
     // 乗り継ぎルートを計算
     $routes = [];
@@ -80,8 +57,9 @@ try {
     if ($direction === 'to_station' && isValidStationCode($destination)) {
         // 大学 → 路線駅
         if ($lineCode === 'linimo') {
+            error_log("[DEBUG branch] Entered Linimo block in to_station. destination={$destination}, dayType={$dayType}");
             // リニモ駅へ
-            $routes = calculateUniversityToStation($destination, $time, $limit);
+            $routes = calculateUniversityToStation($destination, $time, $limit, $dayType);
         } elseif ($lineCode === 'aichi_kanjo') {
             // 愛知環状線駅へ
             $routes = calculateUniversityToRail($lineCode, $destination, $time, $limit, $dayType);
@@ -99,7 +77,7 @@ try {
             // 路線駅 → 大学
             if ($lineCode === 'linimo') {
                 // リニモ駅から
-                $routes = calculateStationToUniversity($origin, $time, $limit);
+                $routes = calculateStationToUniversity($origin, $time, $limit, $dayType);
             } elseif ($lineCode === 'aichi_kanjo') {
                 // 愛知環状線駅から
                 $routes = calculateRailToUniversity($lineCode, $origin, $time, $limit, $dayType);
@@ -112,7 +90,7 @@ try {
     // ルートがない場合、最終便・初便情報を取得
     if (empty($routes)) {
         // デバッグ用：test_hourがセットされている場合はそれを使用
-        $currentHour = $testHour !== null ? $testHour : (int)date('H');
+        $currentHour = (int)date('H');
         // 注: $currentTime は既に line 58 で $time に設定されているため、ここでは上書きしない
 
         if ($direction === 'to_station') {
