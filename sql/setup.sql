@@ -38,7 +38,7 @@ CREATE TABLE stations (
 INSERT INTO stations (station_code, station_name, station_name_en, order_index, travel_time_from_yakusa, line_type) VALUES
 ('yakusa', '八草', 'Yakusa', 1, 0, NULL),
 ('tojishiryokkanminami', '陶磁資料館南', 'Tojishiryokan Minami', 2, 3, 'linimo'),
-('aichikyuhakukienkoen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5, 'linimo'),
+('aichikyuhakukinenkoen', '愛・地球博記念公園', 'Ai･Chikyuhaku Kinen Koen', 3, 5, 'linimo'),
 ('koennishi', '公園西', 'Koen Nishi', 4, 7, 'linimo'),
 ('geidaidori', '芸大通', 'Geidai-dori', 5, 9, 'linimo'),
 ('nagakutekosenjo', '長久手古戦場', 'Nagakute Kosenjo', 6, 11, 'linimo'),
