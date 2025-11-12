@@ -1,0 +1,202 @@
+================================================================================
+AICHI KANJO TO UNIVERSITY DATA FLOW - QUICK REFERENCE CARD
+================================================================================
+
+1. FRONTEND REQUEST PARAMETERS
+   ├─ Direction: 'to_university'
+   ├─ Line Code: 'aichi_kanjo'
+   ├─ Origin: User-selected station code (e.g., 'yamaguchi')
+   └─ Destination: null (unused for to_university)
+
+2. DATABASE QUERY (THE CRITICAL QUERY)
+   ┌─────────────────────────────────────────────────────────────┐
+   │ SELECT * FROM rail_timetable                               │
+   │ WHERE line_code = 'aichi_kanjo'                            │
+   │   AND station_code = 'yamaguchi'                           │
+   │   AND direction = 'to_kozoji'                              │
+   │   AND departure_time >= {currentTime}                      │
+   │   AND day_type = {dayType}                                 │
+   │   AND is_active = 1                                        │
+   │ ORDER BY departure_time ASC                                │
+   │ LIMIT 30                                                    │
+   └─────────────────────────────────────────────────────────────┘
+
+3. DEPARTURE TIME EXTRACTED FROM DATABASE
+   Column:          rail_timetable.departure_time
+   Data Type:       TIME
+   Example Value:   '14:33:00'
+   Format:          HH:MM:SS
+   Source:          Actual timetable data in database
+   NOT Generated:   This is NOT calculated or estimated
+
+4. PHP FUNCTION CHAIN
+   API receives request
+      ↓
+   api/get_next_connection.php
+      ↓
+   calculateRailToUniversity()  [Line 190]
+      ├─ Gets station info (travel_time_from_yakusa = 4 min)
+      ├─ Sets rail direction ('to_kozoji')
+      └─ Calls:
+         ↓
+      getNextRailTrains()  [Line 24]
+         ├─ Executes critical database query
+         └─ Returns array of trains with departure_time
+
+5. RESPONSE STRUCTURE
+   JSON Field:      'rail_departure'
+   Value Example:   '14:33:00'
+   Parent Key:      'routes' array
+   Array Index:     Each route object has this field
+
+6. JAVASCRIPT FIELD ACCESS
+   Variable:        route.rail_departure
+   Example Value:   '14:33:00'
+   After Format:    formatTimeWithoutSeconds('14:33:00') → '14:33'
+   Display:         "14:33 発" (14:33 departure)
+
+7. KEY FILES & LINE NUMBERS
+   ┌──────────────────────────────────┬────────────────┐
+   │ File                             │ Critical Lines │
+   ├──────────────────────────────────┼────────────────┤
+   │ index.html                       │ 52-59          │
+   │ assets/js/index.js (selection)   │ 1416-1452      │
+   │ assets/js/index.js (API call)    │ 145-160        │
+   │ assets/js/api.js                 │ 55-73          │
+   │ api/get_next_connection.php      │ 91-110         │
+   │ includes/db_functions_generic.php│ 190-302        │
+   │ includes/db_functions_generic.php│ 24-53 (QUERY)  │
+   │ assets/js/index.js (rendering)   │ 256-404        │
+   │ sql/setup.sql (schema)           │ 203-217        │
+   └──────────────────────────────────┴────────────────┘
+
+8. COMPLETE DATA FLOW PATH
+   Browser Input
+      ↓
+   JavaScript setRouteOption()
+      ↓
+   API.getNextConnection()
+      ↓
+   HTTP GET /api/get_next_connection.php
+      ↓
+   PHP parameter parsing
+      ↓
+   calculateRailToUniversity('aichi_kanjo', 'yamaguchi', ...)
+      ↓
+   getNextRailTrains() [DATABASE QUERY HERE]
+      ↓
+   rail_timetable.departure_time retrieved
+      ↓
+   formatTime() applied
+      ↓
+   JSON response with 'rail_departure'
+      ↓
+   JavaScript route.rail_departure
+      ↓
+   formatTimeWithoutSeconds()
+      ↓
+   HTML display "14:33 発"
+
+9. AICHI KANJO SPECIFIC LOGIC
+   ├─ Rail Direction Default: 'to_kozoji'
+   ├─ Reverse Direction: 'to_okazaki' (fallback)
+   ├─ Travel Time from Yakusa: Stored in stations.travel_time_from_yakusa
+   ├─ Example: yamaguchi = 4 minutes
+   └─ Day Type Filter: 'weekday_green' or 'holiday_red' (NOT shuttle A/B/C)
+
+10. COMPARISON WITH LINIMO ROUTES
+    ┌──────────────────────┬──────────────────────┬──────────────────────┐
+    │ Aspect               │ Linimo               │ Aichi Kanjo          │
+    ├──────────────────────┼──────────────────────┼──────────────────────┤
+    │ Function             │ calculateStation     │ calculateRailTo      │
+    │                      │ ToUniversity()       │ University()         │
+    ├──────────────────────┼──────────────────────┼──────────────────────┤
+    │ Database Table       │ linimo_timetable     │ rail_timetable       │
+    ├──────────────────────┼──────────────────────┼──────────────────────┤
+    │ Response Field       │ 'linimo_departure'   │ 'rail_departure'     │
+    ├──────────────────────┼──────────────────────┼──────────────────────┤
+    │ Rail Direction       │ 'to_yagusa'          │ 'to_kozoji' or       │
+    │                      │                      │ 'to_okazaki'         │
+    ├──────────────────────┼──────────────────────┼──────────────────────┤
+    │ Reverse Calculation  │ Not used             │ Used if needed       │
+    └──────────────────────┴──────────────────────┴──────────────────────┘
+
+11. TRANSFORMATIONS SUMMARY
+    ┌────────────────────┬─────────────────┬─────────────────────────────┐
+    │ Stage              │ Format          │ Example Value               │
+    ├────────────────────┼─────────────────┼─────────────────────────────┤
+    │ Database           │ TIME (HH:MM:SS) │ '14:33:00'                  │
+    │ PHP formatTime()   │ String HH:MM:SS │ '14:33:00'                  │
+    │ JSON Response      │ String          │ 'rail_departure': '14:33:00'│
+    │ JS variable        │ String          │ route.rail_departure        │
+    │ JS formatTime()    │ String HH:MM    │ '14:33'                     │
+    │ HTML Display       │ Text            │ "14:33 発"                  │
+    └────────────────────┴─────────────────┴─────────────────────────────┘
+
+12. KEY QUESTION & ANSWER
+    Q: Where does the Aichi Kanjo departure time come from?
+    A: rail_timetable.departure_time (database column)
+    
+    Q: Is it calculated or estimated?
+    A: No! It's an actual timetable entry stored in the database.
+    
+    Q: How is it retrieved?
+    A: Via SQL query in getNextRailTrains() function (Line 24-53)
+    
+    Q: What JSON field contains it?
+    A: 'rail_departure' in the route object
+    
+    Q: How is it displayed?
+    A: After formatTimeWithoutSeconds() removes seconds, displayed as "14:33 発"
+
+13. DEBUGGING CHECKLIST
+    If Aichi Kanjo departure times are incorrect, check:
+    
+    ☐ rail_timetable has data for the selected station
+    ☐ day_type in rail_timetable is 'weekday_green' or 'holiday_red'
+    ☐ departure_time >= current time
+    ☐ is_active = 1
+    ☐ station_code matches exactly (e.g., 'yamaguchi')
+    ☐ direction is set correctly ('to_kozoji' or 'to_okazaki')
+    ☐ calculateRailToUniversity() is called (not another function)
+    ☐ getNextRailTrains() executes successfully
+    ☐ formatTime() applies correct format
+    ☐ route.rail_departure exists in JSON response
+    ☐ formatTimeWithoutSeconds() doesn't remove needed characters
+    ☐ HTML rendering uses route.rail_departure correctly
+
+14. API RESPONSE EXAMPLE
+    {
+      "success": true,
+      "data": {
+        "direction": "to_university",
+        "line_code": "aichi_kanjo",
+        "from_name": "山口",
+        "to_name": "愛知工業大学",
+        "current_time": "14:30:00",
+        "routes": [
+          {
+            "rail_departure": "14:33:00",     ← DEPARTURE TIME
+            "rail_arrival": "14:37:00",
+            "rail_time": 4,
+            "shuttle_departure": "14:47:00",
+            "shuttle_arrival": "14:52:00",
+            "transfer_time": 10,
+            "total_time": 19,
+            "waiting_time": 3,
+            "origin_name": "山口",
+            "shuttle_options": [...],
+            "line_code": "aichi_kanjo"
+          }
+        ]
+      }
+    }
+
+15. RELATED DOCUMENTATION
+    - See AICHI_KANJO_DATA_FLOW.md for comprehensive details
+    - See AICHI_KANJO_VISUAL_SUMMARY.txt for visual flowchart
+    - See CLAUDE.md for overall system architecture
+
+================================================================================
+END OF QUICK REFERENCE
+================================================================================

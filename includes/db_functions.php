@@ -59,6 +59,10 @@ function getNextLinimoTrains($stationCode, $direction, $currentTime, $dayType, $
     try {
         $pdo = getDbConnection();
 
+        // 現在時刻の秒を切り捨てて、分単位で比較
+        $timeParts = explode(':', $currentTime);
+        $searchTime = $timeParts[0] . ':' . $timeParts[1] . ':00';
+
         $sql = "SELECT * FROM linimo_timetable
                 WHERE station_code = :station_code
                 AND direction = :direction
@@ -71,7 +75,7 @@ function getNextLinimoTrains($stationCode, $direction, $currentTime, $dayType, $
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':station_code', $stationCode, PDO::PARAM_STR);
         $stmt->bindValue(':direction', $direction, PDO::PARAM_STR);
-        $stmt->bindValue(':current_time', $currentTime, PDO::PARAM_STR);
+        $stmt->bindValue(':current_time', $searchTime, PDO::PARAM_STR);
         $stmt->bindValue(':day_type', $dayType, PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -94,9 +98,33 @@ function getStationInfo($stationCode) {
     try {
         $pdo = getDbConnection();
 
+        // Station code mapping (handle variants with/without underscores)
+        // Maps non-underscore format to database format
+        $codeMapping = [
+            // aikan_umetsubo variants
+            'aikanumetubo' => 'aikan_umetsubo',
+            'aikanumetsubo' => 'aikan_umetsubo',
+            // kita_okazaki variants
+            'kitaokazaki' => 'kita_okazaki',
+            // kitano_masuzuka variants
+            'kitanomasuzuka' => 'kitano_masuzuka',
+            // mikawa_kamigo variants
+            'mikawakamigo' => 'mikawa_kamigo',
+            // mikawa_toyota variants
+            'mikawatoyota' => 'mikawa_toyota',
+            // shin_uwagoromo variants
+            'shinuwagoromo' => 'shin_uwagoromo',
+            // shin_toyota variants
+            'shintoyota' => 'shin_toyota',
+            // naka_okazaki - was incorrect spelling in old code
+            'naka_okazaki' => 'nakaokazaki',
+        ];
+
+        $normalizedCode = $codeMapping[$stationCode] ?? $stationCode;
+
         $sql = "SELECT * FROM stations WHERE station_code = :station_code";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':station_code', $stationCode, PDO::PARAM_STR);
+        $stmt->bindValue(':station_code', $normalizedCode, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetch();
@@ -236,28 +264,7 @@ function calculateUniversityToStation($destinationCode, $currentTime, $limit = 3
 
             // 目的地駅での推定到着時刻を計算
             $estimatedArrivalTime = addMinutes($yagusaDepartureTime, $linimoTravelTime);
-
-            // 目的地駅の時刻表から推定到着時刻に最も近い出発時刻を取得
-            $destinationLinimoTrains = getNextLinimoTrains($destinationCode, 'to_fujigaoka', $yagusaDepartureTime, $dayType, 5);
-
-            if (empty($destinationLinimoTrains)) {
-                continue;
-            }
-
-            // 推定到着時刻に最も近い出発時刻を探す
-            $destinationArrivalTime = null;
-            $minDifference = PHP_INT_MAX;
-            foreach ($destinationLinimoTrains as $candidate) {
-                $difference = abs(compareTime($candidate['departure_time'], $estimatedArrivalTime));
-                if ($difference < $minDifference) {
-                    $minDifference = $difference;
-                    $destinationArrivalTime = $candidate['departure_time'];
-                }
-            }
-
-            if (!$destinationArrivalTime) {
-                continue;
-            }
+            $destinationArrivalTime = $estimatedArrivalTime;
 
             // 実際の乗り換え時間を計算
             $actualTransferTime = calculateDuration($yagusaArrivalTime, $yagusaDepartureTime);

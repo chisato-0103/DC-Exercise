@@ -275,9 +275,12 @@
                 title = '次に乗るシャトルバス';
                 routeInfo = `<img src="assets/image/bus-svgrepo-com 2.svg" /> 八草駅 → <img src="assets/image/school-flag-svgrepo-com 2.svg" /> 愛知工業大学`;
             } else {
-                // リニモ駅 → 大学の場合、リニモの出発時刻を表示
-                departureTime = formatTimeWithoutSeconds(route.linimo_departure);
-                title = '次に乗るリニモ';
+                // リニモ駅 → 大学 または 愛知環状線駅 → 大学の場合
+                const railDepartureField = route.line_code === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
+                const railNameLabel = route.line_code === 'aichi_kanjo' ? '電車' : 'リニモ';
+
+                departureTime = formatTimeWithoutSeconds(route[railDepartureField]);
+                title = `次の${railNameLabel}は`;
                 routeInfo = `<img src="assets/image/train-svgrepo-com 2.svg" /> ${escapeHtml(route.origin_name)} → <img src="assets/image/bus-svgrepo-com 2.svg" /> 八草駅 → <img src="assets/image/school-flag-svgrepo-com 2.svg" /> 愛知工業大学`;
             }
         }
@@ -605,28 +608,33 @@
                 </div>
                 `;
             } else {
-                // リニモ駅 → 大学
+                // リニモ駅 → 大学 または 愛知環状線駅 → 大学
+                const railDepartureField = lineCode === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
+                const railArrivalField = lineCode === 'aichi_kanjo' ? 'rail_arrival' : 'linimo_arrival';
+                const railTimeField = lineCode === 'aichi_kanjo' ? 'rail_time' : 'linimo_time';
+                const railVerbLabel = lineCode === 'aichi_kanjo' ? '電車' : 'リニモ';
+
                 html += `
                     <div class="route-step">
                         <img src="assets/image/train-svgrepo-com 2.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">${escapeHtml(route.origin_name)} 発 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_departure))}</div>
-                            <div class="route-step-detail">リニモで出発</div>
+                            <div class="route-step-time">${escapeHtml(route.origin_name)} 発 ${escapeHtml(formatTimeWithoutSeconds(route[railDepartureField]))}</div>
+                            <div class="route-step-detail">${railVerbLabel}で出発</div>
                         </div>
                     </div>
                     <div class="route-arrow" style="color: white;">↓</div>
                     <div class="route-step">
                         <img src="assets/image/bus-svgrepo-com 2.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">八草駅 着 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_arrival))}</div>
-                            <div class="route-step-detail">リニモ約${escapeHtml(route.linimo_time)}分</div>
+                            <div class="route-step-time">八草駅 着 ${escapeHtml(formatTimeWithoutSeconds(route[railArrivalField]))}</div>
+                            <div class="route-step-detail">${railVerbLabel}約${escapeHtml(route[railTimeField])}分</div>
                         </div>
                     </div>
                 `;
 
                 // シャトルバス選択ウィジェット（リニモ駅→大学 または 愛知環状線駅→大学）
                 if (route.shuttle_options && route.shuttle_options.length > 0) {
-                    const railDeparture = route.linimo_departure || route.rail_departure;
+                    const railDeparture = route[railDepartureField];
                     html += `
                         <div class="route-arrow" style="color: white;">↓</div>
                         <div class="route-step transfer-time-step" data-linimo-departure="${railDeparture.replace(/:/g, '-')}">
@@ -729,7 +737,9 @@
                     departureTime = formatTimeWithoutSeconds(route.shuttle_departure);
                     departureIcon = '<img src="assets/image/bus-svgrepo-com.svg" />';
                 } else {
-                    departureTime = formatTimeWithoutSeconds(route.linimo_departure);
+                    // リニモ駅 → 大学 または 愛知環状線駅 → 大学
+                    const railDepartureField = route.line_code === 'aichi_kanjo' ? 'rail_departure' : 'linimo_departure';
+                    departureTime = formatTimeWithoutSeconds(route[railDepartureField]);
                     departureIcon = '<img src="assets/image/train-svgrepo-com.svg" />';
                 }
             }
@@ -903,8 +913,8 @@
                     <div class="route-step">
                         <img src="assets/image/train-svgrepo-com.svg" />
                         <div class="route-step-content">
-                            <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(route.linimo_departure))}</div>
-                            <div class="route-step-detail">リニモで出発</div>
+                            <div class="route-step-time">八草駅 発 ${escapeHtml(formatTimeWithoutSeconds(lineCode === 'aichi_kanjo' ? route.rail_departure : route.linimo_departure))}</div>
+                            <div class="route-step-detail">${lineCode === 'aichi_kanjo' ? '電車' : 'リニモ'}で出発</div>
                         </div>
                     </div>
                     <div class="route-arrow">↓</div>

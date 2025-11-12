@@ -198,7 +198,7 @@ try {
     $dayDescription = $DAY_TYPE_DESCRIPTIONS[$dayType] ?? '';
 
     // レスポンス
-    jsonResponse(true, [
+    $response = [
         'current_time' => $currentTime,
         'dia_type' => $diaType,
         'dia_description' => $diaDescription,
@@ -210,7 +210,23 @@ try {
         'to_name' => $toName,
         'routes' => $routes,
         'service_info' => $serviceInfo
-    ]);
+    ];
+
+    // デバッグ情報を追加
+    if (DEBUG_MODE) {
+        // シャトルバス数を取得
+        $diaType = getCurrentDiaType();
+        $testShuttles = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, 10);
+
+        $response['debug'] = [
+            'destination_code' => $destination ?? null,
+            'origin_code' => $origin ?? null,
+            'shuttle_count' => count($testShuttles),
+            'routes_count' => count($routes)
+        ];
+    }
+
+    jsonResponse(true, $response);
 
 } catch (Exception $e) {
     http_response_code(500);

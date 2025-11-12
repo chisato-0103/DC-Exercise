@@ -82,8 +82,24 @@ function calculateDuration($startTime, $endTime) {
  * @return string 加算後の時刻（HH:MM:SS形式）
  */
 function addMinutes($time, $minutes) {
-    $timestamp = strtotime($time) + ($minutes * 60);
-    return date('H:i:s', $timestamp);
+    // HH:MM:SS形式の時刻に分を加算
+    $timeParts = explode(':', $time);
+    $hours = (int)$timeParts[0];
+    $mins = (int)$timeParts[1];
+    $secs = isset($timeParts[2]) ? (int)$timeParts[2] : 0;
+
+    // 分を加算
+    $totalMinutes = $hours * 60 + $mins + $minutes;
+    $totalSeconds = $totalMinutes * 60 + $secs;
+
+    // 24時間を超えた場合の処理
+    $totalSeconds = $totalSeconds % (24 * 60 * 60);
+
+    $newHours = (int)($totalSeconds / 3600);
+    $newMins = (int)(($totalSeconds % 3600) / 60);
+    $newSecs = $totalSeconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $newHours, $newMins, $newSecs);
 }
 
 /**
@@ -173,12 +189,11 @@ function isValidStationCode($stationCode) {
         'irigaike_koen',
         'hanamizuki_dori',
         'fujigaoka',
-        // 愛知環状線駅（23駅）
+        // 愛知環状線駅（23駅） - Database format (with underscores)
         'okazaki',
         'mutsuna',
-        'naka_okazaki',
+        'nakaokazaki',
         'kita_okazaki',
-        'daimon',
         'kitano_masuzuka',
         'mikawa_kamigo',
         'ekaku',
@@ -195,7 +210,16 @@ function isValidStationCode($stationCode) {
         'setoguchi',
         'setoshi',
         'nakamizuno',
-        'kozoji'
+        'kozoji',
+        // Alternative formats (without underscores) for backward compatibility
+        'kitaokazaki',
+        'kitanomasuzuka',
+        'mikawakamigo',
+        'mikawatoyota',
+        'shinuwagoromo',
+        'shintoyota',
+        'aikanumetubo',
+        'aikanumetsubo',
     ];
     return in_array($stationCode, $validCodes, true);
 }
@@ -221,25 +245,24 @@ function getStationName($stationCode) {
         // リニモ駅
         'yakusa' => '八草',
         'tojishiryokan_minami' => '陶磁資料館南',
-        'ai_chikyuhaku_kinen_koen' => '愛・地球博記念公園',
-        'koen_nishi' => '公園西',
-        'geidai_dori' => '芸大通',
-        'nagakute_kosenjo' => '長久手古戦場',
-        'irigaike_koen' => '杁ヶ池公園',
-        'hanamizuki_dori' => 'はなみずき通',
+        'aichikyuhaku_kinen_koen' => '愛・地球博記念公園',
+        'koennishi' => '公園西',
+        'geidaidori' => '芸大通',
+        'nagakutekosenjo' => '長久手古戦場',
+        'irigaikekoen' => '杁ヶ池公園',
+        'hanamizukidori' => 'はなみずき通',
         'fujigaoka' => '藤が丘',
-        // 愛知環状線駅（23駅）
+        // 愛知環状線駅（23駅） - Database format with underscores
         'okazaki' => '岡崎',
         'mutsuna' => '武豊',
-        'naka_okazaki' => '中岡崎',
+        'nakaokazaki' => '中岡崎',
         'kita_okazaki' => '北岡崎',
-        'daimon' => '大門',
         'kitano_masuzuka' => '北野増塚',
         'mikawa_kamigo' => '三河上郷',
         'ekaku' => '江角',
         'suenohara' => '末野原',
         'mikawa_toyota' => '三河豊田',
-        'shin_uwagoromo' => '新上ゴ衣',
+        'shin_uwagoromo' => '新上挙母',
         'shin_toyota' => '新豊田',
         'aikan_umetsubo' => '愛環梅坪',
         'shigo' => '塩後',
@@ -250,7 +273,16 @@ function getStationName($stationCode) {
         'setoguchi' => '瀬戸口',
         'setoshi' => '瀬戸市',
         'nakamizuno' => '中水野',
-        'kozoji' => '幸次'
+        'kozoji' => '幸次',
+        // Alternative formats (without underscores) for backward compatibility
+        'kitaokazaki' => '北岡崎',
+        'kitanomasuzuka' => '北野増塚',
+        'mikawakamigo' => '三河上郷',
+        'mikawatoyota' => '三河豊田',
+        'shinuwagoromo' => '新上挙母',
+        'shintoyota' => '新豊田',
+        'aikanumetubo' => '愛環梅坪',
+        'aikanumetsubo' => '愛環梅坪',
     ];
     return $stationNames[$stationCode] ?? $stationCode;
 }

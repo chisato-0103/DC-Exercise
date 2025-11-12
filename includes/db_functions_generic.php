@@ -25,6 +25,10 @@ function getNextRailTrains($lineCode, $stationCode, $direction, $currentTime, $d
     try {
         $pdo = getDbConnection();
 
+        // 現在時刻の秒を切り捨てて、分単位で比較
+        $timeParts = explode(':', $currentTime);
+        $searchTime = $timeParts[0] . ':' . $timeParts[1] . ':00';
+
         $sql = "SELECT * FROM rail_timetable
                 WHERE line_code = :line_code
                 AND station_code = :station_code
@@ -39,7 +43,7 @@ function getNextRailTrains($lineCode, $stationCode, $direction, $currentTime, $d
         $stmt->bindValue(':line_code', $lineCode, PDO::PARAM_STR);
         $stmt->bindValue(':station_code', $stationCode, PDO::PARAM_STR);
         $stmt->bindValue(':direction', $direction, PDO::PARAM_STR);
-        $stmt->bindValue(':current_time', $currentTime, PDO::PARAM_STR);
+        $stmt->bindValue(':current_time', $searchTime, PDO::PARAM_STR);
         $stmt->bindValue(':day_type', $dayType, PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -106,6 +110,7 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
         // 路線駅が目的地の場合はシャトルバス + 路線で計算
         $railTravelTime = (int)$destinationInfo['travel_time_from_yakusa'];
         $shuttleBuses = getNextShuttleBuses('to_yagusa', $currentTime, $diaType, 10);
+
         $routes = [];
 
         foreach ($shuttleBuses as $shuttle) {
@@ -113,14 +118,38 @@ function calculateUniversityToRail($lineCode, $destinationCode, $currentTime, $l
             $minRailTime = addMinutes($yagusaArrivalTime, $transferTime);
 
             // 接続可能な列車を取得（八草駅から）
-            // リニモの場合は'to_fujigaoka'、愛知環状線の場合は'to_okazaki'など
-            $railDirection = ($lineCode === 'linimo') ? 'to_fujigaoka' : 'to_okazaki';
+            if ($lineCode === 'linimo') {
+                $railDirections = ['to_fujigaoka'];
+            } else if ($lineCode === 'aichi_kanjo') {
+                // 愛知環状線は目的地の位置で方向を自動判定
+                // order_index で判定：小さい=岡崎側、大きい=高蔵寺側
+                $destOrderIndex = $destinationInfo['order_index'] ?? 0;
+                if ($destOrderIndex <= 14) {
+                    // 岡崎側（order_index 10-14）
+                    $railDirections = ['to_okazaki'];
+                } else {
+                    // 高蔵寺側（order_index 15-30）
+                    $railDirections = ['to_kozoji'];
+                }
+            } else {
+                // デフォルト（将来の路線追加時対応）
+                $railDirections = [];
+            }
 
-            $railTrains = getNextRailTrains($lineCode, 'yakusa', $railDirection, $minRailTime, $dayType, 3);
+            $railTrains = [];
+            foreach ($railDirections as $railDirection) {
+                $trains = getNextRailTrains($lineCode, 'yakusa', $railDirection, $minRailTime, $dayType, 3);
+                $railTrains = array_merge($railTrains, $trains);
+            }
 
             if (empty($railTrains)) {
                 continue;
             }
+
+            // 最初の列車を取得する前にソート
+            usort($railTrains, function($a, $b) {
+                return strcmp($a['departure_time'], $b['departure_time']);
+            });
 
             $rail = $railTrains[0];
             $yagusaDepartureTime = $rail['departure_time'];
