@@ -268,7 +268,7 @@ CREATE TABLE transport_lines (
 INSERT INTO transport_lines (line_code, line_name, line_name_en, transfer_hub, typical_duration, remarks) VALUES
 ('shuttle', 'シャトルバス', 'Shuttle Bus', 'yakusa', 5, 'AIT Campus ↔ Yakusa Station'),
 ('linimo', 'リニモ', 'Linimo', 'yakusa', 17, '愛知高速交通リニモ 八草駅 ↔ 藤が丘駅 全9駅'),
-('aichi_kanjo', '愛知環状線', 'Aichi Kanjo Line', 'yakusa', 45, 'JR東海 愛知環状線 八草駅 ↔ 岡崎駅方面');
+('aikan', '愛知環状線', 'Aichi Kanjo Line', 'yakusa', 45, 'JR東海 愛知環状線 八草駅 ↔ 岡崎駅方面');
 
 -- ===================================
 -- 8. お問い合わせテーブル
